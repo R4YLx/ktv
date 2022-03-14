@@ -1,0 +1,32 @@
+#app,
+#gameWrapper {
+	min-height: 100vh;
+	max-width: 100%;
+}
+
+#gameWrapper {
+	background-color: white;
+}
+
+#gameArea {
+	background-color: black;
+}
+
+#scoreColumn {
+	padding: 2rem;
+}
+
+#scoreColumn > * {
+	padding: 1rem;
+}
+
+#scoreboard,
+.playerNameContainer,
+#gameRounds {
+	border: 4px solid black;
+	margin: 2rem 0rem 2rem 0rem;
+}
+
+#scoreboard span {
+	font-size: 4rem;
+}
