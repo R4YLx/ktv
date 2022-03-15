@@ -5,9 +5,9 @@
 	max-width: 100%;
 }
 
-.hide {
+/* .hide {
 	display: none !important;
-}
+} */
 
 #start {
 	display: flex;
@@ -29,6 +29,10 @@
 
 #gameArea {
 	background-color: black;
+}
+
+#virus {
+	max-width: 10rem;
 }
 
 #scoreColumn {
