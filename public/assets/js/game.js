@@ -7,10 +7,10 @@ const usernameFormEl = document.querySelector('#usernameForm');
 let username = null;
 
 // Submit event for username
-usernameForm.addEventListener('submit', e => {
+usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
-	username = usernameForm.username.value;
+	username = usernameFormEl.username.value;
 
 	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
 	socket.emit('user:joined', username, room, status => {
