@@ -2,6 +2,7 @@ const socket = io();
 
 const startEl = document.querySelector('#start');
 const gameWrapperEl = document.querySelector('#gameWrapper');
+const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
 
 let username = null;
@@ -27,5 +28,25 @@ usernameForm.addEventListener('submit', e => {
 	});
 });
 
+<<<<<<< Updated upstream
 // testing branch
 // I want to merge
+=======
+// Click event for virus
+gameAreaEl.addEventListener('click', e => {
+	console.log(e.target.tag);
+
+	// if (e.target.id.contains('gameArea')) {
+	// 	console.log('miss');
+	// } else {
+	// 	console.log('hit');
+	// }
+});
+
+/*
+//showing virus after 5 seconds in alert-message to test function
+function delayVirusDisplay() {
+    alert('Virus is here in your alert only for you <3 ');
+  }
+*/
+>>>>>>> Stashed changes
