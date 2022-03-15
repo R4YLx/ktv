@@ -10,8 +10,8 @@ const app = require('../app');
 const debug = require('debug')('game:server');
 const http = require('http');
 const socketio = require('socket.io');
+const { instrument } = require('@socket.io/admin-ui');
 const socket_controller = require('../controllers/socket_controller');
-
 
 /**
  * Get port from environment and store in Express.
@@ -25,7 +25,16 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-const io = new socketio.Server(server);
+const io = new socketio.Server(server, {
+	cors: {
+		origin: ['https://admin.socket.io'],
+		credentials: true,
+	},
+});
+
+instrument(io, {
+	auth: false,
+});
 
 io.on('connection', socket => {
 	socket_controller(socket, io);
