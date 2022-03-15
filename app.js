@@ -11,10 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// routes
-app.use(require("./routes"));
-
 // serve static files from public folder
+//finns ingen route som matchar på 3000 så kommer den kolla i public-mappen om det finns en fil som matchar
 app.use(express.static("public"));
 
 module.exports = app;

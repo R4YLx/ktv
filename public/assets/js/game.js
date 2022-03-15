@@ -29,3 +29,10 @@ usernameForm.addEventListener('submit', e => {
 
 // testing branch
 // I want to merge
+
+/*
+//showing virus after 5 seconds in alert-message to test function
+function delayVirusDisplay() {
+    alert('Virus is here in your alert only for you <3 ');
+  }
+*/
