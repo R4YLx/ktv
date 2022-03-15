@@ -26,7 +26,7 @@
 
 	<body>
 		<div id="app">
-			<!-- Start  -->
+			<!-- Start -->
 			<div id="start" class="container">
 				<form id="usernameForm">
 					<input
@@ -44,35 +44,35 @@
 
 			<!-- Game -->
 			<div id="gameWrapper" class="row hide">
-				<div id="gameArea" class="col-md-8 col-sm-12">
-					<img id="virus" src="./assets/icons/virus-temp.svg" alt="virus" />
+				<div id="gameArea" class="col-md-8 col-sm-12"> <!--Svarta rutan-->
+					<img id="virus" src="./assets/icons/virus-temp.svg" alt="virus"/> <!--slänger in virus här sen från JS-->
 				</div>
-				<div id="scoreColumn" class="col-md-4 col-sm-12">
-					<div id="scoreboard" class="text-center">
+				<div id="scoreColumn" class="col-md-4 col-sm-12"> <!--vita rutan-->
+					<div id="scoreboard" class="text-center"> <!--Scoreboard-ruta med poängställning-->
 						<h3>Scoreboard</h3>
 						<span id="playerScore">0</span> <span>-</span
 						><span id="opponentScore">0</span>
 					</div>
 
-					<div class="playerNameContainer text-center">
+					<div class="playerNameContainer text-center"> <!--Player 1-ruta-->
 						<h3 id="playerUsername">Player 1</h3>
 						<p id="playerOneTime">&mdash;</p>
 					</div>
 
-					<div class="playerNameContainer text-center">
+					<div class="playerNameContainer text-center"> <!--Player 2-ruta-->
 						<h3 id="opponentUsername">Player 2</h3>
 						<p id="playerTwoTime">&mdash;</p>
 					</div>
 
-					<div id="gameRounds" class="text-center">
+					<div id="gameRounds" class="text-center"> <!--visar antal rundor-->
 						<h3>Game Round</h3>
-						<p id="currentRound"><span id="game-round">1</span> / 10</p>
+						<p id="showRounds"><span id="current-round">1</span> / 10</p> 
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Game Over -->
+		<!-- Game Over --> 
 		<!-- Socket.IO -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 
