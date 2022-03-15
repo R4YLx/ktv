@@ -27,10 +27,21 @@
 	<body>
 		<div id="app">
 			<!-- Start  -->
-			<div id="start"></div>
+			<div id="start" class="container">
+				<form id="usernameForm">
+					<input
+						type="text"
+						id="username"
+						class="form-control form-control-lg"
+						required
+						placeholder="Enter your battletag"
+					/>
+				</form>
+				<button type="submit" class="btn btn-primary">Start Game</button>
+			</div>
 
 			<!-- Game -->
-			<div id="gameWrapper" class="row">
+			<div id="gameWrapper" class="row hide">
 				<div id="gameArea" class="col-md-8 col-sm-12">
 					<img id="virus" src="" alt="virus" />
 				</div>

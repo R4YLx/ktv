@@ -1,7 +1,26 @@
 #app,
+#start,
 #gameWrapper {
 	min-height: 100vh;
 	max-width: 100%;
+}
+
+.hide {
+	display: none !important;
+}
+
+#start {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	background-color: black;
+}
+
+#username-form {
+	margin: 0 auto;
+	text-align: center;
 }
 
 #gameWrapper {
