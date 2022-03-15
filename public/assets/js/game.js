@@ -28,10 +28,6 @@ usernameForm.addEventListener('submit', e => {
 	});
 });
 
-<<<<<<< Updated upstream
-// testing branch
-// I want to merge
-=======
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
 	console.log(e.target.tag);
@@ -49,4 +45,3 @@ function delayVirusDisplay() {
     alert('Virus is here in your alert only for you <3 ');
   }
 */
->>>>>>> Stashed changes
