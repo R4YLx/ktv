@@ -34,7 +34,7 @@ const setInnerText = (element, value) => {
 /////*/
 
 // Submit event for username
-usernameForm.addEventListener('submit', e => {
+usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameForm.username.value;
