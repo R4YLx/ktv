@@ -6,6 +6,10 @@ const gameWrapperEl = document.querySelector('#gameWrapper');
 const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
 const playerScoreEl = document.querySelector('#playerScore');
+const virusTextEl = document.querySelector('#virusText');
+const virusEl = document.querySelector('#virus');
+
+
 
 let username = null;
 let score = 0;
@@ -27,9 +31,34 @@ const hideElement = element => {
 // set innerText value
 const setInnerText = (element, value) => {
 	element.innerText = value;
+
 };
 
-/*//////
+
+//DISPLAY VIRUS 
+
+//1. Display virus with delay
+/*
+function delayVirusDisplay() {
+    alert('Virus is here in your alert only for you <3 ');
+  }
+*/
+
+setTimeout(() => {console.log("viruuus")}, 5000);
+setTimeout(() => {setInnerText(virusTextEl, "VIRUS HERE!")}, 5000);
+//setTimeout(() => {setInnerHTML(virusEl, IMAGE)}, 5000);
+
+   
+ 
+
+  
+
+  
+
+
+
+
+/*//////§
 //  Events
 /////*/
 
@@ -54,6 +83,10 @@ usernameFormEl.addEventListener('submit', e => {
 	});
 });
 
+
+
+
+
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
 	if (e.target.tagName === 'IMG') {
@@ -67,9 +100,6 @@ gameAreaEl.addEventListener('click', e => {
 	}
 });
 
-/*
-//showing virus after 5 seconds in alert-message to test function
-function delayVirusDisplay() {
-    alert('Virus is here in your alert only for you <3 ');
-  }
-*/
+
+
+
