@@ -11,22 +11,24 @@
 	max-width: 100%;
 }
 
-/* .hide {
+.hide {
 	display: none !important;
-} */
+}
 
 #start {
+	background-color: black;
+	display: grid;
+	place-content: center;
+}
+
+#usernameForm {
+	margin: 0 auto;
+	text-align: center;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 2rem;
-	background-color: black;
-}
-
-#username-form {
-	margin: 0 auto;
-	text-align: center;
 }
 
 #gameWrapper {
@@ -39,7 +41,7 @@
 
 #gameArea {
 	background-color: black;
-	min-height: 80vh;
+	min-height: 75vh;
 	display: grid;
 	place-content: center;
 }
