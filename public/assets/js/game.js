@@ -47,7 +47,7 @@ function delayVirusDisplay() {
 setTimeout(() => {console.log("viruuus")}, 5000);
 setTimeout(() => {setInnerText(virusTextEl, "VIRUS HERE!")}, 5000);
 //setTimeout(() => {setInnerHTML(virusEl, IMAGE)}, 5000);
-
+//virus.src = "./assets/icons/virus.png"
    
  
 
