@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+	font-family: 'Press Start 2P', cursive;
+}
+
 #app,
 #start,
 #gameWrapper {
@@ -14,7 +20,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 1rem;
+	gap: 2rem;
 	background-color: black;
 }
 
@@ -27,29 +33,26 @@
 	background-color: white;
 }
 
+#scoreColumn {
+	min-height: 20vh;
+}
+
 #gameArea {
 	background-color: black;
+	min-height: 80vh;
+	display: grid;
+	place-content: center;
 }
 
 #virus {
-	max-width: 10rem;
+	max-width: 6rem;
+	z-index: 99;
 }
 
-#scoreColumn {
-	padding: 2rem;
+h3 {
+	font-size: 1.25rem;
 }
 
-#scoreColumn > * {
-	padding: 1rem;
-}
-
-#scoreboard,
-.playerNameContainer,
-#gameRounds {
-	border: 4px solid black;
-	margin: 2rem 0rem 2rem 0rem;
-}
-
-#scoreboard span {
-	font-size: 4rem;
+#scoreboard p {
+	font-size: 2rem;
 }
