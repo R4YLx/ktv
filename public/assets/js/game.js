@@ -38,12 +38,17 @@ const setInnerText = (element, value) => {
 
 //DISPLAY VIRUS 
 
-//1. Display virus with delay
+//1. delayVirusDisplay(); = Display virus with delay
 /*
 function delayVirusDisplay() {
     alert('Virus is here in your alert only for you <3 ');
   }
 */
+
+//1.1 hämta virus
+//1.2. Delay();
+//1.3. Position();
+//1.4 Display Virus 
 
 setTimeout(() => {console.log("viruuus")}, 5000);
 setTimeout(() => {setInnerText(virusTextEl, "VIRUS HERE!")}, 5000);
