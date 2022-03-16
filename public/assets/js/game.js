@@ -1,10 +1,37 @@
 const socket = io();
 
+/** DOM Elements **/
 const startEl = document.querySelector('#start');
 const gameWrapperEl = document.querySelector('#gameWrapper');
+const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
+const playerScoreEl = document.querySelector('#playerScore');
 
 let username = null;
+let score = 0;
+
+/*//////
+//  Functions 
+/////*/
+
+// display element
+const displayElement = element => {
+	element.classList.remove('hide');
+};
+
+// hide element
+const hideElement = element => {
+	element.classList.add('hide');
+};
+
+// set innerText value
+const setInnerText = (element, value) => {
+	element.innerText = value;
+};
+
+/*//////
+//  Events
+/////*/
 
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
@@ -19,16 +46,26 @@ usernameFormEl.addEventListener('submit', e => {
 
 		if (status.success) {
 			// hide start view
-			startEl.classList.add('hide');
+			hideElement(startEl);
 
-			// show game area
-			gameWrapperEl.classList.remove('hide');
+			// show game
+			displayElement(gameWrapperEl);
 		}
 	});
 });
 
-// testing branch
-// I want to merge
+// Click event for virus
+gameAreaEl.addEventListener('click', e => {
+	if (e.target.tagName === 'IMG') {
+		console.log('You killed the virus!');
+		score++;
+		setInnerText(playerScoreEl, score);
+	} else {
+		console.log('You missed!');
+		score = 0;
+		setInnerText(playerScoreEl, 0);
+	}
+});
 
 /*
 //showing virus after 5 seconds in alert-message to test function

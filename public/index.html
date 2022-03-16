@@ -27,52 +27,69 @@
 	<body>
 		<div id="app">
 			<!-- Start -->
-			<div id="start" class="container">
+			<div id="start">
 				<form id="usernameForm">
 					<input
 						type="text"
 						id="username"
-						class="form-control form-control-lg"
+						class="form-control form-control-lg text-center"
 						required
 						placeholder="Enter your battletag"
 					/>
 				</form>
-				<button type="submit" class="btn btn-primary">Start Game</button>
+				<button type="submit" class="btn-lg btn-danger">Start Game</button>
 			</div>
 
 			<!-- Waiting for game -->
 
 			<!-- Game -->
-			<div id="gameWrapper" class="row hide">
-				<div id="gameArea" class="col-md-8 col-sm-12"> <!--Svarta rutan-->
-					<img id="virus" src="./assets/icons/virus-temp.svg" alt="virus"/> <!--slänger in virus här sen från JS-->
-				</div>
-				<div id="scoreColumn" class="col-md-4 col-sm-12"> <!--vita rutan-->
-					<div id="scoreboard" class="text-center"> <!--Scoreboard-ruta med poängställning-->
-						<h3>Scoreboard</h3>
-						<span id="playerScore">0</span> <span>-</span
-						><span id="opponentScore">0</span>
-					</div>
+			<div id="gameWrapper" class="hide d-flex flex-column-reverse">
+				<div
+					id="scoreColumn"
+					class="justify-content-center align-items-center d-flex justify-content-around p-4 order-md-1"
+				>
+					<!--vita rutan-->
 
-					<div class="playerNameContainer text-center"> <!--Player 1-ruta-->
+					<div class="playerNameContainer text-center">
+						<!--Player 1-ruta-->
 						<h3 id="playerUsername">Player 1</h3>
 						<p id="playerOneTime">&mdash;</p>
 					</div>
 
-					<div class="playerNameContainer text-center"> <!--Player 2-ruta-->
+					<div class="scoreWrapper">
+						<div id="scoreboard" class="text-center mb-4">
+							<!--Scoreboard-ruta med poängställning-->
+							<h3>Scoreboard</h3>
+							<p>
+								<span id="playerScore">0</span>-<span id="opponentScore"
+									>0</span
+								>
+							</p>
+						</div>
+
+						<div id="gameRounds" class="text-center mt-4">
+							<!--visar antal rundor-->
+							<h3>Game Round</h3>
+							<p id="showRounds"><span id="current-round">1</span> / 10</p>
+						</div>
+					</div>
+
+					<div class="playerNameContainer text-center">
+						<!--Player 2-ruta-->
 						<h3 id="opponentUsername">Player 2</h3>
 						<p id="playerTwoTime">&mdash;</p>
 					</div>
+				</div>
 
-					<div id="gameRounds" class="text-center"> <!--visar antal rundor-->
-						<h3>Game Round</h3>
-						<p id="showRounds"><span id="current-round">1</span> / 10</p> 
-					</div>
+				<div id="gameArea">
+					<!--Svarta rutan-->
+					<img id="virus" src="./assets/icons/virus.png" alt="virus" />
+					<!--slänger in virus här sen från JS-->
 				</div>
 			</div>
 		</div>
 
-		<!-- Game Over --> 
+		<!-- Game Over -->
 		<!-- Socket.IO -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 
