@@ -5,6 +5,7 @@ const startEl = document.querySelector('#start');
 const gameWrapperEl = document.querySelector('#gameWrapper');
 const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
+const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
 
 let username = null;
@@ -29,6 +30,10 @@ const setInnerText = (element, value) => {
 	element.innerText = value;
 };
 
+const setInnerHTML = (element, value) => {
+	element.innerHTML = value;
+};
+
 /*//////
 //  Events
 /////*/
@@ -39,14 +44,21 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
+	console.log(username);
+	hideElement(startEl);
+	setInnerText(playerUsernameEl, username);
+	displayElement(gameWrapperEl);
+
 	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
-	socket.emit('user:joined', username, room, status => {
+	socket.emit('user:joined', username, status => {
 		//  we've received acknowledgement from the server
 		console.log('A new player has joined', status);
 
 		if (status.success) {
 			// hide start view
 			hideElement(startEl);
+
+			setInnerText(playerUsernameEl, username);
 
 			// show game
 			displayElement(gameWrapperEl);
