@@ -7,6 +7,10 @@ const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
 const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
+const virusTextEl = document.querySelector('#virusText');
+const virusEl = document.querySelector('#virus');
+
+
 
 let username = null;
 let score = 0;
@@ -28,13 +32,39 @@ const hideElement = element => {
 // set innerText value
 const setInnerText = (element, value) => {
 	element.innerText = value;
+
 };
 
-const setInnerHTML = (element, value) => {
-	element.innerHTML = value;
-};
 
-/*//////
+//DISPLAY VIRUS 
+
+//1. delayVirusDisplay(); = Display virus with delay
+/*
+function delayVirusDisplay() {
+    alert('Virus is here in your alert only for you <3 ');
+  }
+*/
+
+//1.1 hämta virus
+//1.2. Delay();
+//1.3. Position();
+//1.4 Display Virus 
+
+setTimeout(() => {console.log("viruuus")}, 5000);
+setTimeout(() => {setInnerText(virusTextEl, "VIRUS HERE!")}, 5000);
+//setTimeout(() => {setInnerHTML(virusEl, IMAGE)}, 5000);
+//virus.src = "./assets/icons/virus.png"
+   
+ 
+
+  
+
+  
+
+
+
+
+/*//////§
 //  Events
 /////*/
 
@@ -66,6 +96,10 @@ usernameFormEl.addEventListener('submit', e => {
 	});
 });
 
+
+
+
+
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
 	if (e.target.tagName === 'IMG') {
@@ -79,9 +113,6 @@ gameAreaEl.addEventListener('click', e => {
 	}
 });
 
-/*
-//showing virus after 5 seconds in alert-message to test function
-function delayVirusDisplay() {
-    alert('Virus is here in your alert only for you <3 ');
-  }
-*/
+
+
+

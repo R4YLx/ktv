@@ -43,7 +43,11 @@
 	background-color: black;
 	min-height: 75vh;
 	display: grid;
-	place-content: center;
+	/*place-content: center;*/
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
 }
 
 #virus {
@@ -58,3 +62,15 @@ h3 {
 #scoreboard p {
 	font-size: 2rem;
 }
+
+
+	
+	.div1 { grid-area: 1 / 1 / 2 / 2; }
+	.div2 { grid-area: 1 / 2 / 2 / 3; }
+	.div3 { grid-area: 1 / 3 / 2 / 4; }
+	.div4 { grid-area: 2 / 1 / 3 / 2; }
+	.div5 { grid-area: 2 / 2 / 3 / 3; }
+	.div6 { grid-area: 2 / 3 / 3 / 4; }
+	.div7 { grid-area: 3 / 1 / 4 / 2; }
+	.div8 { grid-area: 3 / 2 / 4 / 3; }
+	.div9 { grid-area: 3 / 3 / 4 / 4; }
