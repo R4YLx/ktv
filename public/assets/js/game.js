@@ -9,10 +9,10 @@ const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
 const opponentScoreEl = document.querySelector('#playerScore');
 const playAgainButtonEl = document.querySelector('#playAgainButton');
-const scoreboardEl = document.querySelector('#scoreboardEl');
-const currentRoundEl = document.querySelector('#currentRoundEl');
-const showRoundsEl = document.querySelector('#showRoundsEl');
-const messageEl = document.querySelector('#messageEl');
+const scoreboardEl = document.querySelector('#scoreboard');
+const currentRoundEl = document.querySelector('#currentRound');
+const showRoundsEl = document.querySelector('#showRounds');
+const messageEl = document.querySelector('#message');
 
 
 let username = null;
@@ -81,12 +81,9 @@ const showVirus = () => {
 }
 //add startTimer to showVirus-function
 showVirus();
-//vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
-
 
 //  Events
 /////*/
-
 
 
 gameAreaEl.addEventListener('click', e => {
@@ -98,39 +95,31 @@ gameAreaEl.addEventListener('click', e => {
 		console.log('You killed the virus!');
 		score++; //Players score is updated
 		setInnerText(playerScoreEl, score);
-	} else {
-		console.log('You missed!');
-		score = 0;
-		setInnerText(playerScoreEl, 0);
-		
-	} 
-
-	//score++; //updates points for players
+		setInnerText(currentRoundEl, score);
+	}
 
     //sets game to equal 10 rounds
     if(score == 10){
-	/*messageEl.innerHTML = `<p>YOU WON!</p> 
+	messageEl.innerHTML = `<p>CONGRATULATIONS YOU WON!</p> 
                 <button type="playAgainButton">Play again</button>
                 ` 
-				*/
-    score = 0;
-                virus = "";
+				score=0;
             }
-	/*//Play again event
+
+	//Play again event
 	if(e.target.getAttribute("type") === "playAgainButton"){
+		continueGame = false;
 		score = 0; 
-		gameRounds.length = 0; //nollställer gamerounds
-		scoreboardEl.innerHTML = ""; //nollställer Scoreboard
-		playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
-		opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+		setInnerText(playerScoreEl, score);
+		setInnerText(currentRoundEl, score);
+		currentRoundEl.innerHTML = 0;
+		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
+		//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
+		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
 		messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"	
 	}
-  	*/
-
 });
-
-
-
 
 
 // Submit event for username
