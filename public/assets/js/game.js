@@ -40,6 +40,8 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
+let interval;
+
 // Start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
@@ -59,10 +61,10 @@ let stopTimer = function stop(){
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
 	for (let i = 1; i < 27; i++) {
-		let gridbox = document.createElement('img');
+		let gridbox = document.createElement('div');
 		gridbox.id = i;
 		gridbox.className = 'gridbox' + i + ' ' + 'gridbox' + ' ' + 'img-fluid';
-		gridbox.src = '';
+		// gridbox.src = '';
 		gameAreaEl.appendChild(gridbox);
 	}
 };
@@ -70,23 +72,26 @@ getGrid();
 
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
 const randomizedVirusPosition = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1; 
-	let position = document.getElementById(gridPosition);
-	virus = './assets/icons/virus.png'
-	position.src = virus;
+
+    let gridPosition = Math.floor(Math.random() * 26) + 1;
+    let position = document.getElementById(gridPosition);
+    let virus = document.createElement('img');
+
+    virus.id = 'virus';
+    virus.src = './assets/icons/virus.png';
+    position.appendChild(virus);
 };
 
-let interval;
 
 //DISPLAY VIRUS WITH RANDOM DELAY
 const showVirus = () => {
-		setTimeout(() => {
-			randomizedVirusPosition(); //calls the display-virus-function
+	setTimeout(() => {
+		randomizedVirusPosition(); //calls the display-virus-function
 			
-			startTimer();
+		startTimer();
 			
-			//window.alert('Done waiting');
-	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
+		//window.alert('Done waiting');
+	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
 };
 
 //add startTimer to showVirus-function
@@ -99,11 +104,11 @@ showVirus();
 /////*/
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
-	if (e.target.tagName === 'IMG') {
+	if (e.target.tagName === 'IMG' ) {
 
 		// Stop timer
 		stopTimer()
-
+		
 		console.log('You killed the virus!');
 		score++;
 		setInnerText(playerScoreEl, score);
