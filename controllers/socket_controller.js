@@ -10,6 +10,7 @@ const users = {};
 // 	id: 'waitingRoom',
 // 	users: { name: username, time: timestamp },
 // };
+
 const gameRounds = 10;
 
 const getPlayer1 = null;
