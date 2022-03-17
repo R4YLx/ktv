@@ -6,10 +6,10 @@ const debug = require('debug')('ktv:socket_controller'); //läser in debug
 let io = null;
 
 const users = {};
-const waitingRoom = {
-	id: 'waitingRoom',
-	users: { name: username, time: timestamp },
-};
+// const waitingRoom = {
+// 	id: 'waitingRoom',
+// 	users: { name: username, time: timestamp },
+// };
 const gameRounds = 10;
 
 const getPlayer1 = null;
