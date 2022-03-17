@@ -7,10 +7,21 @@ const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
 const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
-const virusTextEl = document.querySelector('#virusText');
+const opponentScoreEl = document.querySelector('#playerScore');
+const playAgainButtonEl = document.querySelector('#playAgainButton');
+const scoreboardEl = document.querySelector('#scoreboardEl');
+const currentRoundEl = document.querySelector('#currentRoundEl');
+const showRoundsEl = document.querySelector('#showRoundsEl');
+const messageEl = document.querySelector('#messageEl');
+
 
 let username = null;
 let score = 0;
+//let showRounds = 0;
+let currentRound = 0;
+let virus = './assets/icons/virus.png';
+let continueGame = true;
+
 
 /*//////
 //  Functions 
@@ -75,18 +86,51 @@ showVirus();
 
 //  Events
 /////*/
-// Click event for virus
+
+
+
 gameAreaEl.addEventListener('click', e => {
+	//prevents default page reload
+	e.preventDefault();
+
+	// Click event for virus
 	if (e.target.tagName === 'IMG') {
 		console.log('You killed the virus!');
-		score++;
+		score++; //Players score is updated
 		setInnerText(playerScoreEl, score);
 	} else {
 		console.log('You missed!');
 		score = 0;
 		setInnerText(playerScoreEl, 0);
+		
+	} 
+
+	//score++; //updates points for players
+
+    //sets game to equal 10 rounds
+    if(score == 10){
+	/*messageEl.innerHTML = `<p>YOU WON!</p> 
+                <button type="playAgainButton">Play again</button>
+                ` 
+				*/
+    score = 0;
+                virus = "";
+            }
+	/*//Play again event
+	if(e.target.getAttribute("type") === "playAgainButton"){
+		score = 0; 
+		gameRounds.length = 0; //nollställer gamerounds
+		scoreboardEl.innerHTML = ""; //nollställer Scoreboard
+		playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+		opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+		messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"	
 	}
+  	*/
+
 });
+
+
+
 
 
 // Submit event for username
