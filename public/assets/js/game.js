@@ -7,10 +7,21 @@ const gameAreaEl = document.querySelector('#gameArea');
 const usernameFormEl = document.querySelector('#usernameForm');
 const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
-const virusTextEl = document.querySelector('#virusText');
+const opponentScoreEl = document.querySelector('#playerScore');
+const playAgainButtonEl = document.querySelector('#playAgainButton');
+const scoreboardEl = document.querySelector('#scoreboard');
+const currentRoundEl = document.querySelector('#currentRound');
+const showRoundsEl = document.querySelector('#showRounds');
+const messageEl = document.querySelector('#message');
+
 
 let username = null;
 let score = 0;
+//let showRounds = 0;
+let currentRound = 0;
+let virus = './assets/icons/virus.png';
+let continueGame = true;
+
 
 /*//////
 //  Functions 
@@ -70,21 +81,43 @@ const showVirus = () => {
 }
 //add startTimer to showVirus-function
 showVirus();
-//vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
-
 
 //  Events
 /////*/
-// Click event for virus
+
+
 gameAreaEl.addEventListener('click', e => {
+	//prevents default page reload
+	e.preventDefault();
+
+	// Click event for virus
 	if (e.target.tagName === 'IMG') {
 		console.log('You killed the virus!');
-		score++;
+		score++; //Players score is updated
 		setInnerText(playerScoreEl, score);
-	} else {
-		console.log('You missed!');
-		score = 0;
-		setInnerText(playerScoreEl, 0);
+		setInnerText(currentRoundEl, score);
+	}
+
+    //sets game to equal 10 rounds
+    if(score == 10){
+	messageEl.innerHTML = `<p>CONGRATULATIONS YOU WON!</p> 
+                <button type="playAgainButton">Play again</button>
+                ` 
+				score=0;
+            }
+
+	//Play again event
+	if(e.target.getAttribute("type") === "playAgainButton"){
+		continueGame = false;
+		score = 0; 
+		setInnerText(playerScoreEl, score);
+		setInnerText(currentRoundEl, score);
+		currentRoundEl.innerHTML = 0;
+		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
+		//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
+		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+		messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"	
 	}
 });
 

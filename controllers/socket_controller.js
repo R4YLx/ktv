@@ -8,7 +8,7 @@ let io = null;
 const users = {};
 const waitingRoom = {
 	id: 'waitingRoom',
-	users: { name: username, time: timestamp },
+	//users: { name: username, time: timestamp },
 };
 const gameRounds = 10;
 
