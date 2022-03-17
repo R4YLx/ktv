@@ -39,6 +39,8 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
+
+//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
 	for (let i = 1; i < 27; i++) {
 		let gridbox = document.createElement('img');
@@ -48,33 +50,44 @@ const getGrid = () => {
 		gameAreaEl.appendChild(gridbox);
 	}
 };
-
 getGrid();
 
-const displayVirus = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1;
+//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
+const randomizedVirusPosition = () => {
+	let gridPosition = Math.floor(Math.random() * 26) + 1; 
 	let virus = './assets/icons/virus.png';
 	let position = document.getElementById(gridPosition);
-
 	position.src = virus;
-
-	// set delay
 };
 
-//DISPLAY VIRUS
 
-//1. delayVirusDisplay(); = Display virus with delay
-/*
-function delayVirusDisplay() {
-    alert('Virus is here in your alert only for you <3 ');
-  }
-*/
+//DISPLAY VIRUS WITH RANDOM DELAY
+const showVirus = () => {
+		setTimeout(() => {
+			randomizedVirusPosition(); //calls the display-virus-function
+			//window.alert('Done waiting');
+	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
+}
+//add startTimer to showVirus-function
+showVirus();
+//vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
 
-//1.1 hämta virus
-//1.2. Delay();
-//1.3. Position();
+
 //  Events
 /////*/
+// Click event for virus
+gameAreaEl.addEventListener('click', e => {
+	if (e.target.tagName === 'IMG') {
+		console.log('You killed the virus!');
+		score++;
+		setInnerText(playerScoreEl, score);
+	} else {
+		console.log('You missed!');
+		score = 0;
+		setInnerText(playerScoreEl, 0);
+	}
+});
+
 
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
@@ -104,15 +117,4 @@ usernameFormEl.addEventListener('submit', e => {
 	});
 });
 
-// Click event for virus
-gameAreaEl.addEventListener('click', e => {
-	if (e.target.tagName === 'IMG') {
-		console.log('You killed the virus!');
-		score++;
-		setInnerText(playerScoreEl, score);
-	} else {
-		console.log('You missed!');
-		score = 0;
-		setInnerText(playerScoreEl, 0);
-	}
-});
+
