@@ -39,6 +39,21 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
+// Start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function() {
+		let elapsedTime = Date.now() - startTime;
+
+		document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);//(3)- is nr of decimals
+	}, 	100);
+
+}
+
+// Stop timer
+let stopTimer = function stop(){
+	clearInterval(interval);
+}
 
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
@@ -60,20 +75,15 @@ const randomizedVirusPosition = () => {
 	position.src = virus;
 };
 
+let interval;
 
 //DISPLAY VIRUS WITH RANDOM DELAY
 const showVirus = () => {
 		setTimeout(() => {
 			randomizedVirusPosition(); //calls the display-virus-function
 			
-			// Start timer when virus is on display
-			var startTime = Date.now();
-			setInterval(function() {
-				let elapsedTime = Date.now() - startTime;
-
-				document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);
-			}, 	100);
-
+			startTimer();
+			
 			//window.alert('Done waiting');
 	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
 };
@@ -84,15 +94,20 @@ showVirus();
 
 
 
-
 //  Events
 /////*/
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
 	if (e.target.tagName === 'IMG') {
+
+		// Stop timer
+		stopTimer()
+
 		console.log('You killed the virus!');
 		score++;
 		setInnerText(playerScoreEl, score);
+
+		
 	} else {
 		console.log('You missed!');
 		score = 0;
