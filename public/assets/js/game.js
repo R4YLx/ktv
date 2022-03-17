@@ -14,14 +14,12 @@ const currentRoundEl = document.querySelector('#currentRound');
 const showRoundsEl = document.querySelector('#showRounds');
 const messageEl = document.querySelector('#message');
 
-
 let username = null;
 let score = 0;
 let virus = '';
 //let showRounds = 0;
 let currentRound = 0;
 let continueGame = true;
-
 
 /*//////
 //  Functions 
@@ -80,7 +78,7 @@ const getGrid = () => {
 };
 getGrid();
 
-//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
+//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
 
     let gridPosition = Math.floor(Math.random() * 26) + 1;
@@ -91,7 +89,6 @@ const randomizedVirusPosition = () => {
     virus.src = './assets/icons/virus.png';
     position.appendChild(virus);
 };
-
 
 //DISPLAY VIRUS WITH RANDOM DELAY
 const showVirus = () => {
@@ -110,7 +107,6 @@ showVirus();
 
 //  Events
 /////*/
-
 
 gameAreaEl.addEventListener('click', e => {
 	if (e.target.tagName === 'IMG' ) {
@@ -170,26 +166,22 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
-	console.log(username);
-	hideElement(startEl);
-	setInnerText(playerUsernameEl, username);
-	displayElement(gameWrapperEl);
-
 	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
-	socket.emit('user:joined', username, status => {
-		//  we've received acknowledgement from the server
-		console.log('A new player has joined', status);
-
+	socket.emit('playerJoined', username, status => {
 		if (status.success) {
-			// hide start view
 			hideElement(startEl);
-
 			setInnerText(playerUsernameEl, username);
-
-			// show game
 			displayElement(gameWrapperEl);
 		}
 	});
 });
 
+// listen for when a user disconnects
+socket.on('user:disconnected', username => {
+	addNoticeToChat(`${username} disconnected 😢`);
+});
 
+// listen for when we're disconnected
+socket.on('disconnect', reason => {
+	console.log(`Disconnected because of ${reason}} 😳`);
+});

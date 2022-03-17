@@ -2,42 +2,32 @@
  * Socket Controller
  */
 
-const debug = require('debug')('ktv:socket_controller'); //läser in debug
+const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
-const users = {};
-// const waitingRoom = {
-// 	id: 'waitingRoom',
-// 	users: { name: username, time: timestamp },
-// };
+let players = {};
 
-const gameRounds = 10;
+// Function for handling connecting players
+const handlePlayerJoined = function (username, callback) {
+	debug(`User ${username} with socket id ${this.id} has joined.`);
 
-const getPlayer1 = null;
-const getPlayer2 = null;
+	players[this.id] = username;
 
-const matchPlayers = () => {};
-
-// Create a function for handling joined user
-const handleUserJoined = function (username, room_id, callback) {
-	debug(
-		`User ${username} with socket id ${this.id} wants to join room '${room_id}'`
-	);
+	callback({ success: true });
 };
 
-// // Handle user disconnect
-// socket.on('disconnect', function() {
-// debug(`Player ${this.id} disconnected`);
+// Function for handling disconnecting players
+const handlePlayerDisconnected = function (username) {
+	debug(`Client ${username} with id: ${this.id} disconnected`);
+};
 
-// //broadcast to everyone else that the user disconnected (vi kan annars strunta i att broadcasta detta och bara skicka ut felmeddelande till den andra spelaren/alternativt att spelet bara avbryts och den får ett "du-vann-meddelande!" bara )
-// this.broadcast.emit('user:disconnected');
-// });
+module.exports = function (socket) {
+	io = this;
 
-// Randomize virus position and send location to game.js to display
+	debug('On start of app: a new client has connected', socket.id);
 
-module.exports = function (socket, _io) {
-	debug('A new client has connected', socket.id);
-
-	// Handle user joined
-	socket.on('user:joined', handleUserJoined);
+	// handle player connect
+	socket.on('playerJoined', handlePlayerJoined);
+	// handle player disconnet
+	socket.on('disconnect', handlePlayerDisconnected);
 };
