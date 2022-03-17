@@ -41,7 +41,7 @@
 
 #gameArea {
 	background-color: black;
-	min-height: 75vh;
+	min-height: 80vh;
 	display: grid;
 	/*place-content: center;*/
 	grid-template-columns: repeat(5, 1fr);
@@ -130,7 +130,7 @@
 }
 
 #virus {
-	/* max-width: 100%; */
+	max-width: 2 rem;
 	z-index: 99;
 }
 
