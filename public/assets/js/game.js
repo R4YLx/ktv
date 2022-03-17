@@ -8,9 +8,6 @@ const usernameFormEl = document.querySelector('#usernameForm');
 const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
 const virusTextEl = document.querySelector('#virusText');
-const virusEl = document.querySelector('#virus');
-
-
 
 let username = null;
 let score = 0;
@@ -38,6 +35,7 @@ const setInnerText = (element, value) => {
 
 //DISPLAY VIRUS 
 
+
 //1. delayVirusDisplay(); = Display virus with delay
 /*
 function delayVirusDisplay() {
@@ -48,23 +46,6 @@ function delayVirusDisplay() {
 //1.1 hämta virus
 //1.2. Delay();
 //1.3. Position();
-//1.4 Display Virus 
-
-setTimeout(() => {console.log("viruuus")}, 5000);
-setTimeout(() => {setInnerText(virusTextEl, "VIRUS HERE!")}, 5000);
-//setTimeout(() => {setInnerHTML(virusEl, IMAGE)}, 5000);
-//virus.src = "./assets/icons/virus.png"
-   
- 
-
-  
-
-  
-
-
-
-
-/*//////§
 //  Events
 /////*/
 
@@ -112,7 +93,3 @@ gameAreaEl.addEventListener('click', e => {
 		setInnerText(playerScoreEl, 0);
 	}
 });
-
-
-
-
