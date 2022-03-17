@@ -54,12 +54,4 @@ module.exports = function (socket, _io) {
 
 // 7. Randomize DelayVirusDisplay - SET TIMEOUT, slumpar en delay-tid innan Virus-position sätts ut
 
-//<h2 id="VirusHere"></h2> //put in html
-//put in JS chat and not here (?????)
-/*
-   const myTimeout = setTimeout(delayVirusDisplay, 5000); //sets the timer to 5 seconds
-   function delayVirusDisplay() {
-	 document.getElementById("VirusHere").innerHTML = "Virus comes after you now after 5 seconds!"
-   }
-   */
-//vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
+
