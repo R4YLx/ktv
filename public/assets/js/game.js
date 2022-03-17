@@ -29,39 +29,12 @@ const hideElement = element => {
 // set innerText value
 const setInnerText = (element, value) => {
 	element.innerText = value;
+
 };
 
-const setInnerHTML = (element, value) => {
-	element.innerHTML = value;
-};
 
-const getRandomNumber = value => {
-	return Math.floor(Math.random() * value) + 1;
-};
+//DISPLAY VIRUS 
 
-const getGrid = () => {
-	for (let i = 1; i < 27; i++) {
-		let gridbox = document.createElement('img');
-		gridbox.id = i;
-		gridbox.className = 'gridbox' + i + ' ' + 'gridbox' + ' ' + 'img-fluid';
-		gridbox.src = '';
-		gameAreaEl.appendChild(gridbox);
-	}
-};
-
-getGrid();
-
-const displayVirus = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1;
-	let virus = './assets/icons/virus.png';
-	let position = document.getElementById(gridPosition);
-
-	position.src = virus;
-
-	// set delay
-};
-
-//DISPLAY VIRUS
 
 //1. delayVirusDisplay(); = Display virus with delay
 /*
@@ -73,18 +46,6 @@ function delayVirusDisplay() {
 //1.1 hämta virus
 //1.2. Delay();
 //1.3. Position();
-//1.4 Display Virus
-
-// setTimeout(() => {
-// 	console.log('viruuus');
-// }, 5000);
-// setTimeout(() => {
-// 	setInnerText(virusTextEl, 'VIRUS HERE!');
-// }, 5000);
-//setTimeout(() => {setInnerHTML(virusEl, IMAGE)}, 5000);
-//virus.src = "./assets/icons/virus.png"
-
-/*//////
 //  Events
 /////*/
 
@@ -115,6 +76,10 @@ usernameFormEl.addEventListener('submit', e => {
 		}
 	});
 });
+
+
+
+
 
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
