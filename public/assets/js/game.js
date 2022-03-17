@@ -39,44 +39,44 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
-
-//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
+//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box.
 const getGrid = () => {
 	for (let i = 1; i < 27; i++) {
-		let gridbox = document.createElement('img');
+		let gridbox = document.createElement('div');
 		gridbox.id = i;
 		gridbox.className = 'gridbox' + i + ' ' + 'gridbox' + ' ' + 'img-fluid';
-		gridbox.src = '';
+		// gridbox.src = '';
 		gameAreaEl.appendChild(gridbox);
 	}
 };
 getGrid();
 
-//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
+//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1; 
-	let virus = './assets/icons/virus.png';
+	let gridPosition = Math.floor(Math.random() * 26) + 1;
 	let position = document.getElementById(gridPosition);
-	position.src = virus;
+	let virus = document.createElement('img');
+	virus.id = 'virus';
+	virus.src = './assets/icons/virus.png';
+	position.appendChild(virus);
 };
-
 
 //DISPLAY VIRUS WITH RANDOM DELAY
 const showVirus = () => {
-		setTimeout(() => {
-			randomizedVirusPosition(); //calls the display-virus-function
-			//window.alert('Done waiting');
-	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
-}
+	setTimeout(() => {
+		randomizedVirusPosition(); //calls the display-virus-function
+		//window.alert('Done waiting');
+	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
+};
 //add startTimer to showVirus-function
 showVirus();
 //vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
-
 
 //  Events
 /////*/
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
+	console.log(e.target.id);
 	if (e.target.tagName === 'IMG') {
 		console.log('You killed the virus!');
 		score++;
@@ -88,33 +88,28 @@ gameAreaEl.addEventListener('click', e => {
 	}
 });
 
-
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameFormEl.username.value;
 
-	console.log(username);
-	hideElement(startEl);
-	setInnerText(playerUsernameEl, username);
-	displayElement(gameWrapperEl);
-
 	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
-	socket.emit('user:joined', username, status => {
-		//  we've received acknowledgement from the server
-		console.log('A new player has joined', status);
-
+	socket.emit('playerJoined', username, status => {
 		if (status.success) {
-			// hide start view
 			hideElement(startEl);
-
 			setInnerText(playerUsernameEl, username);
-
-			// show game
 			displayElement(gameWrapperEl);
 		}
 	});
 });
 
+// listen for when a user disconnects
+socket.on('user:disconnected', username => {
+	addNoticeToChat(`${username} disconnected 😢`);
+});
 
+// listen for when we're disconnected
+socket.on('disconnect', reason => {
+	console.log(`Disconnected because of ${reason}} 😳`);
+});

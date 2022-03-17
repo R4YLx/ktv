@@ -11,9 +11,9 @@
 	max-width: 100%;
 }
 
-/* .hide {
+.hide {
 	display: none !important;
-} */
+}
 
 #start {
 	background-color: black;
@@ -36,12 +36,12 @@
 }
 
 #scoreColumn {
-	min-height: 20vh;
+	height: 20vh;
 }
 
 #gameArea {
 	background-color: black;
-	min-height: 75vh;
+	min-height: 80vh;
 	display: grid;
 	/*place-content: center;*/
 	grid-template-columns: repeat(5, 1fr);
@@ -130,7 +130,7 @@
 }
 
 #virus {
-	/* max-width: 100%; */
+	max-width: 8rem;
 	z-index: 99;
 }
 
