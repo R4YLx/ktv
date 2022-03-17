@@ -44,11 +44,89 @@
 	min-height: 75vh;
 	display: grid;
 	/*place-content: center;*/
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
+}
 
+.gridbox1 {
+	grid-area: 1 / 1 / 2 / 2;
+}
+.gridbox2 {
+	grid-area: 1 / 2 / 2 / 3;
+}
+.gridbox3 {
+	grid-area: 1 / 3 / 2 / 4;
+}
+.gridbox4 {
+	grid-area: 1 / 4 / 2 / 5;
+}
+.gridbox5 {
+	grid-area: 1 / 5 / 2 / 6;
+}
+.gridbox6 {
+	grid-area: 2 / 1 / 3 / 2;
+}
+.gridbox7 {
+	grid-area: 2 / 2 / 3 / 3;
+}
+.gridbox8 {
+	grid-area: 2 / 3 / 3 / 4;
+}
+.gridbox9 {
+	grid-area: 2 / 4 / 3 / 5;
+}
+.gridbox10 {
+	grid-area: 2 / 5 / 3 / 6;
+}
+.gridbox11 {
+	grid-area: 3 / 1 / 4 / 2;
+}
+.gridbox12 {
+	grid-area: 3 / 2 / 4 / 3;
+}
+.gridbox13 {
+	grid-area: 3 / 3 / 4 / 4;
+}
+.gridbox14 {
+	grid-area: 3 / 4 / 4 / 5;
+}
+.gridbox15 {
+	grid-area: 3 / 5 / 4 / 6;
+}
+.gridbox16 {
+	grid-area: 4 / 1 / 5 / 2;
+}
+.gridbox17 {
+	grid-area: 4 / 2 / 5 / 3;
+}
+.gridbox18 {
+	grid-area: 4 / 3 / 5 / 4;
+}
+.gridbox19 {
+	grid-area: 4 / 4 / 5 / 5;
+}
+.gridbox20 {
+	grid-area: 4 / 5 / 5 / 6;
+}
+.gridbox21 {
+	grid-area: 1 / 5 / 6 / 6;
+}
+.gridbox22 {
+	grid-area: 5 / 1 / 6 / 2;
+}
+.gridbox23 {
+	grid-area: 5 / 2 / 6 / 3;
+}
+.gridbox24 {
+	grid-area: 5 / 3 / 6 / 4;
+}
+.gridbox25 {
+	grid-area: 5 / 4 / 6 / 5;
+}
+.gridbox26 {
+	grid-area: 5 / 5 / 6 / 6;
 }
 
 #virus {
