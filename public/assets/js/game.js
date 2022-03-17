@@ -118,7 +118,7 @@ gameAreaEl.addEventListener('click', e => {
 		e.preventDefault();
 
 		// Stop timer
-		stopTimer()
+		stopTimer();
 		
 	// Click event for virus
 	if (e.target.tagName === 'IMG') {
@@ -161,8 +161,8 @@ if(e.target.getAttribute("type") === "playAgainButton"){
 	
 	}
 	showVirus();
-}});
-
+}
+});
 
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
