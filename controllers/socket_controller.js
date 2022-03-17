@@ -3,35 +3,25 @@
  */
 
 const debug = require('debug')('ktv:socket_controller'); //läser in debug
-
-// Socket.io server instance
 let io = null;
 
-// List of users
 const users = {};
+const waitingRoom = {
+	id: 'waitingRoom',
+	users: { name: username, time: timestamp },
+};
+const gameRounds = 10;
 
-//List of rooms
-const rooms = [{}];
+const getPlayer1 = null;
+const getPlayer2 = null;
+
+const matchPlayers = () => {};
 
 // Create a function for handling joined user
 const handleUserJoined = function (username, room_id, callback) {
 	debug(
 		`User ${username} with socket id ${this.id} wants to join room '${room_id}'`
 	);
-
-	// Join room
-	this.join(room_id);
-
-	// Find room
-	const room = rooms.find(gameroom => gameroom.id === room_id);
-
-	// Add socket to room's users-object
-	// room.users[this.id] = username;
-};
-
-// Put available players into one gameroom
-const assignUserToRoom = function () {
-	socket.emit('Welcome to the pixel game', 'WELCOME TO THE PIXEL GAME!');
 };
 
 // // Handle user disconnect
@@ -42,16 +32,11 @@ const assignUserToRoom = function () {
 // this.broadcast.emit('user:disconnected');
 // });
 
-//det finns en socket till varje ny anslutning av en person till spelet
+// Randomize virus position and send location to game.js to display
+
 module.exports = function (socket, _io) {
 	debug('A new client has connected', socket.id);
 
 	// Handle user joined
 	socket.on('user:joined', handleUserJoined);
 };
-
-// 6. Randomize virusPosition
-
-// 7. Randomize DelayVirusDisplay - SET TIMEOUT, slumpar en delay-tid innan Virus-position sätts ut
-
-
