@@ -65,12 +65,24 @@ const randomizedVirusPosition = () => {
 const showVirus = () => {
 		setTimeout(() => {
 			randomizedVirusPosition(); //calls the display-virus-function
+			
+			// Start timer when virus is on display
+			var startTime = Date.now();
+			setInterval(function() {
+				let elapsedTime = Date.now() - startTime;
+
+				document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);
+			}, 	100);
+
 			//window.alert('Done waiting');
-	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
-}
+	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
+};
+
 //add startTimer to showVirus-function
 showVirus();
 //vi kan annars göra en onclick på viruset: <button onclick="setTimeout(delayVirusDisplay, 3000);">Click this virus!</button>
+
+
 
 
 //  Events
