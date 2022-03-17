@@ -11,6 +11,7 @@ const virusTextEl = document.querySelector('#virusText');
 
 let username = null;
 let score = 0;
+let virus = '';
 
 /*//////
 //  Functions 
@@ -70,8 +71,8 @@ getGrid();
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
 const randomizedVirusPosition = () => {
 	let gridPosition = Math.floor(Math.random() * 26) + 1; 
-	let virus = './assets/icons/virus.png';
 	let position = document.getElementById(gridPosition);
+	virus = './assets/icons/virus.png'
 	position.src = virus;
 };
 
@@ -113,6 +114,7 @@ gameAreaEl.addEventListener('click', e => {
 		score = 0;
 		setInnerText(playerScoreEl, 0);
 	}
+	showVirus();
 });
 
 
