@@ -41,6 +41,14 @@
 			</div>
 
 			<!-- Waiting for game -->
+			<div id="waiting" class="text-center hide">
+				<div class="container">
+					<p class="text-light">Waiting for opponenent</p>
+					<div class="spinner-border text-danger" role="status">
+						<span class="sr-only"></span>
+					</div>
+				</div>
+			</div>
 
 			<!-- Game -->
 			<div id="gameWrapper" class="hide d-flex flex-column-reverse">
@@ -48,17 +56,13 @@
 					id="scoreColumn"
 					class="justify-content-center align-items-center d-flex justify-content-around p-2 order-md-1"
 				>
-					<!--vita rutan-->
-
 					<div class="playerNameContainer text-center">
-						<!--Player 1-ruta-->
 						<h3 id="playerUsername">Player 1</h3>
 						<p id="playerOneTime">&mdash;</p>
 					</div>
 
 					<div class="scoreWrapper">
 						<div id="scoreboard" class="text-center mb-4">
-							<!--Scoreboard-ruta med poängställning-->
 							<h3>Scoreboard</h3>
 							<p>
 								<span id="playerScore">0</span>-<span id="opponentScore"
@@ -68,30 +72,23 @@
 						</div>
 
 						<div id="gameRounds" class="text-center mt-4">
-							<!--visar antal rundor-->
 							<h3>Game Round</h3>
 							<p id="showRounds"><span id="currentRound"></span> / 10</p>
 						</div>
 					</div>
 
 					<div class="playerNameContainer text-center">
-						<!--Player 2-ruta-->
 						<h3 id="opponentUsername">Player 2</h3>
 						<p id="playerTwoTime">&mdash;</p>
 					</div>
 				</div>
 
-				<div id="gameArea">
-					<!--Svarta rutan-->
-					<div id="message" class="text-center justify-content-center"></div> <!--innehåller YOU WON!-meddelande-->
-					<div id="playAgainButton" class="text-center justify-content-center"></div> <!--innehåller PLAY AGAIN-KNAPP-->
-					<div id="exitGameButton" class="text-center justify-content-center"></div> <!--innehåller EXIT GAME-KNAPP-->
-					
-				</div>
+				<div id="gameArea"></div>
 			</div>
 		</div>
 
 		<!-- Game Over -->
+		<div id="notice" class="lightbox"></div>
 		<!-- Socket.IO -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
 
