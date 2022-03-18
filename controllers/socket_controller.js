@@ -6,6 +6,10 @@ const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
 let players = {};
+let availableRoom = 1;
+let games = [];
+
+const getVirus = () => {};
 
 // Function for handling connecting players
 const handlePlayerJoined = function (username, callback) {
@@ -16,11 +20,6 @@ const handlePlayerJoined = function (username, callback) {
 	callback({ success: true });
 };
 
-// Function for handling disconnecting players
-const handlePlayerDisconnected = function (username) {
-	debug(`Client ${username} with id: ${this.id} disconnected`);
-};
-
 module.exports = function (socket) {
 	io = this;
 
@@ -28,6 +27,4 @@ module.exports = function (socket) {
 
 	// handle player connect
 	socket.on('playerJoined', handlePlayerJoined);
-	// handle player disconnet
-	socket.on('disconnect', handlePlayerDisconnected);
 };

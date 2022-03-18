@@ -167,13 +167,3 @@ usernameFormEl.addEventListener('submit', e => {
 		}
 	});
 });
-
-// listen for when a user disconnects
-socket.on('user:disconnected', username => {
-	addNoticeToChat(`${username} disconnected 😢`);
-});
-
-// listen for when we're disconnected
-socket.on('disconnect', reason => {
-	console.log(`Disconnected because of ${reason}} 😳`);
-});
