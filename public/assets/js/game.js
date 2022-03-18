@@ -9,6 +9,7 @@ const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
 const opponentScoreEl = document.querySelector('#playerScore');
 const playAgainButtonEl = document.querySelector('#playAgainButton');
+const exitGameButtonEl = document.querySelector('#exitGameButton');
 const scoreboardEl = document.querySelector('#scoreboard');
 const currentRoundEl = document.querySelector('#currentRound');
 const showRoundsEl = document.querySelector('#showRounds');
@@ -18,7 +19,7 @@ let username = null;
 let score = 0;
 //let showRounds = 0;
 let currentRound = 0;
-let virus = './assets/icons/virus.png';
+let virus = '';
 let continueGame = true;
 
 /*//////
@@ -48,7 +49,28 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
-//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box.
+
+
+let interval;
+
+// Saras Timer-function: Start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function() {
+		let elapsedTime = Date.now() - startTime;
+
+		document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);//(3)- is nr of decimals
+	}, 	100);
+
+}
+
+// Stop timer
+let stopTimer = function stop(){
+	clearInterval(interval);
+}
+
+
+//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
 	for (let i = 1; i < 27; i++) {
 		let gridbox = document.createElement('div');
@@ -60,14 +82,17 @@ const getGrid = () => {
 };
 getGrid();
 
+
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1;
-	let position = document.getElementById(gridPosition);
-	let virus = document.createElement('img');
-	virus.id = 'virus';
-	virus.src = './assets/icons/virus.png';
-	position.appendChild(virus);
+
+    let gridPosition = Math.floor(Math.random() * 26) + 1;
+    let position = document.getElementById(gridPosition);
+    let virus = document.createElement('img');
+
+    virus.id = 'virus';
+    virus.src = './assets/icons/virus.png';
+    position.appendChild(virus);
 };
 
 //DISPLAY VIRUS WITH RANDOM DELAY
@@ -95,18 +120,33 @@ gameAreaEl.addEventListener('click', e => {
 		setInnerText(currentRoundEl, score);
 	}
 
-	//sets game to equal 10 rounds
-	if (score == 10) {
-		messageEl.innerHTML = `<p>CONGRATULATIONS YOU WON!</p> 
-                <button type="playAgainButton">Play again</button>
-                `;
-		score = 0;
+    //sets game to equal 10 rounds
+    if(score == 10){
+	messageEl.innerHTML = 
+		`
+		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
+        <button type="playAgainButton">Play again</button>
+		<button type="">Exit</button>
+		` 
+		score=0;
+		//TÖM VIRUS-BILDEN HÄR TACK
 	}
+							/*//logik för förloraren (funkar inte med else här men nåt liknande):
+							else {
+								messageEl.innerHTML = 
+								`
+								<p>YOU LOST!, ${username}</p> 
+								<button type="playAgainButton">Play again</button>
+								<button type="">Exit</button>
+								` 
+								score=0;
+							}
+							*/
 
 	//Play again event
-	if (e.target.getAttribute('type') === 'playAgainButton') {
-		continueGame = false;
-		score = 0;
+	if(e.target.getAttribute("type") === "playAgainButton"){
+		
+		score = 0; 
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
 		currentRoundEl.innerHTML = 0;
