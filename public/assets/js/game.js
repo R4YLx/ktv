@@ -60,13 +60,12 @@ const getRandomNumber = value => {
 };
 
 
-
-// Start timer when virus is on display
+// Saras Timer-function: Start timer when virus is on display
 let startTimer = () => {
-	startTime = Date.now();
+	let startTime = Date.now();
 	interval = setInterval(function() {
 		let elapsedTime = Date.now() - startTime;
-		
+
 		document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);//(3)- is nr of decimals
 	}, 	100);
 
@@ -108,8 +107,6 @@ const getGrid = () => {
 };
 getGrid();
 
-
-
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
 
@@ -133,7 +130,6 @@ const showVirus = () => {
 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
 };
 
-//add startTimer to showVirus-function
 showVirus();
 
 
@@ -151,12 +147,14 @@ gameAreaEl.addEventListener('click', e => {
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
 
-		stopTimer();
-	}
 
+		stopTimer();
+		showVirus()
+	}
 	if (e.target.tagName === 'IMG' && oneRound === 10) {
 		
 	}
+						
 
     // //sets game to equal 10 rounds
     // if(score == 10){
@@ -188,8 +186,9 @@ gameAreaEl.addEventListener('click', e => {
 //Play again event
 playAgainButtonEl.addEventListener('click', e => {
 
+	//Play again event
 	if(e.target.getAttribute("type") === "playAgainButton"){
-
+		
 		score = 0; 
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
