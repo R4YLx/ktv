@@ -12,16 +12,15 @@ const playAgainButtonEl = document.querySelector('#playAgainButton');
 const exitGameButtonEl = document.querySelector('#exitGameButton');
 const scoreboardEl = document.querySelector('#scoreboard');
 const currentRoundEl = document.querySelector('#currentRound');
-const showRoundsEl = document.querySelector('#showRounds');
 const messageEl = document.querySelector('#message');
 
 let username = null;
 let score = 0;
-//let showRounds = 0;
-let oneRound = 0;
 let currentRound = 0;
 let virus = '';
 let continueGame = true;
+//const player1= "";
+//const player2= "";
 
 // Get time and calculate
 let interval;
@@ -107,13 +106,13 @@ const getGrid = () => {
 };
 getGrid();
 
+
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
 
     let gridPosition = Math.floor(Math.random() * 26) + 1;
     let position = document.getElementById(gridPosition);
     let virus = document.createElement('img');
-
     virus.id = 'virus';
     virus.src = './assets/icons/virus.png';
     position.appendChild(virus);
@@ -141,34 +140,41 @@ gameAreaEl.addEventListener('click', e => {
 	e.preventDefault();
 
 	// Click event for virus
-	if (e.target.tagName === 'IMG' ) {
+	if (e.target.tagName === 'IMG') {
 		console.log('You killed the virus!');
-		score++; //Players score is updated
-		setInnerText(playerScoreEl, score);
-		setInnerText(currentRoundEl, score);
-
 
 		stopTimer();
-		showVirus()
-	}
-	if (e.target.tagName === 'IMG' && oneRound === 10) {
+		score++;
+		/*
+		if (player1.time < player2.time) {
+			player1 = score++, setInnerText(playerScoreEl, score);;
+		} else {
+			player2 = score++, setInnerText(opponentScoreEl, score);;
+		}
+		*/
+		//Players score is updated
+		setInnerText(playerScoreEl, score);
 		
+		//ska ske varannan gång
+		setInnerText(currentRoundEl, score);
+	
+		showVirus();	
 	}
-						
 
-    // //sets game to equal 10 rounds
-    // if(score == 10){
-	// 	messageEl.innerHTML = 
-	// 		`
-	// 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
-	// 		<button type="playAgainButton">Play again</button>
-	// 		<button type="">Exit</button>
-	// 		` 
-	// 		score = 0;
-	// 		stopTimer();
-	// 		//TÖM VIRUS-BILDEN HÄR TACK
-	// }
+	
+     //sets game to equal 10 rounds
+    if(score == 10){
+		score = 0;
+		messageEl.innerHTML = 
+	 		`
+	 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
+	 		<button type="playAgainButton">Play again</button>
+	 		<button type="">Exit</button>
+	 		` 
+	 		//TÖM VIRUS-BILDEN HÄR TACK
+	 }
 
+	 
 	/*//logik för förloraren (funkar inte med else här men nåt liknande):
 					else {
 						messageEl.innerHTML = 
@@ -180,27 +186,30 @@ gameAreaEl.addEventListener('click', e => {
 							score=0;
 					}
 					*/
-
-});
-	
-//Play again event
-playAgainButtonEl.addEventListener('click', e => {
-
-	//Play again event
-	if(e.target.getAttribute("type") === "playAgainButton"){
+		//Play again event
+		if(e.target.getAttribute("type") === "playAgainButton"){
 		
-		score = 0; 
-		setInnerText(playerScoreEl, score);
-		setInnerText(currentRoundEl, score);
-		currentRoundEl.innerHTML = 0;
-		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
-		//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
-		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
-		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
-		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
+			score = 0; 
+			setInnerText(playerScoreEl, score);
+			setInnerText(currentRoundEl, score);
+			currentRoundEl.innerHTML = 0;
+			//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
+			//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+			//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+			messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
+		};
+			//Exit game-event
+		if(e.target.getAttribute("type") === "exitGameButton"){
+			hideElement(gameWrapperEl);
+			messageEl.innerHTML = 
+			`
+			<p>YOU LOST!, ${username}</p> 
+			` 
+			//messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
 	};
 
 });
+	
 
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
