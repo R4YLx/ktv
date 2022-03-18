@@ -9,6 +9,7 @@ const playerUsernameEl = document.querySelector('#playerUsername');
 const playerScoreEl = document.querySelector('#playerScore');
 const opponentScoreEl = document.querySelector('#playerScore');
 const playAgainButtonEl = document.querySelector('#playAgainButton');
+const exitGameButtonEl = document.querySelector('#exitGameButton');
 const scoreboardEl = document.querySelector('#scoreboard');
 const currentRoundEl = document.querySelector('#currentRound');
 const showRoundsEl = document.querySelector('#showRounds');
@@ -16,10 +17,19 @@ const messageEl = document.querySelector('#message');
 
 let username = null;
 let score = 0;
-let virus = '';
 //let showRounds = 0;
+let oneRound = 0;
 let currentRound = 0;
+let virus = '';
 let continueGame = true;
+
+// Get time and calculate
+let interval;
+let startTime;
+let elapsedTime;
+let stopTime;
+let playerTime; 
+let sum = 0;
 let timeSum = [];
 
 /*//////
@@ -49,14 +59,6 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
-// Get time and calculate
-let interval;
-let startTime;
-let elapsedTime;
-let stopTime;
-let playerTime; 
-let sum = 0;
-
 
 
 // Start timer when virus is on display
@@ -74,15 +76,17 @@ let startTimer = () => {
 let stopTimer = () => {
 	stopTime = Date.now();
 	clearInterval(interval);
-	saveTime();
 	console.log(timeSum)
 };
 
 
 let saveTime = () => {
-	const time = stopTime - startTime
-	playerTime = time/1000
-	timeSum.push (playerTime)
+	if (showVirus === 10) {
+		stopTimer();
+		const time = stopTime - startTime
+		playerTime = time/1000
+		timeSum.push (playerTime)
+}
 
 	timeSum.forEach (time => {
 		if (showVirus === 10) {
@@ -91,7 +95,6 @@ let saveTime = () => {
 		}
 	});	
 };
-
 
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
@@ -138,53 +141,65 @@ showVirus();
 /////*/
 
 gameAreaEl.addEventListener('click', e => {
+	//prevents default page reload
+	e.preventDefault();
+
+	// Click event for virus
 	if (e.target.tagName === 'IMG' ) {
-		//prevents default page reload
-		e.preventDefault();
-		score++; //Players score is updated
-
-
 		console.log('You killed the virus!');
+		score++; //Players score is updated
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
-		stopTimer();
 
+		stopTimer();
 	}
 
-    //sets game to equal 10 rounds
-    if(score == 10){
-		messageEl.innerHTML = `<p>CONGRATULATIONS YOU WON!</p> 
-            <button type="playAgainButton">Play again</button>
-                ` 
-		score=0;
-		stopTimer();
-
-    }
-
-	//Play again event
-
-if(e.target.getAttribute("type") === "playAgainButton"){
-
-	continueGame = false;
-	
-	score = 0;
-	
-	setInnerText(playerScoreEl, score);
-	setInnerText(currentRoundEl, score);
-	
-	currentRoundEl.innerHTML = 0;
-	
-	//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
-	
-	//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
-	
-	//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
-	
-	//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
-	
-	messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"
-	
+	if (e.target.tagName === 'IMG' && oneRound === 10) {
+		
 	}
+
+    // //sets game to equal 10 rounds
+    // if(score == 10){
+	// 	messageEl.innerHTML = 
+	// 		`
+	// 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
+	// 		<button type="playAgainButton">Play again</button>
+	// 		<button type="">Exit</button>
+	// 		` 
+	// 		score = 0;
+	// 		stopTimer();
+	// 		//TÖM VIRUS-BILDEN HÄR TACK
+	// }
+
+	/*//logik för förloraren (funkar inte med else här men nåt liknande):
+					else {
+						messageEl.innerHTML = 
+						`
+							<p>YOU LOST!, ${username}</p> 
+							<button type="playAgainButton">Play again</button>
+							<button type="">Exit</button>
+								` 
+							score=0;
+					}
+					*/
+
+});
+	
+//Play again event
+playAgainButtonEl.addEventListener('click', e => {
+
+	if(e.target.getAttribute("type") === "playAgainButton"){
+
+		score = 0; 
+		setInnerText(playerScoreEl, score);
+		setInnerText(currentRoundEl, score);
+		currentRoundEl.innerHTML = 0;
+		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
+		//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
+		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
+	};
 
 });
 
