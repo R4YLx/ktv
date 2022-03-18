@@ -51,9 +51,11 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
+
+
 let interval;
 
-// Start timer when virus is on display
+// Saras Timer-function: Start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
 	interval = setInterval(function() {
@@ -69,19 +71,6 @@ let stopTimer = function stop(){
 	clearInterval(interval);
 }
 
-/*
-//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
-const getGrid = () => {
-	for (let i = 1; i < 27; i++) {
-		let gridbox = document.createElement('img');
-		gridbox.id = i;
-		gridbox.className = 'gridbox' + i + ' ' + 'gridbox' + ' ' + 'img-fluid';
-		gridbox.src = '';
-		gameAreaEl.appendChild(gridbox);
-	}
-};
-getGrid();
-*/
 
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
@@ -95,15 +84,7 @@ const getGrid = () => {
 };
 getGrid();
 
-/*
-//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box. 
-const randomizedVirusPosition = () => {
-	let gridPosition = Math.floor(Math.random() * 26) + 1; 
-	let virus = './assets/icons/virus.png';
-	let position = document.getElementById(gridPosition);
-	position.src = virus;
-};
-*/
+
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
 
