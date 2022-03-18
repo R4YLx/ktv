@@ -15,14 +15,12 @@ const currentRoundEl = document.querySelector('#currentRound');
 const showRoundsEl = document.querySelector('#showRounds');
 const messageEl = document.querySelector('#message');
 
-
 let username = null;
 let score = 0;
 //let showRounds = 0;
 let currentRound = 0;
 let virus = '';
 let continueGame = true;
-
 
 /*//////
 //  Functions 
@@ -97,20 +95,18 @@ const randomizedVirusPosition = () => {
     position.appendChild(virus);
 };
 
-
 //DISPLAY VIRUS WITH RANDOM DELAY
 const showVirus = () => {
-		setTimeout(() => {
-			randomizedVirusPosition(); //calls the display-virus-function
-			//window.alert('Done waiting');
-	 	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
-}
+	setTimeout(() => {
+		randomizedVirusPosition(); //calls the display-virus-function
+		//window.alert('Done waiting');
+	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
+};
 //add startTimer to showVirus-function
 showVirus();
 
 //  Events
 /////*/
-
 
 gameAreaEl.addEventListener('click', e => {
 	//prevents default page reload
@@ -158,10 +154,9 @@ gameAreaEl.addEventListener('click', e => {
 		//showRoundsEl.innerHTML = ""; //nollställer Scoreboard
 		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
 		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
-		messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"	
+		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
 	}
 });
-
 
 // Submit event for username
 usernameFormEl.addEventListener('submit', e => {
@@ -169,26 +164,22 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
-	console.log(username);
-	hideElement(startEl);
-	setInnerText(playerUsernameEl, username);
-	displayElement(gameWrapperEl);
-
 	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
-	socket.emit('user:joined', username, status => {
-		//  we've received acknowledgement from the server
-		console.log('A new player has joined', status);
-
+	socket.emit('playerJoined', username, status => {
 		if (status.success) {
-			// hide start view
 			hideElement(startEl);
-
 			setInnerText(playerUsernameEl, username);
-
-			// show game
 			displayElement(gameWrapperEl);
 		}
 	});
 });
 
+// listen for when a user disconnects
+socket.on('user:disconnected', username => {
+	addNoticeToChat(`${username} disconnected 😢`);
+});
 
+// listen for when we're disconnected
+socket.on('disconnect', reason => {
+	console.log(`Disconnected because of ${reason}} 😳`);
+});

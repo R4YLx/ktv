@@ -11,9 +11,9 @@
 	max-width: 100%;
 }
 
-/* .hide {
+.hide {
 	display: none !important;
-} */
+}
 
 #start {
 	background-color: black;
@@ -36,7 +36,7 @@
 }
 
 #scoreColumn {
-	min-height: 20vh;
+	height: 20vh;
 }
 
 #gameArea {
@@ -130,7 +130,7 @@
 }
 
 #virus {
-	max-width: 2 rem;
+	max-width: 8rem;
 	z-index: 99;
 }
 
