@@ -20,6 +20,7 @@ let virus = '';
 //let showRounds = 0;
 let currentRound = 0;
 let continueGame = true;
+let timeSum = [];
 
 /*//////
 //  Functions 
@@ -48,23 +49,49 @@ const getRandomNumber = value => {
 	return Math.floor(Math.random() * value) + 1;
 };
 
+// Get time and calculate
 let interval;
+let startTime;
+let elapsedTime;
+let stopTime;
+let playerTime; 
+let sum = 0;
+
+
 
 // Start timer when virus is on display
 let startTimer = () => {
-	let startTime = Date.now();
+	startTime = Date.now();
 	interval = setInterval(function() {
 		let elapsedTime = Date.now() - startTime;
-
+		
 		document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);//(3)- is nr of decimals
 	}, 	100);
 
 }
 
 // Stop timer
-let stopTimer = function stop(){
+let stopTimer = () => {
+	stopTime = Date.now();
 	clearInterval(interval);
-}
+	saveTime();
+	console.log(timeSum)
+};
+
+
+let saveTime = () => {
+	const time = stopTime - startTime
+	playerTime = time/1000
+	timeSum.push (playerTime)
+
+	timeSum.forEach (time => {
+		if (showVirus === 10) {
+			sum += time/10;
+			document.querySelector("#playerOneTime").innerHTML  = `<span>${time}</span>`
+		}
+	});	
+};
+
 
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
@@ -77,6 +104,8 @@ const getGrid = () => {
 	}
 };
 getGrid();
+
+
 
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
@@ -112,16 +141,14 @@ gameAreaEl.addEventListener('click', e => {
 	if (e.target.tagName === 'IMG' ) {
 		//prevents default page reload
 		e.preventDefault();
-
-		// Stop timer
-		stopTimer();
-		
-	// Click event for virus
-	if (e.target.tagName === 'IMG') {
-		console.log('You killed the virus!');
 		score++; //Players score is updated
+
+
+		console.log('You killed the virus!');
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
+		stopTimer();
+
 	}
 
     //sets game to equal 10 rounds
@@ -130,6 +157,8 @@ gameAreaEl.addEventListener('click', e => {
             <button type="playAgainButton">Play again</button>
                 ` 
 		score=0;
+		stopTimer();
+
     }
 
 	//Play again event
@@ -156,8 +185,7 @@ if(e.target.getAttribute("type") === "playAgainButton"){
 	messageEl.innerHTML = ""; //nollställer "Grattis-meddelandet"
 	
 	}
-	showVirus();
-}
+
 });
 
 // Submit event for username
