@@ -18,9 +18,19 @@ const messageEl = document.querySelector('#message');
 let username = null;
 let score = 0;
 //let showRounds = 0;
+let oneRound = 0;
 let currentRound = 0;
 let virus = '';
 let continueGame = true;
+
+// Get time and calculate
+let interval;
+let startTime;
+let elapsedTime;
+let stopTime;
+let playerTime; 
+let sum = 0;
+let timeSum = [];
 
 /*//////
 //  Functions 
@@ -50,9 +60,6 @@ const getRandomNumber = value => {
 };
 
 
-
-let interval;
-
 // Saras Timer-function: Start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
@@ -65,10 +72,28 @@ let startTimer = () => {
 }
 
 // Stop timer
-let stopTimer = function stop(){
+let stopTimer = () => {
+	stopTime = Date.now();
 	clearInterval(interval);
+	console.log(timeSum)
+};
+
+
+let saveTime = () => {
+	if (showVirus === 10) {
+		stopTimer();
+		const time = stopTime - startTime
+		playerTime = time/1000
+		timeSum.push (playerTime)
 }
 
+	timeSum.forEach (time => {
+		if (showVirus === 10) {
+			sum += time/10;
+			document.querySelector("#playerOneTime").innerHTML  = `<span>${time}</span>`
+		}
+	});	
+};
 
 //Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
 const getGrid = () => {
@@ -81,7 +106,6 @@ const getGrid = () => {
 	}
 };
 getGrid();
-
 
 //randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
 const randomizedVirusPosition = () => {
@@ -99,11 +123,15 @@ const randomizedVirusPosition = () => {
 const showVirus = () => {
 	setTimeout(() => {
 		randomizedVirusPosition(); //calls the display-virus-function
+			
+		startTimer();
+			
 		//window.alert('Done waiting');
-	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder
+	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
 };
-//add startTimer to showVirus-function
+
 showVirus();
+
 
 //  Events
 /////*/
@@ -113,35 +141,50 @@ gameAreaEl.addEventListener('click', e => {
 	e.preventDefault();
 
 	// Click event for virus
-	if (e.target.tagName === 'IMG') {
+	if (e.target.tagName === 'IMG' ) {
 		console.log('You killed the virus!');
 		score++; //Players score is updated
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
-	}
 
-    //sets game to equal 10 rounds
-    if(score == 10){
-	messageEl.innerHTML = 
-		`
-		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
-        <button type="playAgainButton">Play again</button>
-		<button type="">Exit</button>
-		` 
-		score=0;
-		//TÖM VIRUS-BILDEN HÄR TACK
+
+		stopTimer();
+		showVirus()
 	}
-							/*//logik för förloraren (funkar inte med else här men nåt liknande):
-							else {
-								messageEl.innerHTML = 
-								`
-								<p>YOU LOST!, ${username}</p> 
-								<button type="playAgainButton">Play again</button>
-								<button type="">Exit</button>
+	if (e.target.tagName === 'IMG' && oneRound === 10) {
+		
+	}
+						
+
+    // //sets game to equal 10 rounds
+    // if(score == 10){
+	// 	messageEl.innerHTML = 
+	// 		`
+	// 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
+	// 		<button type="playAgainButton">Play again</button>
+	// 		<button type="">Exit</button>
+	// 		` 
+	// 		score = 0;
+	// 		stopTimer();
+	// 		//TÖM VIRUS-BILDEN HÄR TACK
+	// }
+
+	/*//logik för förloraren (funkar inte med else här men nåt liknande):
+					else {
+						messageEl.innerHTML = 
+						`
+							<p>YOU LOST!, ${username}</p> 
+							<button type="playAgainButton">Play again</button>
+							<button type="">Exit</button>
 								` 
-								score=0;
-							}
-							*/
+							score=0;
+					}
+					*/
+
+});
+	
+//Play again event
+playAgainButtonEl.addEventListener('click', e => {
 
 	//Play again event
 	if(e.target.getAttribute("type") === "playAgainButton"){
@@ -155,7 +198,8 @@ gameAreaEl.addEventListener('click', e => {
 		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
 		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
 		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
-	}
+	};
+
 });
 
 // Submit event for username
