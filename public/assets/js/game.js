@@ -6,6 +6,7 @@ const exitGameButtonEl = document.querySelector('#exitGameButton');
 const gameAreaEl = document.querySelector('#gameArea');
 const gameWrapperEl = document.querySelector('#gameWrapper');
 const messageEl = document.querySelector('#message');
+const noticeEl = document.querySelector('#notice');
 const playAgainButtonEl = document.querySelector('#playAgainButton');
 const playerScoreEl = document.querySelector('#playerScore');
 const playerUsernameEl = document.querySelector('#playerUsername');
@@ -58,6 +59,16 @@ const setInnerText = (element, value) => {
 // set innerHTML value
 const setInnerHTML = (element, value) => {
 	element.innerHTML = value;
+};
+
+const showLightbox = () => {
+	if (noticeEl.style.display === 'grid') {
+		noticeEl.style.display = 'none';
+		hideElement(noticeEl);
+	} else {
+		noticeEl.style.display = 'grid';
+		displayElement(noticeEl);
+	}
 };
 
 // Saras Timer-function: Start timer when virus is on display
@@ -159,25 +170,22 @@ playAgainButtonEl.addEventListener('click', e => {
 // Click event for virus
 gameAreaEl.addEventListener('click', e => {
 	if (e.target.id === 'virus') {
-		stopTimer();
+		// stopTimer();
 		score++;
 		socket.emit('virus:click');
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
-	}
 
-	//sets game to equal 10 rounds
-	if (score == 10) {
-		score = 0;
-		messageEl.innerHTML = `
-	 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
-	 		<button type="playAgainButton">Play again</button>
-	 		<button type="">Exit</button>
-	 		`;
-		//TÖM VIRUS-BILDEN HÄR TACK
-	}
+		//sets game to equal 10 rounds
+		if (score === 10) {
+			showLightbox();
 
-	/*//logik för förloraren (funkar inte med else här men nåt liknande):
+			setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+			setInnerText(playAgainButtonEl, 'Play Again');
+			setInnerText(exitGameButtonEl, 'Exit');
+		}
+
+		/*//logik för förloraren (funkar inte med else här men nåt liknande):
 					else {
 						messageEl.innerHTML = 
 						`
@@ -188,6 +196,7 @@ gameAreaEl.addEventListener('click', e => {
 							score=0;
 					}
 					*/
+	}
 });
 
 /*//////

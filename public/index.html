@@ -90,16 +90,23 @@
 		</div>
 
 		<!-- Game Over -->
-		<div id="notice" class="lightbox">
-			<div id="message" class="text-center justify-content-center"></div>
-			<!--innehåller YOU WON!-meddelande-->
-			<div
-				id="playAgainButton"
-				class="text-center justify-content-center"
-			></div>
-			<!--innehåller PLAY AGAIN-KNAPP-->
-			<div id="exitGameButton" class="text-center justify-content-center"></div>
-			<!--innehåller EXIT GAME-KNAPP-->
+		<div id="notice" class="lightbox hide">
+			<div class="infobox container row d-flex align-items-center">
+				<h3 id="message" class="text-center justify-content-center col-12"></h3>
+				<div class="container">
+					<!--innehåller YOU WON!-meddelande-->
+					<div
+						id="playAgainButton"
+						class="text-center justify-content-center btn-lg btn-danger col-12 p-2"
+					></div>
+					<!--innehåller PLAY AGAIN-KNAPP-->
+					<div
+						id="exitGameButton"
+						class="text-center justify-content-center btn col-12 p-4"
+					></div>
+				</div>
+				<!--innehåller EXIT GAME-KNAPP-->
+			</div>
 		</div>
 		<!-- Socket.IO -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>

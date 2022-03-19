@@ -101,6 +101,4 @@ h3 {
 	height: 40vh;
 	background-color: white;
 	border-radius: 1rem;
-	display: grid;
-	place-content: center;
 }

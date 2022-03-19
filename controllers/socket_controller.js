@@ -6,6 +6,8 @@ const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
 let players = {};
+let maxRounds = 10;
+let rounds = 0;
 
 const getRandomPosition = () => {
 	return Math.floor(Math.random() * 21);
@@ -26,6 +28,15 @@ const handlePlayerJoined = function (username, callback) {
 };
 
 // Handle disconnecting players
+const handleDisconnect = function () {
+	debug(`Client ${this.id} disconnected :(`);
+
+	// let everyone connected know that player has disconnected
+	this.broadcast.emit('player:disconnected', players[this.id]);
+
+	// remove user from list of connected players
+	delete players[this.id];
+};
 
 // Check if two players are online
 
@@ -46,6 +57,9 @@ const handleClick = function () {
 // Decide winner
 
 // Start new game.
+// 1. Display virus
+// 2. Update score
+// 3.
 
 // Update scoreboard.
 
@@ -56,6 +70,9 @@ module.exports = function (socket, _io) {
 
 	// handle player connect
 	socket.on('playerJoined', handlePlayerJoined);
+
+	// handle player disconnect
+	socket.on('disconnect', handleDisconnect);
 
 	socket.on('virus:click', handleClick);
 };
