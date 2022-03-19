@@ -15,7 +15,7 @@ const getRandomDelay = () => {
 	return Math.floor(Math.random() * 5000);
 };
 
-// Function for handling connecting players
+// Handle connecting players
 const handlePlayerJoined = function (username, callback) {
 	debug(`User ${username} with socket id ${this.id} has joined.`);
 	players[this.id] = username;
@@ -25,13 +25,29 @@ const handlePlayerJoined = function (username, callback) {
 	callback({ success: true });
 };
 
-const handleClick = function (target) {
-	debug('Someone clicked on the virus', target);
+// Handle disconnecting players
 
+// Check if two players are online
+
+// Match 1 vs 1 players
+
+// Handle when virus is clicked
+const handleClick = function () {
+	debug('Someone clicked on the virus');
+
+	// Gets random virus position and delay on each click
 	setTimeout(() => {
 		this.emit('virus:position', getRandomPosition(), getRandomPosition());
 	}, getRandomDelay());
 };
+
+// Compare reaction time and update score
+
+// Decide winner
+
+// Start new game.
+
+// Update scoreboard.
 
 module.exports = function (socket, _io) {
 	io = _io;
