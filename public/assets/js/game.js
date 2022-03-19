@@ -90,6 +90,7 @@ let stopTimer = () => {
 	console.log(timeSum);
 };
 
+// THIS SHOULD MOVE TO SERVER SIDE!
 let saveTime = () => {
 	if (showVirus === 10) {
 		stopTimer();
