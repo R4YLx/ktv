@@ -18,7 +18,6 @@ const getRandomDelay = () => {
 // Function for handling connecting players
 const handlePlayerJoined = function (username, callback) {
 	debug(`User ${username} with socket id ${this.id} has joined.`);
-
 	players[this.id] = username;
 
 	this.emit('player:connected', username);

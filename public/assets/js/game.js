@@ -74,15 +74,12 @@ const setVirusPosition = (col, row) => {
 /////*/
 
 gameAreaEl.addEventListener('click', e => {
-	console.log(e.target);
-	socket.emit('virus:click');
-
 	// Click event for virus
 	if (e.target.id === 'virus') {
-		console.log('You killed the virus!');
+		score++;
+		socket.emit('virus:click');
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
-	} else {
 	}
 });
 
@@ -93,6 +90,8 @@ usernameFormEl.addEventListener('submit', e => {
 	username = usernameFormEl.username.value;
 
 	socket.emit('playerJoined', username, status => {
+		console.log('Server acknowledged that user joined', status);
+
 		if (status.success) {
 			hideElement(startEl);
 			setInnerText(playerUsernameEl, username);
