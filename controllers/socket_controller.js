@@ -42,6 +42,14 @@ const handleDisconnect = function () {
 
 // Match 1 vs 1 players
 
+// Start game
+const startGame = () => {
+	// emit delay and random virus
+	setTimeout(() => {
+		this.emit('virus:position', getRandomPosition(), getRandomPosition());
+	}, getRandomDelay());
+};
+
 // Handle when virus is clicked
 const handleClick = function () {
 	debug('Someone clicked on the virus');
@@ -69,10 +77,11 @@ module.exports = function (socket, _io) {
 	debug('On start of app: a new client has connected', socket.id);
 
 	// handle player connect
-	socket.on('playerJoined', handlePlayerJoined);
+	socket.on('player:join', handlePlayerJoined);
 
 	// handle player disconnect
 	socket.on('disconnect', handleDisconnect);
 
+	// handle click on virus
 	socket.on('virus:click', handleClick);
 };

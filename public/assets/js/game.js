@@ -129,7 +129,7 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
-	socket.emit('playerJoined', username, status => {
+	socket.emit('player:join', username, status => {
 		console.log('Server acknowledged that user joined', status);
 
 		displayElement(waitingEl);
