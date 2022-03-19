@@ -181,6 +181,9 @@ gameAreaEl.addEventListener('click', e => {
 		if (score === 10) {
 			showLightbox();
 
+			// This function doesn't work...
+			hideElement(virusEl);
+
 			setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
 			setInnerText(playAgainButtonEl, 'Play Again');
 			setInnerText(exitGameButtonEl, 'Exit');
