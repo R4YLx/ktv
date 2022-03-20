@@ -110,15 +110,6 @@ let saveTime = () => {
 	});
 };
 
-// Decides postion for the virus
-// const setVirusPosition = (col, row) => {
-// 	virusEl.style.gridColumn = `${col} / span 1`;
-// 	virusEl.style.gridRow = `${row} / span 1`;
-
-// 	// this function should move to displayVirus(), not created yet
-// 	displayElement(virusEl);
-// };
-
 const setVirus = (col, row, delay) => {
 	virusEl.style.gridColumn = `${col} / span 1`;
 	virusEl.style.gridRow = `${row} / span 1`;
@@ -144,8 +135,6 @@ usernameFormEl.addEventListener('submit', e => {
 		displayElement(waitingEl);
 
 		if (status.success) {
-			// disabled this function to test waiting page
-			// displayElement(waitingEl);
 			hideElement(waitingEl);
 			hideElement(startEl);
 			setInnerText(playerUsernameEl, username);
@@ -221,3 +210,5 @@ virusEl.addEventListener('click', () => {
 /////*/
 
 socket.on('virus:position', setVirus);
+
+socket.on('virus:get', setVirus);

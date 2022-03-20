@@ -5,9 +5,8 @@
 const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
-let players = {};
-let maxRounds = 10;
-let rounds = 0;
+const players = {};
+const lobby = {};
 
 const getRandomPosition = () => {
 	return Math.floor(Math.random() * 21);
@@ -27,8 +26,10 @@ const getVirus = () => {
 
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
-	debug(`User ${username} with socket id ${this.id} has joined.`);
+	debug(`User ${username} with socket id ${this.id} has joined ${lobby}.`);
 	players[this.id] = username;
+
+	this.join(lobby);
 
 	this.emit('player:connected', username);
 
