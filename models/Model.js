@@ -3,34 +3,34 @@
 /////*/
 
 
-// ROOM ID
-const roomId = () => {};
+//get room id
+const roomId = (id) => {
+    return rooms.find(room => room.id === id)
+};
+
+
+// get player by room id
+const playerId = (id, rooms, roomId) => {
+    return rooms[roomId].players.find (player => player.id === id)
+};
+
+
+// Oget opponent id
+const opponentId = (id, rooms, roomId) => {
+    return rooms[roomId].players.find (player => player.id === id)
+};
 
 
 
 
-
-// GET PLAYER BY ROOM ID
-const playerId = () => {};
-
-
-
-
-
-// OPPONENT ID
-const opponentId = () => {};
-
-
-
-
-// SCORE
+// get score
 const score = () => {};
 
 
 
 
 
-// RESULT (WINNER)
+// get result (winner)
 const winner = () => {};
 
 
