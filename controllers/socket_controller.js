@@ -67,8 +67,10 @@ const handleClick = function () {
 	}, getRandomDelay());
 };
 
-// Compare reaction time and update score
-const handleReactionTime = function () {};
+// // Compare reaction time and update score
+// const handleReactionTime = function (reactionTime) {
+// 	const player = 
+// };
 
 // Decide winner
 
@@ -92,4 +94,7 @@ module.exports = function (socket, _io) {
 
 	// handle click on virus
 	socket.on('virus:click', handleClick);
+
+	// handle reaction time
+	//socket.on('reaction-time', handleReactionTime);
 };
