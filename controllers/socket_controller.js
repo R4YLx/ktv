@@ -5,7 +5,16 @@
 const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
+const { 
+	roomId, 
+	playerId, 
+	opponentId,
+	score, 
+	winner 
+} = require('../models/Model');
+
 let players = {};
+const rooms = {};
 let maxRounds = 10;
 let rounds = 0;
 
