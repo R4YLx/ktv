@@ -17,6 +17,14 @@ const getRandomDelay = () => {
 	return Math.floor(Math.random() * 5000);
 };
 
+const getVirus = () => {
+	let col = Math.floor(Math.random() * 21);
+	let row = Math.floor(Math.random() * 21);
+	let delay = Math.floor(Math.random() * 5000);
+
+	this.emit('virus:get', col, row, delay);
+};
+
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
 	debug(`User ${username} with socket id ${this.id} has joined.`);
@@ -45,9 +53,6 @@ const handleDisconnect = function () {
 // Start game
 const startGame = () => {
 	// emit delay and random virus
-	setTimeout(() => {
-		this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	}, getRandomDelay());
 };
 
 // Handle when virus is clicked
@@ -55,12 +60,15 @@ const handleClick = function () {
 	debug('Someone clicked on the virus');
 
 	// Gets random virus position and delay on each click
+
+	// this.emit('virus:position', getVirus);
 	setTimeout(() => {
 		this.emit('virus:position', getRandomPosition(), getRandomPosition());
 	}, getRandomDelay());
 };
 
 // Compare reaction time and update score
+const handleReactionTime = function () {};
 
 // Decide winner
 

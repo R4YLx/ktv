@@ -61,6 +61,7 @@ const setInnerHTML = (element, value) => {
 	element.innerHTML = value;
 };
 
+// shows and hides notice element
 const showLightbox = () => {
 	if (noticeEl.style.display === 'grid') {
 		noticeEl.style.display = 'none';
@@ -110,12 +111,21 @@ let saveTime = () => {
 };
 
 // Decides postion for the virus
-const setVirusPosition = (col, row) => {
+// const setVirusPosition = (col, row) => {
+// 	virusEl.style.gridColumn = `${col} / span 1`;
+// 	virusEl.style.gridRow = `${row} / span 1`;
+
+// 	// this function should move to displayVirus(), not created yet
+// 	displayElement(virusEl);
+// };
+
+const setVirus = (col, row, delay) => {
 	virusEl.style.gridColumn = `${col} / span 1`;
 	virusEl.style.gridRow = `${row} / span 1`;
-
-	// this function should move to displayVirus(), not created yet
-	displayElement(virusEl);
+	setTimeout(() => {
+		displayElement(virusEl);
+		startTimer();
+	}, delay);
 };
 
 // Update scoreboard. Get score from server
@@ -140,6 +150,8 @@ usernameFormEl.addEventListener('submit', e => {
 			hideElement(startEl);
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
+
+			setVirus();
 		}
 	});
 });
@@ -169,42 +181,43 @@ playAgainButtonEl.addEventListener('click', e => {
 // Restart game on disconnect
 
 // Click event for virus
-gameAreaEl.addEventListener('click', e => {
-	if (e.target.id === 'virus') {
-		// stopTimer();
-		score++;
-		socket.emit('virus:click');
-		setInnerText(playerScoreEl, score);
-		setInnerText(currentRoundEl, score);
+virusEl.addEventListener('click', () => {
+	score++;
+	socket.emit('virus:click');
+	stopTimer();
+	setInnerText(playerScoreEl, score);
+	setInnerText(currentRoundEl, score);
+	hideElement(virusEl);
 
-		//sets game to equal 10 rounds
-		if (score === 10) {
-			showLightbox();
+	//sets game to equal 10 rounds
+	if (score === 10) {
+		showLightbox();
 
-			// This function doesn't work...
-			hideElement(virusEl);
+		// This function doesn't work...
+		hideElement(virusEl);
+		startTimer();
 
-			setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
-			setInnerText(playAgainButtonEl, 'Play Again');
-			setInnerText(exitGameButtonEl, 'Exit');
-		}
-
-		/*//logik för förloraren (funkar inte med else här men nåt liknande):
-					else {
-						messageEl.innerHTML = 
-						`
-							<p>YOU LOST!, ${username}</p> 
-							<button type="playAgainButton">Play again</button>
-							<button type="">Exit</button>
-								` 
-							score=0;
-					}
-					*/
+		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+		setInnerText(playAgainButtonEl, 'Play Again');
+		setInnerText(exitGameButtonEl, 'Exit');
 	}
+
+	/*
+	//logik för förloraren (funkar inte med else här men nåt liknande):
+	else {
+		messageEl.innerHTML = 
+		`
+			<p>YOU LOST!, ${username}</p> 
+			<button type="playAgainButton">Play again</button>
+			<button type="">Exit</button>
+				` 
+			score=0;
+	}
+	*/
 });
 
 /*//////
 //  Socket events
 /////*/
 
-socket.on('virus:position', setVirusPosition);
+socket.on('virus:position', setVirus);
