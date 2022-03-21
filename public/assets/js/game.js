@@ -140,7 +140,7 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
-	socket.emit('player:join', username, status => {
+	socket.emit('player:join', 'startGame', username, status => {
 		displayElement(waitingEl);
 
 		if (status.success) {
