@@ -129,6 +129,17 @@ const setVirus = (col, row, delay) => {
 
 // Update scoreboard. Get score from server
 
+
+
+//Display "waiting for other players"
+const displayWaitingForPlayers = () => {
+				hideElement(startEl); //släcker register-rutan
+				displayElement(waitingEl); //visar "waiting for another player-ruta"
+				setInnerText(playerUsernameEl, username);
+				displayElement(gameWrapperEl);
+};
+
+
 /*//////
 //  Events
 /////*/
@@ -141,13 +152,15 @@ usernameFormEl.addEventListener('submit', e => {
 
 	socket.emit('player:join', username, status => {
 
-		//gör om till funktion
+		
 		if (status.success) {
+		/*	//gör om till funktion "waitingn for other players"
 			hideElement(startEl); //släcker register-rutan
 			displayElement(waitingEl); //visar "waiting for another player-ruta"
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
-
+			*/
+			displayWaitingForPlayers();
 			setVirus();
 		}
 	});
@@ -190,11 +203,12 @@ virusEl.addEventListener('click', () => {
 	socket.emit('virus:click');
 	stopTimer();
 	setInnerText(playerScoreEl, score);
+	setInnerText(playerScoreEl, score);
 	setInnerText(currentRoundEl, score);
 	hideElement(virusEl);
 
 	//sets game to equal 10 rounds
-	if (score === 2) {
+	if (score === 4) {
 		showLightbox();
 
 		// This function doesn't work...
