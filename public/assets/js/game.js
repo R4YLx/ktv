@@ -1,33 +1,39 @@
-const socket = io();
-
-/** DOM Elements **/
-const startEl = document.querySelector('#start');
-const gameWrapperEl = document.querySelector('#gameWrapper');
-const gameAreaEl = document.querySelector('#gameArea');
-const usernameFormEl = document.querySelector('#usernameForm');
-const playerUsernameEl = document.querySelector('#playerUsername');
-const playerScoreEl = document.querySelector('#playerScore');
-const opponentScoreEl = document.querySelector('#playerScore');
-const playAgainButtonEl = document.querySelector('#playAgainButton');
-const exitGameButtonEl = document.querySelector('#exitGameButton');
-const scoreboardEl = document.querySelector('#scoreboard');
+/*//////
+//  DOM Elements
+/////*/
 const currentRoundEl = document.querySelector('#currentRound');
+const exitGameButtonEl = document.querySelector('#exitGameButton');
+const gameAreaEl = document.querySelector('#gameArea');
+const gameWrapperEl = document.querySelector('#gameWrapper');
 const messageEl = document.querySelector('#message');
+const noticeEl = document.querySelector('#notice');
+const playAgainButtonEl = document.querySelector('#playAgainButton');
+const playerScoreEl = document.querySelector('#playerScore');
+const playerUsernameEl = document.querySelector('#playerUsername');
+const showRoundsEl = document.querySelector('#showRounds');
+const startEl = document.querySelector('#start');
+const usernameFormEl = document.querySelector('#usernameForm');
+const virusEl = document.querySelector('#virus');
+const waitingEl = document.querySelector('#waiting');
+
+/*//////
+//  Variables
+/////*/
+
+const socket = io();
 
 let username = null;
 let score = 0;
+let showRounds = 0;
 let currentRound = 0;
-let virus = '';
 let continueGame = true;
-//const player1= "";
-//const player2= "";
 
 // Get time and calculate
 let interval;
 let startTime;
 let elapsedTime;
 let stopTime;
-let playerTime; 
+let playerTime;
 let sum = 0;
 let timeSum = [];
 
@@ -50,189 +56,159 @@ const setInnerText = (element, value) => {
 	element.innerText = value;
 };
 
+// set innerHTML value
 const setInnerHTML = (element, value) => {
 	element.innerHTML = value;
 };
 
-const getRandomNumber = value => {
-	return Math.floor(Math.random() * value) + 1;
+// shows and hides notice element
+const showLightbox = () => {
+	if (noticeEl.style.display === 'grid') {
+		noticeEl.style.display = 'none';
+		hideElement(noticeEl);
+	} else {
+		noticeEl.style.display = 'grid';
+		displayElement(noticeEl);
+	}
 };
-
 
 // Saras Timer-function: Start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
-	interval = setInterval(function() {
+	interval = setInterval(function () {
 		let elapsedTime = Date.now() - startTime;
 
-		document.querySelector("#playerOneTime").innerHTML = (elapsedTime / 1000).toFixed(3);//(3)- is nr of decimals
-	}, 	100);
-
-}
+		document.querySelector('#playerOneTime').innerHTML = (
+			elapsedTime / 1000
+		).toFixed(3); //(3)- is nr of decimals
+	}, 100);
+};
 
 // Stop timer
 let stopTimer = () => {
 	stopTime = Date.now();
 	clearInterval(interval);
-	console.log(timeSum)
+	console.log(timeSum);
 };
 
-
+// THIS SHOULD MOVE TO SERVER SIDE!
 let saveTime = () => {
 	if (showVirus === 10) {
 		stopTimer();
-		const time = stopTime - startTime
-		playerTime = time/1000
-		timeSum.push (playerTime)
-}
-
-	timeSum.forEach (time => {
-		if (showVirus === 10) {
-			sum += time/10;
-			document.querySelector("#playerOneTime").innerHTML  = `<span>${time}</span>`
-		}
-	});	
-};
-
-//Creates numbers between 1-26 and let´s that number be equal to the grid-position of the same div-box. 
-const getGrid = () => {
-	for (let i = 1; i < 27; i++) {
-		let gridbox = document.createElement('div');
-		gridbox.id = i;
-		gridbox.className = 'gridbox' + i + ' ' + 'gridbox' + ' ' + 'img-fluid';
-		// gridbox.src = '';
-		gameAreaEl.appendChild(gridbox);
+		const time = stopTime - startTime;
+		playerTime = time / 1000;
+		timeSum.push(playerTime);
 	}
-};
-getGrid();
 
-
-//randomizes the grid-positions between 1-26. Puts the virus-image in that grid-div-box.
-const randomizedVirusPosition = () => {
-
-    let gridPosition = Math.floor(Math.random() * 26) + 1;
-    let position = document.getElementById(gridPosition);
-    let virus = document.createElement('img');
-    virus.id = 'virus';
-    virus.src = './assets/icons/virus.png';
-    position.appendChild(virus);
+	timeSum.forEach(time => {
+		if (showVirus === 10) {
+			sum += time / 10;
+			document.querySelector(
+				'#playerOneTime'
+			).innerHTML = `<span>${time}</span>`;
+		}
+	});
 };
 
-//DISPLAY VIRUS WITH RANDOM DELAY
-const showVirus = () => {
+const setVirus = (col, row, delay) => {
+	virusEl.style.gridColumn = `${col} / span 1`;
+	virusEl.style.gridRow = `${row} / span 1`;
 	setTimeout(() => {
-		randomizedVirusPosition(); //calls the display-virus-function
-			
+		displayElement(virusEl);
 		startTimer();
-			
-		//window.alert('Done waiting');
-	}, Math.floor(Math.random() * 5000)); //slumpar ut viruset mellan 0 och 5 sekunder		 
+	}, delay);
 };
 
-showVirus();
+// Update scoreboard. Get score from server
 
-
+/*//////
 //  Events
 /////*/
 
-gameAreaEl.addEventListener('click', e => {
-	//prevents default page reload
-	e.preventDefault();
-
-	// Click event for virus
-	if (e.target.tagName === 'IMG') {
-		console.log('You killed the virus!');
-
-		stopTimer();
-		score++;
-		/*
-		if (player1.time < player2.time) {
-			player1 = score++, setInnerText(playerScoreEl, score);;
-		} else {
-			player2 = score++, setInnerText(opponentScoreEl, score);;
-		}
-		*/
-		//Players score is updated
-		setInnerText(playerScoreEl, score);
-		
-		//ska ske varannan gång
-		setInnerText(currentRoundEl, score);
-	
-		showVirus();	
-	}
-
-	
-     //sets game to equal 10 rounds
-    if(score == 10){
-		score = 0;
-		messageEl.innerHTML = 
-	 		`
-	 		<p>CONGRATULATIONS YOU WON!, ${username}</p> 
-	 		<button type="playAgainButton">Play again</button>
-	 		<button type="">Exit</button>
-	 		` 
-	 		//TÖM VIRUS-BILDEN HÄR TACK
-	 }
-
-	 
-	/*//logik för förloraren (funkar inte med else här men nåt liknande):
-					else {
-						messageEl.innerHTML = 
-						`
-							<p>YOU LOST!, ${username}</p> 
-							<button type="playAgainButton">Play again</button>
-							<button type="">Exit</button>
-								` 
-							score=0;
-					}
-					*/
-		//Play again event
-		if(e.target.getAttribute("type") === "playAgainButton"){
-		
-			score = 0; 
-			setInnerText(playerScoreEl, score);
-			setInnerText(currentRoundEl, score);
-			currentRoundEl.innerHTML = 0;
-			//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
-			//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
-			//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
-			messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
-		};
-			//Exit game-event
-		if(e.target.getAttribute("type") === "exitGameButton"){
-			hideElement(gameWrapperEl);
-			messageEl.innerHTML = 
-			`
-			<p>YOU LOST!, ${username}</p> 
-			` 
-			//messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
-	};
-
-});
-	
-
-// Submit event for username
+// Register new player
 usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameFormEl.username.value;
 
-	// emit 'user:joined' event and when we get acknowledgement, THEN show chat
-	socket.emit('playerJoined', username, status => {
+	socket.emit('player:join', username, status => {
+		displayElement(waitingEl);
+
 		if (status.success) {
+			hideElement(waitingEl);
 			hideElement(startEl);
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
+
+			setVirus();
 		}
 	});
 });
 
-// listen for when a user disconnects
-socket.on('user:disconnected', username => {
-	addNoticeToChat(`${username} disconnected 😢`);
+// Play again when game over
+playAgainButtonEl.addEventListener('click', e => {
+	if (e.target.getAttribute('type') === 'playAgainButton') {
+		score = 0;
+		setInnerText(playerScoreEl, score);
+		setInnerText(currentRoundEl, score);
+		currentRoundEl.innerHTML = 0;
+		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
+		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
+		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
+		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
+	}
+	//Exit game-event
+	if (e.target.getAttribute('type') === 'exitGameButton') {
+		hideElement(gameWrapperEl);
+		messageEl.innerHTML = `
+		<p>YOU LOST!, ${username}</p> 
+		`;
+		//messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
+	}
 });
 
-// listen for when we're disconnected
-socket.on('disconnect', reason => {
-	console.log(`Disconnected because of ${reason}} 😳`);
+// Restart game on disconnect
+
+// Click event for virus
+virusEl.addEventListener('click', () => {
+	score++;
+	socket.emit('virus:click');
+	stopTimer();
+	setInnerText(playerScoreEl, score);
+	setInnerText(currentRoundEl, score);
+	hideElement(virusEl);
+
+	//sets game to equal 10 rounds
+	if (score === 10) {
+		showLightbox();
+
+		// This function doesn't work...
+		hideElement(virusEl);
+		startTimer();
+
+		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+		setInnerText(playAgainButtonEl, 'Play Again');
+		setInnerText(exitGameButtonEl, 'Exit');
+	}
+
+	/*
+	//logik för förloraren (funkar inte med else här men nåt liknande):
+	else {
+		messageEl.innerHTML = 
+		`
+			<p>YOU LOST!, ${username}</p> 
+			<button type="playAgainButton">Play again</button>
+			<button type="">Exit</button>
+				` 
+			score=0;
+	}
+	*/
 });
+
+/*//////
+//  Socket events
+/////*/
+
+socket.on('virus:position', setVirus);
+
+socket.on('virus:get', setVirus);

@@ -36,7 +36,9 @@ instrument(io, {
 	auth: false,
 });
 
-io.on('connection', require('../controllers/socket_controller'));
+io.on('connection', socket => {
+	socket_controller(socket, io);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
