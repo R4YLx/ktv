@@ -79,7 +79,7 @@ const timer = (element) => {
 }
 
 //! OK. rör ej
-// Saras Timer-function: Start timer when virus is on display
+// start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
 	interval = setInterval(function () {
