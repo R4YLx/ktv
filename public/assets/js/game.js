@@ -72,43 +72,52 @@ const showLightbox = () => {
 	}
 };
 
-// Saras Timer-function: Start timer when virus is on display
+const timer = (element) => {
+	document.querySelector(element).innerHTML = (
+		elapsedTime / 1000
+	).toFixed(3); //(3)- is nr of decimals
+}
+
+//! OK. rör ej
+// start timer when virus is on display
 let startTimer = () => {
 	let startTime = Date.now();
 	interval = setInterval(function () {
-		let elapsedTime = Date.now() - startTime;
-
-		document.querySelector('#playerOneTime').innerHTML = (
-			elapsedTime / 1000
-		).toFixed(3); //(3)- is nr of decimals
+		elapsedTime = Date.now() - startTime;
+		timer('#playerOneTime', elapsedTime)
+		
 	}, 100);
 };
+//! OK ???
+// Opponents reaction time
+const opponentTimer = () => {
+	timer('#playerTwoTime', elapsedTime);
+}
 
 // Stop timer
 let stopTimer = () => {
 	stopTime = Date.now();
 	clearInterval(interval);
-	console.log(timeSum);
 };
 
-// THIS SHOULD MOVE TO SERVER SIDE!
-let saveTime = () => {
-	if (showVirus === 10) {
-		stopTimer();
-		const time = stopTime - startTime;
-		playerTime = time / 1000;
-		timeSum.push(playerTime);
-	}
+// // THIS SHOULD MOVE TO SERVER SIDE!
+// let saveTime = () => {
+// 	if (showVirus === 10) {
+// 		stopTimer();
+// 		const time = stopTime - startTime;
+// 		playerTime = time / 1000;
+// 		timeSum.push(playerTime);
+// 	}
 
-	timeSum.forEach(time => {
-		if (showVirus === 10) {
-			sum += time / 10;
-			document.querySelector(
-				'#playerOneTime'
-			).innerHTML = `<span>${time}</span>`;
-		}
-	});
-};
+// 	timeSum.forEach(time => {
+// 		if (showVirus === 10) {
+// 			sum += time / 10;
+// 			document.querySelector(
+// 				'#playerOneTime'
+// 			).innerHTML = `<span>${time}</span>`;
+// 		}
+// 	});
+// };
 
 const setVirus = (col, row, delay) => {
 	virusEl.style.gridColumn = `${col} / span 1`;
@@ -179,7 +188,7 @@ virusEl.addEventListener('click', () => {
 	hideElement(virusEl);
 
 	//sets game to equal 10 rounds
-	if (score === 10) {
+	if (score === 2) {
 		showLightbox();
 
 		// This function doesn't work...
@@ -189,6 +198,7 @@ virusEl.addEventListener('click', () => {
 		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
 		setInnerText(playAgainButtonEl, 'Play Again');
 		setInnerText(exitGameButtonEl, 'Exit');
+
 	}
 
 	/*
@@ -208,6 +218,8 @@ virusEl.addEventListener('click', () => {
 /*//////
 //  Socket events
 /////*/
+
+socket.on('opponentTimer', opponentTimer);
 
 socket.on('virus:position', setVirus);
 
