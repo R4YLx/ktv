@@ -13,34 +13,65 @@ const thisGame = {};
 
 const players = {};
 const lobby = {};
- 
+
+//testing
+let opponent = {};
+let timesClicked = 0;
+let activeGame = {
+    playersInGame: {},
+    playedRounds: 0,
+    score: {},
+    reactionTime: {}
+};
+let scoreboard = {}; 
+
+
+ //ev. sätt in dessa i start new game function
 const getRandomPosition = () => {
 	return Math.floor(Math.random() * 21);
 };
- 
+	
 const getRandomDelay = () => {
 	return Math.floor(Math.random() * 5000);
 };
- 
+	
 const getVirus = () => {
-	let col = Math.floor(Math.random() * 21);
-	let row = Math.floor(Math.random() * 21);
-	let delay = Math.floor(Math.random() * 5000);
- 
+	let col = getRandomPosition;
+	let row = getRandomPosition;
+	let delay = getRandomDelay;
+
 	this.emit('virus:get', col, row, delay);
 };
  
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
-	debug(`User ${username} with socket id ${this.id} has joined ${lobby}.`);
-	players[this.id] = username;
+	debug(`User ${username} with socket id ${this.id} has connected.`);
+	players[this.id] = username; //sets name to be their id
  
-	this.join(lobby);
+	//this.join(lobby);
+	//this.emit('player:connected', username);
  
-	this.emit('player:connected', username);
- 
-	callback({ success: true });
+	callback({ 
+		success: true,
+		onlineUsers: Object.values(players), //hämtar ut innehållet i objektet players. Här ser vi hur många players
+	}); //
+
+	if (Object.keys(players).length === 2) {
+        game.playersInGame[this.id] = players[this.id];
+        game.score[this.id] = 0;
+        scoreboard[game.playersInGame[this.id]] = 0;
+
+        io.emit('update-scoreboard with new players', scoreboard, game.playedRounds);
+        io.emit('start game');
+
+        startGame(); //kallar på display, set position och delay som vi kan lägga inom en funktion (rad 29)
+    } else if (Object.keys(users).length < 2) {
+        //kalla på rad 144 if sucess true function i game
+    } 
 };
+
+
+
  
 // Handle disconnecting players
 const handleDisconnect = function () {

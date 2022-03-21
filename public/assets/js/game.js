@@ -24,7 +24,6 @@ const socket = io();
 
 let username = null;
 let score = 0;
-let showRounds = 0;
 let currentRound = 0;
 let continueGame = true;
 
@@ -141,11 +140,11 @@ usernameFormEl.addEventListener('submit', e => {
 	username = usernameFormEl.username.value;
 
 	socket.emit('player:join', username, status => {
-		displayElement(waitingEl);
 
+		//gör om till funktion
 		if (status.success) {
-			hideElement(waitingEl);
-			hideElement(startEl);
+			hideElement(startEl); //släcker register-rutan
+			displayElement(waitingEl); //visar "waiting for another player-ruta"
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
 
@@ -153,6 +152,13 @@ usernameFormEl.addEventListener('submit', e => {
 		}
 	});
 });
+
+
+
+
+
+
+
 
 // Play again when game over
 playAgainButtonEl.addEventListener('click', e => {
