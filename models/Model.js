@@ -4,7 +4,7 @@
 
 
 //get room id
-const roomId = (id) => {
+const roomId = (rooms, id) => {
     return rooms.find(room => room.id === id);
 };
 
