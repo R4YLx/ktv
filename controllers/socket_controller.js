@@ -6,13 +6,13 @@ const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
 // get functions from models
-const { roomId, playerId, opponentId,score, winner } = require('../models/Model');
+const { roomId, playerId, opponentId,score, winner } = require('./functions');
 
-const rooms = {};
-const thisGame = {};
+const thisRoom = {};
+let rooms = 1
+let gamesArray = []
 
-const players = {};
-const lobby = {};
+let players = {};
  
 const getRandomPosition = () => {
 	return Math.floor(Math.random() * 21);
@@ -29,38 +29,16 @@ const getVirus = () => {
  
 	this.emit('virus:get', col, row, delay);
 };
- 
-// Handle connecting players
-const handlePlayerJoined = function (username, callback) {
-	debug(`User ${username} with socket id ${this.id} has joined ${lobby}.`);
-	players[this.id] = username;
- 
-	this.join(lobby);
- 
-	this.emit('player:connected', username);
- 
-	callback({ success: true });
-};
- 
-// Handle disconnecting players
-const handleDisconnect = function () {
-	debug(`Client ${this.id} disconnected :(`);
- 
-	// let everyone connected know that player has disconnected
-	this.broadcast.emit('player:disconnected', players[this.id]);
- 
-	// remove user from list of connected players
-	delete players[this.id];
-};
- 
+
+
 // Check if two players are online
  
 // Match 1 vs 1 players
  
-// Start game
-const startGame = () => {
-	// emit delay and random virus
-};
+// // Start game
+// const startGame = () => {
+// 	// emit delay and random virus
+// };
  
 // Handle when virus is clicked
 const handleClick = function () {
@@ -95,6 +73,8 @@ module.exports = function (socket, _io) {
 
 	// handle player connect
 	socket.on('player:join', handlePlayerJoined);
+
+	socket.on('player', startGame);
 
 	// handle player disconnect
 	socket.on('disconnect', handleDisconnect);
