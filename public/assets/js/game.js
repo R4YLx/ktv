@@ -116,13 +116,12 @@ let stopTimer = () => {
 // 	});
 // };
 
-const setVirus = (col, row, delay) => {
-	virusEl.style.gridColumn = `${col} / span 1`;
-	virusEl.style.gridRow = `${row} / span 1`;
+const getRandomVirus = virusData => {
+	virusEl.style.gridColumn = `${virusData.col} / span 1`;
+	virusEl.style.gridRow = `${virusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
-		startTimer();
-	}, delay);
+	}, virusData.delay);
 };
 
 // Update scoreboard. Get score from server
@@ -133,11 +132,24 @@ const displayWaitingForPlayers = () => {
 	displayElement(waitingEl); //visar "waiting for another player-ruta"
 };
 
-const startGame = (player1, player2) => {
+const startGame = (player1, player2, virusData) => {
 	setInnerText(playerUsernameEl, player1);
 	setInnerText(opponentUsernameEl, player2);
 	hideElement(waitingEl);
 	displayElement(gameWrapperEl);
+	getRandomVirus(virusData);
+};
+
+const newRound = (player1, player2, virusData) => {
+	virusImg.style.display = 'none';
+	displayElement(virusEl);
+
+	// DESSA FUNKTIONER ÄR EJ KLARA
+	// if (Object.keys(players).length === 2) {
+	// 	getRandomVirus(virusData);
+
+	// 	updateScoreBoard(player1, player2);
+	// }
 };
 
 /*//////
@@ -160,7 +172,6 @@ usernameFormEl.addEventListener('submit', e => {
 			displayElement(gameWrapperEl);
 			*/
 			startGame();
-			// setVirus();
 		}
 	});
 });
@@ -191,12 +202,17 @@ playAgainButtonEl.addEventListener('click', e => {
 
 // Click event for virus
 virusEl.addEventListener('click', () => {
-	score++;
-	socket.emit('virus:click');
+	// score++;
 	stopTimer();
 
-	setInnerText(currentRoundEl, score);
+	const reactionTime = Date.now() - startTime;
+
+	const playerData = { reactionTime, rounds };
+
+	// setInnerText(currentRoundEl, score);
 	hideElement(virusEl);
+
+	socket.emit('virus:clicked'), playerData;
 
 	//sets game to equal 10 rounds
 	if (score === 4) {
@@ -231,10 +247,8 @@ virusEl.addEventListener('click', () => {
 
 socket.on('opponentTimer', opponentTimer);
 
-socket.on('virus:position', setVirus);
-
-socket.on('virus:get', setVirus);
-
-socket.on('newGame', startGame);
+socket.on('game:start', startGame);
 
 socket.on('waitingForPlayer', displayWaitingForPlayers);
+
+socket.on('newRound', newRound);

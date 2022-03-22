@@ -15,21 +15,16 @@ let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de s
  * Functions
  */
 
-//ev. sätt in dessa i start new game function
-const getRandomPosition = () => {
-	return Math.floor(Math.random() * 21);
-};
+const virusData = () => {
+	let col = Math.floor(Math.random() * 21);
+	let row = Math.floor(Math.random() * 21);
+	let delay = Math.floor(Math.random() * 5000);
 
-const getRandomDelay = () => {
-	return Math.floor(Math.random() * 5000);
-};
-
-const getVirus = () => {
-	let col = getRandomPosition;
-	let row = getRandomPosition;
-	let delay = getRandomDelay;
-
-	this.emit('virus:get', col, row, delay);
+	return (getVirusData = {
+		col,
+		row,
+		delay,
+	});
 };
 
 // Start game handler (denna ska ändras helt klart och utvecklas men ligger som en liten boilerplate här så länge)
@@ -38,11 +33,11 @@ const handleStartGame = () => {
 	debug('Someone clicked on the virus');
 
 	// Gets random virus position and delay on each click
-	this.emit('virus:position', getVirus);
+	// this.emit('game:start', getVirus);
 
-	setTimeout(() => {
-		this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	}, getRandomDelay());
+	// setTimeout(() => {
+	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
+	// }, getRandomDelay());
 };
 
 // Handle connecting players
@@ -74,7 +69,7 @@ const handlePlayerJoined = function (username, callback) {
 		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
 
 		//io.emit('start game');
-		io.in(room).emit('newGame', player1, player2);
+		io.in(room).emit('game:start', player1, player2, virusData());
 
 		// empty players
 		players = {};
@@ -100,15 +95,15 @@ const handleDisconnect = function () {
 };
 
 // Handle when virus is clicked
-const handleClick = function () {
+const handleVirusClick = function () {
 	debug('Someone clicked on the virus');
 
 	// Gets random virus position and delay on each click
-	this.emit('virus:position', getVirus);
-
-	setTimeout(() => {
-		this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	}, getRandomDelay());
+	// this.emit('virus:position', getVirus);
+	this.emit('game:newRound', virusData);
+	// setTimeout(() => {
+	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
+	// }, getRandomDelay());
 };
 
 // Compare reaction time and update score //! inte klar
@@ -138,7 +133,7 @@ module.exports = function (socket, _io) {
 	socket.on('disconnect', handleDisconnect);
 
 	// handle click on virus
-	socket.on('virus:click', handleClick);
+	socket.on('virus:clicked', handleVirusClick);
 
 	// handle reaction time
 	socket.on('reaction-time', handleReactionTime);
