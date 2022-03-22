@@ -10,6 +10,7 @@ let gamesArray = []; //sätter en tom array för att sedan fylla med spel, där 
 
 let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum ligger i samma players-objekt
 
+let score = 0; //måste ha nollställd poäng från start
 /**
  *
  * Functions
@@ -55,9 +56,11 @@ const handlePlayerJoined = function (username, callback) {
 		const room = rooms;
 
 		// add the room players are in and which 2 players that are in the room, to the games array
+		//i detta spel-objektet finns det info om room, players, score
 		let thisGame = {
 			room,
 			players,
+			score
 		};
 
 		debug(thisGame.players, room);
