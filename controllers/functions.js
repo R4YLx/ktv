@@ -12,13 +12,13 @@ const roomId = (thisGame, playerId) => {
 
 // get player by room id
 const playerId = (id, rooms, roomId) => {
-    return rooms[roomId].players.find (player => player.id === id);
+    return rooms[roomId].players.find (player => player.id !== id);
 };
 
 
 // get opponent id
 const opponentId = (id, rooms, roomId) => {
-    return rooms[roomId].players.find (player => player.id === id);
+    return rooms[roomId].players.find (player => player.id == id);
 };
 
 
