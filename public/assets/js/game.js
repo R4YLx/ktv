@@ -7,6 +7,7 @@ const gameAreaEl = document.querySelector('#gameArea');
 const gameWrapperEl = document.querySelector('#gameWrapper');
 const messageEl = document.querySelector('#message');
 const noticeEl = document.querySelector('#notice');
+const opponentUsernameEl = document.querySelector('#opponentUsername');
 const playAgainButtonEl = document.querySelector('#playAgainButton');
 const playerScoreEl = document.querySelector('#playerScore');
 const playerUsernameEl = document.querySelector('#playerUsername');
@@ -72,11 +73,9 @@ const showLightbox = () => {
 	}
 };
 
-const timer = (element) => {
-	document.querySelector(element).innerHTML = (
-		elapsedTime / 1000
-	).toFixed(3); //(3)- is nr of decimals
-}
+const timer = element => {
+	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+};
 
 //! OK. rör ej
 // start timer when virus is on display
@@ -84,15 +83,14 @@ let startTimer = () => {
 	let startTime = Date.now();
 	interval = setInterval(function () {
 		elapsedTime = Date.now() - startTime;
-		timer('#playerOneTime', elapsedTime)
-		
+		timer('#playerOneTime', elapsedTime);
 	}, 100);
 };
 //! OK ???
 // Opponents reaction time
 const opponentTimer = () => {
 	timer('#playerTwoTime', elapsedTime);
-}
+};
 
 // Stop timer
 let stopTimer = () => {
@@ -130,16 +128,18 @@ const setVirus = (col, row, delay) => {
 
 // Update scoreboard. Get score from server
 
-
-
 //Display "waiting for other players"
 const displayWaitingForPlayers = () => {
-				hideElement(startEl); //släcker register-rutan
-				displayElement(waitingEl); //visar "waiting for another player-ruta"
-				setInnerText(playerUsernameEl, username);
-				displayElement(gameWrapperEl);
+	hideElement(startEl); //släcker register-rutan
+	displayElement(waitingEl); //visar "waiting for another player-ruta"
 };
 
+const startGame = (player1, player2) => {
+	setInnerText(playerUsernameEl, player1);
+	setInnerText(opponentUsernameEl, player2);
+	hideElement(waitingEl);
+	displayElement(gameWrapperEl);
+};
 
 /*//////
 //  Events
@@ -150,29 +150,21 @@ usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameFormEl.username.value;
-
+	displayWaitingForPlayers();
 
 	socket.emit('player:join', username, status => {
-		
 		if (status.success) {
-			//gör om till funktion "waitingn for other players"
+			/*	//gör om till funktion "waitingn for other players"
 			hideElement(startEl); //släcker register-rutan
 			displayElement(waitingEl); //visar "waiting for another player-ruta"
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
-			
-			displayWaitingForPlayers();
-			setVirus();
+			*/
+			startGame();
+			// setVirus();
 		}
 	});
 });
-
-
-
-
-
-
-
 
 // Play again when game over
 playAgainButtonEl.addEventListener('click', e => {
@@ -203,8 +195,7 @@ virusEl.addEventListener('click', () => {
 	score++;
 	socket.emit('virus:click');
 	stopTimer();
-	setInnerText(playerScoreEl, score);
-	setInnerText(playerScoreEl, score);
+
 	setInnerText(currentRoundEl, score);
 	hideElement(virusEl);
 
@@ -219,7 +210,6 @@ virusEl.addEventListener('click', () => {
 		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
 		setInnerText(playAgainButtonEl, 'Play Again');
 		setInnerText(exitGameButtonEl, 'Exit');
-
 	}
 
 	/*
@@ -245,3 +235,7 @@ socket.on('opponentTimer', opponentTimer);
 socket.on('virus:position', setVirus);
 
 socket.on('virus:get', setVirus);
+
+socket.on('newGame', startGame);
+
+socket.on('waitingForPlayer', displayWaitingForPlayers);
