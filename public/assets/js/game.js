@@ -21,8 +21,9 @@ const waitingEl = document.querySelector('#waiting');
 /////*/
 
 const socket = io();
-
+let room = null;
 let username = null;
+let username2 = null;
 let score = 0;
 let currentRound = 0;
 let continueGame = true;
@@ -150,16 +151,16 @@ usernameFormEl.addEventListener('submit', e => {
 
 	username = usernameFormEl.username.value;
 
-	socket.emit('player:join', username, status => {
 
+	socket.emit('player:join', username, status => {
 		
 		if (status.success) {
-		/*	//gör om till funktion "waitingn for other players"
+			//gör om till funktion "waitingn for other players"
 			hideElement(startEl); //släcker register-rutan
 			displayElement(waitingEl); //visar "waiting for another player-ruta"
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
-			*/
+			
 			displayWaitingForPlayers();
 			setVirus();
 		}
