@@ -49,7 +49,7 @@ const handleStartGame = () => {
 const handlePlayerJoined = function (username, callback) {
 	players[this.id] = username; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
 
-	this.join('the room u joined is room: ' + rooms);
+	this.join(rooms);
 
 	if (Object.keys(players).length === 2) {
 		callback({
@@ -57,7 +57,7 @@ const handlePlayerJoined = function (username, callback) {
 			//usersThatareOnline: Object.values(players), //hämtar ut innehållet i objektet players från usersthatareonline. men det behöver vi inte veta här
 		});
 
-		const room = 'the room u joined is room: ' + rooms;
+		const room = rooms;
 
 		// add the room players are in and which 2 players that are in the room, to the games array
 		let thisGame = {
@@ -67,9 +67,9 @@ const handlePlayerJoined = function (username, callback) {
 
 		debug(thisGame.players, room);
 
-		const player2 = players[this.id];
+		const player1 = players[this.id];
 		delete players[this.id];
-		const player1 = Object.values(players);
+		const player2 = Object.values(players);
 
 		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
 
