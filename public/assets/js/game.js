@@ -16,6 +16,9 @@ const startEl = document.querySelector('#start');
 const usernameFormEl = document.querySelector('#usernameForm');
 const virusEl = document.querySelector('#virus');
 const waitingEl = document.querySelector('#waiting');
+const playerOnetimeEl = document.querySelector('#playerOnetime');
+const playerTwotimeEl = document.querySelector('#playerTwotime');
+
 
 /*//////
 //  Variables
@@ -84,6 +87,7 @@ let startTimer = () => {
 	interval = setInterval(function () {
 		elapsedTime = Date.now() - startTime;
 		timer('#playerOneTime', elapsedTime);
+		opponentTimer();
 	}, 100);
 };
 //! OK ???
@@ -122,6 +126,7 @@ const getRandomVirus = virusData => {
 	virusEl.style.gridRow = `${virusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
+		startTimer();
 	}, virusData.delay);
 };
 
