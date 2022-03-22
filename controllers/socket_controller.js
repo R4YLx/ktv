@@ -74,7 +74,7 @@ const handlePlayerJoined = function (username, callback) {
 		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
 
 		//io.emit('start game');
-		this.to(room).emit('newGame', player1, player2);
+		io.in(room).emit('newGame', player1, player2);
 
 		// empty players
 		players = {};
