@@ -83,6 +83,7 @@ let startTimer = () => {
 	interval = setInterval(function () {
 		elapsedTime = Date.now() - startTime;
 		timer('#playerOneTime', elapsedTime);
+		opponentTimer();
 	}, 100);
 };
 //! OK ???
@@ -121,6 +122,7 @@ const getRandomVirus = virusData => {
 	virusEl.style.gridRow = `${virusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
+		startTimer();
 	}, virusData.delay);
 };
 
@@ -205,14 +207,14 @@ virusEl.addEventListener('click', () => {
 	// score++;
 	stopTimer();
 
-	const reactionTime = Date.now() - startTime;
+	// const reactionTime = Date.now() - startTime;
 
-	const playerData = { reactionTime, rounds };
+	// const playerData = { reactionTime, rounds };
 
 	// setInnerText(currentRoundEl, score);
 	hideElement(virusEl);
 
-	socket.emit('virus:clicked'), playerData;
+	// socket.emit('virus:clicked'), playerData;
 
 	//sets game to equal 10 rounds
 	if (score === 4) {
