@@ -137,7 +137,7 @@ const startGame = (player1, player2) => {
 	setInnerText(playerUsernameEl, player1);
 	setInnerText(opponentUsernameEl, player2);
 	hideElement(waitingEl);
-	displayElement(gameAreaEl);
+	displayElement(gameWrapperEl);
 };
 
 /*//////
@@ -149,6 +149,7 @@ usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameFormEl.username.value;
+	displayWaitingForPlayers();
 
 	socket.emit('player:join', username, status => {
 		if (status.success) {
@@ -158,8 +159,7 @@ usernameFormEl.addEventListener('submit', e => {
 			setInnerText(playerUsernameEl, username);
 			displayElement(gameWrapperEl);
 			*/
-			// displayWaitingForPlayers();
-			// startGame();
+			startGame();
 			// setVirus();
 		}
 	});
