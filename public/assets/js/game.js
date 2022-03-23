@@ -51,8 +51,8 @@ const setInnerHTML = (element, value) => {
 
 //Display "waiting for other players"
 const displayWaitingForPlayers = () => {
-	hideElement(startEl); //släcker register-rutan
-	displayElement(waitingEl); //visar "waiting for another player-ruta"
+	hideElement(startEl);
+	displayElement(waitingEl);
 };
 
 // Get random values for virus
@@ -65,7 +65,7 @@ const getRandomVirus = getVirusData => {
 };
 // Render players on scoreboard
 const updatePlayers = players => {
-	document.querySelector('#playersNameList').innerHTML = players
+	document.querySelector('#playersNameList').innerHTML = Object.values(players)
 		.map(player => `<li class="player">${player}</li>`)
 		.join('');
 };

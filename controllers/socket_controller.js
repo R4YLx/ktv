@@ -9,42 +9,15 @@
 const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
-let player = null;
-
 let players = {};
 
 let gamesArray = [];
 
 let rooms = 1;
 
-let playerReady = 0;
-
-let clickedVirus = 0;
-
-let rounds = 0;
-
-let playAgain = 0;
-
 /*//////
 //  Functions 
 /////*/
-
-// Get usernames of online users
-const getOnlinePlayers = function () {
-	return gamesArray.map(player => player.username);
-};
-
-// const getRandomDelay = function () {
-// 	return Math.floor(Math.random() * 5000);
-// };
-
-// const getRandomPositionX = function () {
-// 	return Math.floor(Math.random() * 21);
-// };
-
-// const getRandomPositionY = function () {
-// 	return Math.floor(Math.random() * 21);
-// };
 
 const virusData = () => {
 	let col = Math.floor(Math.random() * 21);
@@ -63,30 +36,32 @@ const virusData = () => {
 /////*/
 
 const handleJoin = function (username, callback) {
-	// Create player profile
-	player = {
-		socketId: this.id,
-		username,
-		reactionTime: [],
-		score: 0,
-	};
+	players[this.id] = username;
 
-	// adding new player to array with other players
-	gamesArray.push(player);
+	this.join(rooms);
 
-	debug('Show player data', player);
-
-	if (gamesArray.length === 2) {
+	if (Object.keys(players).length === 2) {
 		callback({
 			success: true,
-			connectedPlayers: getOnlinePlayers(),
 		});
 
-		io.emit('player:connected', getOnlinePlayers());
+		const room = rooms;
 
-		io.emit('game:start', virusData());
+		// add the room players are in and which 2 players that are in the room, to the games array
+		let thisGame = {
+			room,
+			players,
+		};
 
-		gamesArray = [];
+		gamesArray.push(thisGame);
+
+		io.in(room).emit('player:connected', players);
+
+		io.in(room).emit('game:start', virusData());
+
+		players = {};
+
+		rooms++;
 	}
 };
 
