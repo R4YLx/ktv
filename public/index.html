@@ -52,34 +52,26 @@
 
 			<!-- Game -->
 			<div id="gameWrapper" class="hide d-flex flex-column-reverse">
-				<div
-					id="scoreColumn"
-					class="justify-content-center align-items-center d-flex justify-content-around p-2 order-md-1"
-				>
-					<div class="playerNameContainer text-center">
-						<h3 id="playerUsername">Player 1</h3>
-						<p id="playerOneTime">&mdash;</p>
-					</div>
+				<div id="scoreColumn" class="">
+					<h2 class="text-center mt-4">Scoreboard</h2>
+					<div class="scoreWrapper d-flex justify-content-evenly mt-4">
+						<div id="scoreboard" class="text-center">
+							<div id="players">
+								<h3>Player1 <span>:</span> <span class="score">0</span></h3>
 
-					<div class="scoreWrapper">
-						<div id="scoreboard" class="text-center mb-4">
-							<h3>Scoreboard</h3>
-							<p>
-								<span id="playerScore">0</span>-<span id="opponentScore"
-									>0</span
-								>
-							</p>
+								<h3>Player2 <span>:</span> <span class="score">0</span></h3>
+							</div>
 						</div>
 
-						<div id="gameRounds" class="text-center mt-4">
+						<div class="playersTimer">
+							<p id="playerOneTime" class="time">&mdash;</p>
+							<p id="playerTwoTime" class="time">&mdash;</p>
+						</div>
+
+						<div class="rounds">
 							<h3>Game Round</h3>
-							<p id="showRounds"><span id="currentRound">0</span> / 10</p>
+							<p id="showRounds"><span id="currentRound">1</span> / 10</p>
 						</div>
-					</div>
-
-					<div class="playerNameContainer text-center">
-						<h3 id="opponentUsername">Player 2</h3>
-						<p id="playerTwoTime">&mdash;</p>
 					</div>
 				</div>
 

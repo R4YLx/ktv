@@ -10,6 +10,10 @@ let gamesArray = []; //sätter en tom array för att sedan fylla med spel, där 
 
 let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum ligger i samma players-objekt
 
+let rounds = 0;
+let count = 0;
+let winner;
+
 /**
  *
  * Functions
@@ -27,22 +31,9 @@ const virusData = () => {
 	});
 };
 
-// Start game handler (denna ska ändras helt klart och utvecklas men ligger som en liten boilerplate här så länge)
-const handleStartGame = () => {
-	// emit delay and random virus
-	debug('Someone clicked on the virus');
-
-	// Gets random virus position and delay on each click
-	// this.emit('game:start', getVirus);
-
-	// setTimeout(() => {
-	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	// }, getRandomDelay());
-};
-
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
-	players[this.id] = username; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
+	players[this.id] = { name: username, score: 0 }; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
 
 	this.join(rooms);
 
@@ -58,29 +49,38 @@ const handlePlayerJoined = function (username, callback) {
 		let thisGame = {
 			room,
 			players,
+			clicks: [],
 		};
 
 		debug(thisGame.players, room);
 
-		const player1 = players[this.id];
-		delete players[this.id];
-		const player2 = Object.values(players);
-
-		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
+		//pushes thisGame into the from start empty Games-array
+		gamesArray.push(thisGame);
 
 		//io.emit('start game');
-		io.in(room).emit('game:start', player1, player2, virusData());
+		io.in(room).emit('game:start', players, virusData());
 
 		// empty players
 		players = {};
 
 		// when 2 people are in a room, a new room has to be crfeated for a 3rd player to join, and so on.
 		rooms++;
-
-		//startGame(); //kallar på display, set position och delay som vi kan lägga inom en funktion (rad 29)
-
-		//kalla på rad 144 if sucess true function i game
 	}
+};
+
+// Handle when virus is clicked
+const handleVirusClick = function () {
+	debug('Someone clicked on the virus');
+
+	const thisGame = gamesArray.find(id => id.players[this.id]);
+
+	debug(thisGame);
+
+	io.in(thisGame.room).emit('game:stopTimer', this.id);
+
+	thisGame.clicks.push(this.id);
+
+	// io.emit('game:newRound', randomVirus, players);
 };
 
 // Handle disconnecting players
@@ -92,18 +92,6 @@ const handleDisconnect = function () {
 
 	// remove user from list of connected players
 	delete players[this.id];
-};
-
-// Handle when virus is clicked
-const handleVirusClick = function () {
-	debug('Someone clicked on the virus');
-
-	// Gets random virus position and delay on each click
-	// this.emit('virus:position', getVirus);
-	this.emit('game:newRound', virusData);
-	// setTimeout(() => {
-	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	// }, getRandomDelay());
 };
 
 // Compare reaction time and update score //! inte klar
@@ -123,17 +111,14 @@ module.exports = function (socket, _io) {
 
 	debug('On start of app: a new client has connected', socket.id);
 
-	//handle START
-	socket.on('virus:start', handleStartGame);
-
 	// handle player connect
 	socket.on('player:join', handlePlayerJoined);
 
-	// handle player disconnect
-	socket.on('disconnect', handleDisconnect);
-
 	// handle click on virus
 	socket.on('virus:clicked', handleVirusClick);
+
+	// handle player disconnect
+	socket.on('disconnect', handleDisconnect);
 
 	// handle reaction time
 	socket.on('reaction-time', handleReactionTime);
