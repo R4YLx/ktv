@@ -8,6 +8,8 @@ let io = null; //sätter io till null för att kunna lägga in player-objects h�
 let rooms = 1; //antal rum från början. när mer än 2 spelare vill spela ska de sen hamna i rum nr 2 osv.
 let gamesArray = []; //sätter en tom array för att sedan fylla med spel, där info om spelare och vilket rum de är i ska ligga. (vi fyller på med mer info sen)
 
+let thisGame = {};
+
 let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum ligger i samma players-objekt
 
 let count = 0;
@@ -30,6 +32,20 @@ const virusData = () => {
 		delay,
 	});
 };
+
+const getRoomById = id => {
+	return gamesArray.find(room => room.id === id);
+};
+
+const getRoomByPlayerId = id => {
+	return gamesArray.find(activeRoom => activeRoom.players.hasOwnProperty(id));
+};
+
+/**
+ *
+ * Handling events
+ *
+ */
 
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
@@ -74,9 +90,12 @@ const handleVirusClick = function (playerData) {
 	count++;
 	let winner;
 
-	const thisGame = gamesArray.find(id => id.players[this.id]);
+	debug('This info is from front', playerData);
+	// let player = getRoomByPlayerId(this.id);
 
-	debug(thisGame);
+	// debug('This is playerData from front:', playerData);
+
+	// debug('This is object thisGame:', thisGame);
 
 	if (count % 2 !== 0) {
 		// give points to the fastest player (the first one that clicked is the first one in to the server)

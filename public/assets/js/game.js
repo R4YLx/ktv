@@ -20,8 +20,7 @@ const waitingEl = document.querySelector('#waiting');
 /////*/
 
 const socket = io();
-
-let username = null;
+let username = '';
 
 // Get time and calculate
 let interval;
@@ -67,9 +66,9 @@ const showLightbox = () => {
 	}
 };
 
-const timer = element => {
-	document.querySelector(element).innerHTML = (reactionTime / 1000).toFixed(3); //(3)- is nr of decimals
-};
+// const timer = element => {
+// 	document.querySelector(element).innerHTML = (reactionTime / 1000).toFixed(3); //(3)- is nr of decimals
+// };
 
 //! OK. rör ej
 // start timer when virus is on display
@@ -81,43 +80,18 @@ const timer = element => {
 // 	}, 100);
 // };
 
-const startPlayerOneTimer = () => {
-	let startTime = Date.now();
-	interval = setInterval(function () {
-		reactionTime = Date.now() - startTime;
-		timer('#playerOneTime', reactionTime);
-	}, 100);
-};
-
-const startPlayerTwoTimer = () => {
-	let startTime = Date.now();
-	interval = setInterval(function () {
-		reactionTime = Date.now() - startTime;
-		timer('#playerTwoTime', reactionTime);
-	}, 100);
-};
-
 // Stop timer
-let stopTimer = () => {
-	stopTime = Date.now();
-	clearInterval(interval);
-};
-
-let stopPlayersTimer = function (id) {
-	if (id == socket.id) {
-		clearInterval(startPlayerOneTimer);
-	} else if (id !== socket.id) {
-		clearInterval(startPlayerTwoTimer);
-	}
-};
+// let stopTimer = () => {
+// 	stopTime = Date.now();
+// 	clearInterval(interval);
+// };
 
 const getRandomVirus = virusData => {
 	virusEl.style.gridColumn = `${virusData.col} / span 1`;
 	virusEl.style.gridRow = `${virusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
-		// startPlayerOneTimer();
-		// startPlayerTwoTimer();
+		startTime = Date.now();
 	}, virusData.delay);
 };
 
@@ -139,8 +113,6 @@ const startGame = (players, virusData) => {
 	displayElement(gameWrapperEl);
 	getRandomVirus(virusData);
 };
-
-const killedVirus = () => {};
 
 const newRound = randomVirus => {
 	// getRandomVirus(randomVirus);
@@ -185,16 +157,17 @@ usernameFormEl.addEventListener('submit', e => {
 
 // Click event for virus
 virusEl.addEventListener('click', () => {
+	stopTime = Date.now();
+	reactionTime = (stopTime - startTime) / 1000;
 	hideElement(virusEl);
 
 	const playerData = {
-		name: socket.id,
+		id: socket.id,
 		time: reactionTime,
-		score,
 	};
 	console.log(playerData);
 
-	socket.emit('virus:clicked'), playerData;
+	socket.emit('virus:clicked', playerData);
 });
 
 // Play again when game over
@@ -225,7 +198,5 @@ playAgainButtonEl.addEventListener('click', e => {
 socket.on('game:start', startGame);
 
 socket.on('game:newRound', newRound);
-
-socket.on('game:stopTimer', stopTimer);
 
 socket.on('player:updateScore', updateScoreBoard);
