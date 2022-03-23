@@ -79,6 +79,12 @@ h3 {
 	font-size: 2rem;
 }
 
+.playerScore {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
 .lightbox {
 	position: fixed;
 	top: 0;

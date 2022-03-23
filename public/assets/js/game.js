@@ -116,8 +116,8 @@ const getRandomVirus = virusData => {
 	virusEl.style.gridRow = `${virusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
-		startPlayerOneTimer();
-		startPlayerTwoTimer();
+		// startPlayerOneTimer();
+		// startPlayerTwoTimer();
 	}, virusData.delay);
 };
 
@@ -131,7 +131,7 @@ const startGame = (players, virusData) => {
 	document.querySelector('#players').innerHTML = Object.values(players)
 		.map(
 			player =>
-				`<h3>${player.name}<span>:</span> <span class="score">${player.score}</span></h3>`
+				`<h3 class="playerScore">${player.name}<span>:</span><span class="score">${player.score}</span><span>:</span><span class="time">${player.time}</span></h3>`
 		)
 		.join(' ');
 
@@ -142,13 +142,11 @@ const startGame = (players, virusData) => {
 
 const killedVirus = () => {};
 
-const newRound = (randomVirus, players) => {
-	virusImg.style.display = 'none';
-	displayElement(virusEl);
+const newRound = randomVirus => {
+	// getRandomVirus(randomVirus);
 
 	if (Object.keys(players).length === 2) {
 		getRandomVirus(randomVirus);
-		updateScoreBoard(players);
 	}
 };
 
@@ -190,8 +188,9 @@ virusEl.addEventListener('click', () => {
 	hideElement(virusEl);
 
 	const playerData = {
-		id: socket.id,
+		name: socket.id,
 		time: reactionTime,
+		score,
 	};
 	console.log(playerData);
 

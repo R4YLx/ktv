@@ -10,9 +10,9 @@ let gamesArray = []; //sätter en tom array för att sedan fylla med spel, där 
 
 let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum ligger i samma players-objekt
 
-let rounds = 0;
 let count = 0;
-let winner;
+let rounds = 0;
+const maxRounds = 10;
 
 /**
  *
@@ -33,7 +33,7 @@ const virusData = () => {
 
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
-	players[this.id] = { name: username, score: 0 }; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
+	players[this.id] = { name: username, score: 0, time: '&mdash;' }; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
 
 	this.join(rooms);
 
@@ -49,7 +49,6 @@ const handlePlayerJoined = function (username, callback) {
 		let thisGame = {
 			room,
 			players,
-			clicks: [],
 		};
 
 		debug(thisGame.players, room);
@@ -69,18 +68,49 @@ const handlePlayerJoined = function (username, callback) {
 };
 
 // Handle when virus is clicked
-const handleVirusClick = function () {
+const handleVirusClick = function (playerData) {
 	debug('Someone clicked on the virus');
+
+	count++;
+	let winner;
 
 	const thisGame = gamesArray.find(id => id.players[this.id]);
 
 	debug(thisGame);
 
-	io.in(thisGame.room).emit('game:stopTimer', this.id);
+	if (count % 2 !== 0) {
+		// give points to the fastest player (the first one that clicked is the first one in to the server)
+		players[playerData.id].score++;
+		rounds++;
+	} else {
+		const randomVirus = handleRandomData();
+		if (rounds < maxRounds) {
+			// emit new game round
+			io.emit('game:newRound', randomVirus, players);
+		} else if (rounds === maxRounds) {
+			// check who the winner is
+			Object.values(players).map(player => {
+				if (player.score > 5) {
+					winner = player.name;
+					return winner;
+				}
+			});
+			// emit 'end-game'-event when 10 rounds has been played and let the clients know who is the winner
+			io.emit('end-game', players, winner);
+			delete players[this.id];
+			// reset game
+			rounds = 0;
+			players = {};
+		}
+	}
 
-	thisGame.clicks.push(this.id);
+	// const thisGame = gamesArray.find(id => id.players[this.id]);
 
-	// io.emit('game:newRound', randomVirus, players);
+	// debug(thisGame);
+
+	// io.in(thisGame.room).emit('game:stopTimer', this.id);
+
+	// thisGame.clicks.push(this.id);
 };
 
 // Handle disconnecting players
