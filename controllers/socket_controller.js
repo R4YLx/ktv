@@ -59,10 +59,23 @@ const handleJoin = function (username, callback) {
 
 		io.in(room).emit('game:start', virusData());
 
-		players = {};
+		// players = {};
 
 		rooms++;
 	}
+};
+
+const handleClick = function () {
+	// show reaction time for player
+	// let player = {
+	// 	name: users[playerData.id],
+	// 	id: playerData.id,
+	// 	reactionTime: playerData.reactionTime,
+	// 	clicked: playerData.clicked,
+	// 	rounds: playerData.rounds,
+	// };
+
+	io.emit('virus:reset', virusData());
 };
 
 module.exports = function (socket, _io) {
@@ -74,4 +87,6 @@ module.exports = function (socket, _io) {
 	 */
 
 	socket.on('player:join', handleJoin);
+
+	socket.on('virus:clicked', handleClick);
 };

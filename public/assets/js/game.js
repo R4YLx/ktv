@@ -19,11 +19,7 @@ const waitingEl = document.querySelector('#waiting');
 const socket = io();
 let username = null;
 
-let renderTime = null;
-let stoppedTime = null;
-let started = null;
-
-let timeElapsed = null;
+let playerData = null;
 
 /*//////
 //  Functions 
@@ -70,6 +66,16 @@ const updatePlayers = players => {
 		.join('');
 };
 
+const updateVirus = getVirusData => {
+	// virusEl.style.display = 'none';
+	// displayElement(virusEl);
+	getRandomVirus(getVirusData);
+	// if (Object.keys(players).length === 2) {
+	// 	getRandomVirus(getVirusData);
+	// 	updateScoreBoard(players);
+	// }
+};
+
 /*//////
 //  Socket events
 /////*/
@@ -101,7 +107,18 @@ usernameFormEl.addEventListener('submit', e => {
 });
 
 // Click event for virus
-virusEl.addEventListener('click', () => {});
+virusEl.addEventListener('click', () => {
+	hideElement(virusEl);
+
+	playerData = {
+		// reactionTime,
+		id: socket.id,
+		// clicked: timesClicked,
+		// rounds,
+	};
+
+	socket.emit('virus:clicked', playerData);
+});
 
 /*//////
 //  Socket on events - Listening to server
@@ -110,3 +127,5 @@ virusEl.addEventListener('click', () => {});
 socket.on('player:connected', updatePlayers);
 
 socket.on('game:start', startGame);
+
+socket.on('virus:reset', updateVirus);
