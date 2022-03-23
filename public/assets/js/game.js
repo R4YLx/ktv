@@ -20,7 +20,7 @@ const waitingEl = document.querySelector('#waiting');
 /////*/
 
 const socket = io();
-let username = '';
+let username = null;
 
 // Get time and calculate
 let interval;
@@ -114,25 +114,29 @@ const startGame = (players, virusData) => {
 	getRandomVirus(virusData);
 };
 
-const newRound = randomVirus => {
-	// getRandomVirus(randomVirus);
+const newRound = virusData => {
+	virusEl.style.display = 'none';
+	// displayElement(virusEl);
+	console.log('random virus should appear within 5 sec');
 
 	if (Object.keys(players).length === 2) {
-		getRandomVirus(randomVirus);
+		getRandomVirus(virusData);
+		updateScoreBoard(players);
+		console.log('this text is visible if this if-statment works');
 	}
 };
 
 // Update scoreboard. Get score from server
 const updateScoreBoard = players => {
-	showRoundsEl.innerText = `${players[0].rounds}/10`;
-	players.forEach(player => {
-		playersTimer.innerHTML += `<p>${player.reactionTime}</p>`;
-	});
+	// showRoundsEl.innerText = `${players[0].rounds}/10`;
+	// players.forEach(player => {
+	// 	playersTimer.innerHTML += `<p>${player.reactionTime}</p>`;
+	// });
 
 	document.querySelector('#players').innerHTML = Object.values(players)
 		.map(
 			player =>
-				`<h3>${player.name}<span>:</span> <span class="score">${player.score}</span></h3>`
+				`<h3 class="playerScore">${player.name}<span>:</span><span class="score">${player.score}</span><span>:</span><span class="time">${player.time}</span></h3>`
 		)
 		.join(' vs ');
 };
@@ -161,9 +165,9 @@ virusEl.addEventListener('click', () => {
 	reactionTime = (stopTime - startTime) / 1000;
 	hideElement(virusEl);
 
-	const playerData = {
-		id: socket.id,
+	playerData = {
 		time: reactionTime,
+		id: socket.id,
 	};
 	console.log(playerData);
 
