@@ -45,25 +45,6 @@ let timeSum = [];
 //  Functions 
 /////*/
 
-// display element
-const displayElement = element => {
-	element.classList.remove('hide');
-};
-
-// hide element
-const hideElement = element => {
-	element.classList.add('hide');
-};
-
-// set innerText value
-const setInnerText = (element, value) => {
-	element.innerText = value;
-};
-
-// set innerHTML value
-const setInnerHTML = (element, value) => {
-	element.innerHTML = value;
-};
 
 // shows and hides notice element
 const showLightbox = () => {
@@ -182,6 +163,31 @@ usernameFormEl.addEventListener('submit', e => {
 	});
 });
 
+// Click event for virus
+virusEl.addEventListener('click', () => {
+	// score++;
+	stopTimer();
+	// const reactionTime = Date.now() - startTime;
+	// const playerData = { reactionTime, rounds };
+	// setInnerText(currentRoundEl, score);
+	hideElement(virusEl);
+
+	// socket.emit('virus:clicked'), playerData;
+
+	//sets game to equal 10 rounds
+	if (score === 4) {
+		showLightbox();
+
+		// This function doesn't work...
+		hideElement(virusEl);
+		startTimer();
+
+		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+		setInnerText(playAgainButtonEl, 'Play Again');
+		setInnerText(exitGameButtonEl, 'Exit');
+	}
+});
+
 // Play again when game over
 playAgainButtonEl.addEventListener('click', e => {
 	if (e.target.getAttribute('type') === 'playAgainButton') {
@@ -206,46 +212,7 @@ playAgainButtonEl.addEventListener('click', e => {
 
 // Restart game on disconnect
 
-// Click event for virus
-virusEl.addEventListener('click', () => {
-	// score++;
-	stopTimer();
 
-	// const reactionTime = Date.now() - startTime;
-
-	// const playerData = { reactionTime, rounds };
-
-	// setInnerText(currentRoundEl, score);
-	hideElement(virusEl);
-
-	// socket.emit('virus:clicked'), playerData;
-
-	//sets game to equal 10 rounds
-	if (score === 4) {
-		showLightbox();
-
-		// This function doesn't work...
-		hideElement(virusEl);
-		startTimer();
-
-		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
-		setInnerText(playAgainButtonEl, 'Play Again');
-		setInnerText(exitGameButtonEl, 'Exit');
-	}
-
-	/*
-	//logik för förloraren (funkar inte med else här men nåt liknande):
-	else {
-		messageEl.innerHTML = 
-		`
-			<p>YOU LOST!, ${username}</p> 
-			<button type="playAgainButton">Play again</button>
-			<button type="">Exit</button>
-				` 
-			score=0;
-	}
-	*/
-});
 
 /*//////
 //  Socket events
@@ -258,3 +225,30 @@ socket.on('game:start', startGame);
 socket.on('waitingForPlayer', displayWaitingForPlayers);
 
 socket.on('newRound', newRound);
+
+
+
+
+
+
+/*
+// display element
+const displayElement = element => {
+	element.classList.remove('hide');
+};
+
+// hide element
+const hideElement = element => {
+	element.classList.add('hide');
+};
+
+// set innerText value
+const setInnerText = (element, value) => {
+	element.innerText = value;
+};
+
+// set innerHTML value
+const setInnerHTML = (element, value) => {
+	element.innerHTML = value;
+};
+*/
