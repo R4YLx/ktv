@@ -41,30 +41,6 @@ let playerTime;
 let sum = 0;
 let timeSum = [];
 
-/*//////
-//  Functions 
-/////*/
-
-// display element
-const displayElement = element => {
-	element.classList.remove('hide');
-};
-
-// hide element
-const hideElement = element => {
-	element.classList.add('hide');
-};
-
-// set innerText value
-const setInnerText = (element, value) => {
-	element.innerText = value;
-};
-
-// set innerHTML value
-const setInnerHTML = (element, value) => {
-	element.innerHTML = value;
-};
-
 // shows and hides notice element
 const showLightbox = () => {
 	if (noticeEl.style.display === 'grid') {
@@ -78,6 +54,7 @@ const showLightbox = () => {
 
 const timer = element => {
 	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+
 };
 
 //! OK. rör ej
@@ -88,6 +65,9 @@ let startTimer = () => {
 		elapsedTime = Date.now() - startTime;
 		timer('#playerOneTime', elapsedTime);
 		opponentTimer();
+		setInnerText(playerOnetimeEl, player1);
+		setInnerText(playerTwotimeEl, player2);
+
 	}, 100);
 };
 //! OK ???
@@ -102,24 +82,6 @@ let stopTimer = () => {
 	clearInterval(interval);
 };
 
-// // THIS SHOULD MOVE TO SERVER SIDE!
-// let saveTime = () => {
-// 	if (showVirus === 10) {
-// 		stopTimer();
-// 		const time = stopTime - startTime;
-// 		playerTime = time / 1000;
-// 		timeSum.push(playerTime);
-// 	}
-
-// 	timeSum.forEach(time => {
-// 		if (showVirus === 10) {
-// 			sum += time / 10;
-// 			document.querySelector(
-// 				'#playerOneTime'
-// 			).innerHTML = `<span>${time}</span>`;
-// 		}
-// 	});
-// };
 
 const getRandomVirus = virusData => {
 	virusEl.style.gridColumn = `${virusData.col} / span 1`;
@@ -143,12 +105,14 @@ const startGame = (player1, player2, virusData) => {
 	setInnerText(opponentUsernameEl, player2);
 	hideElement(waitingEl);
 	displayElement(gameWrapperEl);
-	getRandomVirus(virusData);
+	getRandomVirus(virusData); //visar viruset
 };
 
+//denna måste vara här för att viruset ska visas
 const newRound = (player1, player2, virusData) => {
 	virusImg.style.display = 'none';
 	displayElement(virusEl);
+	
 
 	// DESSA FUNKTIONER ÄR EJ KLARA
 	// if (Object.keys(players).length === 2) {
@@ -171,16 +135,46 @@ usernameFormEl.addEventListener('submit', e => {
 
 	socket.emit('player:join', username, status => {
 		if (status.success) {
-			/*	//gör om till funktion "waitingn for other players"
-			hideElement(startEl); //släcker register-rutan
-			displayElement(waitingEl); //visar "waiting for another player-ruta"
-			setInnerText(playerUsernameEl, username);
-			displayElement(gameWrapperEl);
-			*/
 			startGame();
 		}
 	});
 });
+
+// Click event for virus
+virusEl.addEventListener('click', () => {
+	//prevents default page reload
+	//e.preventDefault();
+	stopTimer();
+	//clearInterval(interval);
+
+		// hide virus 
+		//virusEl.src = '';
+		hideElement(virusEl);
+
+
+
+	//score++;
+	//setInnerText(currentRoundEl, score);
+	hideElement(virusEl);
+
+	//sets game to equal 10 rounds
+	if (score === 4) {
+		showLightbox();
+
+		// This function doesn't work...
+		hideElement(virusEl);
+		startTimer();
+
+		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+		setInnerText(playAgainButtonEl, 'Play Again');
+		setInnerText(exitGameButtonEl, 'Exit');
+	}
+});
+
+	// socket.emit('virus:clicked'), playerData;
+
+
+
 
 // Play again when game over
 playAgainButtonEl.addEventListener('click', e => {
@@ -200,52 +194,18 @@ playAgainButtonEl.addEventListener('click', e => {
 		messageEl.innerHTML = `
 		<p>YOU LOST!, ${username}</p> 
 		`;
-		//messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
 	}
 });
 
 // Restart game on disconnect
 
-// Click event for virus
-virusEl.addEventListener('click', () => {
-	// score++;
-	stopTimer();
 
-	// const reactionTime = Date.now() - startTime;
 
-	// const playerData = { reactionTime, rounds };
 
-	// setInnerText(currentRoundEl, score);
-	hideElement(virusEl);
 
-	// socket.emit('virus:clicked'), playerData;
 
-	//sets game to equal 10 rounds
-	if (score === 4) {
-		showLightbox();
+	
 
-		// This function doesn't work...
-		hideElement(virusEl);
-		startTimer();
-
-		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
-		setInnerText(playAgainButtonEl, 'Play Again');
-		setInnerText(exitGameButtonEl, 'Exit');
-	}
-
-	/*
-	//logik för förloraren (funkar inte med else här men nåt liknande):
-	else {
-		messageEl.innerHTML = 
-		`
-			<p>YOU LOST!, ${username}</p> 
-			<button type="playAgainButton">Play again</button>
-			<button type="">Exit</button>
-				` 
-			score=0;
-	}
-	*/
-});
 
 /*//////
 //  Socket events
@@ -258,3 +218,29 @@ socket.on('game:start', startGame);
 socket.on('waitingForPlayer', displayWaitingForPlayers);
 
 socket.on('newRound', newRound);
+
+
+
+/*//////
+//  Functions 
+/////*/
+
+// display element
+const displayElement = element => {
+	element.classList.remove('hide');
+};
+
+// hide element
+const hideElement = element => {
+	element.classList.add('hide');
+};
+
+// set innerText value
+const setInnerText = (element, value) => {
+	element.innerText = value;
+};
+
+// set innerHTML value
+const setInnerHTML = (element, value) => {
+	element.innerHTML = value;
+};

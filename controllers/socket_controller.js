@@ -28,18 +28,7 @@ const virusData = () => {
 	});
 };
 
-// Start game handler (denna ska ändras helt klart och utvecklas men ligger som en liten boilerplate här så länge)
-const handleStartGame = () => {
-	// emit delay and random virus
-	debug('Someone clicked on the virus');
 
-	// Gets random virus position and delay on each click
-	// this.emit('game:start', getVirus);
-
-	// setTimeout(() => {
-	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
-	// }, getRandomDelay());
-};
 
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
@@ -66,8 +55,11 @@ const handlePlayerJoined = function (username, callback) {
 		debug(thisGame.players, room);
 
 		const player1 = players[this.id];
+		debug("Player 1 is " +player1); //visar användarnas namn
 		delete players[this.id];
 		const player2 = Object.values(players);
+		debug("Player 2 is " +player2); //visar användarnas namn
+		//player1ID = players[this.id];
 
 		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
 
@@ -85,6 +77,29 @@ const handlePlayerJoined = function (username, callback) {
 		//kalla på rad 144 if sucess true function i game
 	}
 };
+
+// Start game handler (denna ska ändras helt klart och utvecklas men ligger som en liten boilerplate här så länge)
+ const handleStartGame = (player1, player2) => {
+	player1.emit('start-new-game', {
+		id: player1.id,
+		opponent: player2.playerData.username,
+	});
+
+	player2.emit('start-new-game', {
+		id: player2.id,
+		opponent: player1.playerData.username,
+	});
+
+	// emit delay and random virus
+	io.in(thisGame).emit('display-virus', getVirusData());
+}
+
+
+
+
+
+
+
 
 // Handle disconnecting players
 const handleDisconnect = function () {
@@ -127,7 +142,7 @@ module.exports = function (socket, _io) {
 	debug('On start of app: a new client has connected', socket.id);
 
 	//handle START
-	socket.on('virus:start', handleStartGame);
+	socket.on('game:start', handleStartGame);
 
 	// handle player connect
 	socket.on('player:join', handlePlayerJoined);
