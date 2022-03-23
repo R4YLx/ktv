@@ -19,51 +19,94 @@ const waitingEl = document.querySelector('#waiting');
 const socket = io();
 let username = null;
 
+let renderTime = null;
+let stoppedTime = null;
+let started = null;
+
+let timeElapsed = null;
+
 /*//////
 //  Functions 
 /////*/
 
-// display element
+// Display element
 const displayElement = element => {
 	element.classList.remove('hide');
 };
 
-// hide element
+// Hide element
 const hideElement = element => {
 	element.classList.add('hide');
 };
 
-// set innerText value
+// Set innerText value
 const setInnerText = (element, value) => {
 	element.innerText = value;
 };
 
-// set innerHTML value
+// Set innerHTML value
 const setInnerHTML = (element, value) => {
 	element.innerHTML = value;
 };
 
-const getRandomVirus = virusData => {
-	virusEl.style.gridColumn = `${virusData.col} / span 1`;
-	virusEl.style.gridRow = `${virusData.row} / span 1`;
+//Display "waiting for other players"
+const displayWaitingForPlayers = () => {
+	hideElement(startEl); //släcker register-rutan
+	displayElement(waitingEl); //visar "waiting for another player-ruta"
+};
+
+// Get random values for virus
+const getRandomVirus = getVirusData => {
+	virusEl.style.gridColumn = `${getVirusData.col} / span 1`;
+	virusEl.style.gridRow = `${getVirusData.row} / span 1`;
 	setTimeout(() => {
 		displayElement(virusEl);
-		startTime = Date.now();
-	}, virusData.delay);
+	}, getVirusData.delay);
+};
+// Render players on scoreboard
+const updatePlayers = players => {
+	document.querySelector('#playersNameList').innerHTML = players
+		.map(player => `<li class="player">${player}</li>`)
+		.join('');
 };
 
 /*//////
-//  Events
+//  Socket events
+/////*/
+
+// Starting game
+const startGame = getVirusData => {
+	hideElement(waitingEl);
+	displayElement(gameWrapperEl);
+	getRandomVirus(getVirusData);
+};
+
+/*//////
+//  Submit and click events
 /////*/
 
 // Register new player
 usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
+
+	username = usernameFormEl.username.value;
+	displayWaitingForPlayers();
+
+	socket.emit('player:join', username, status => {
+		if (status.success) {
+			console.log(`${username} has joined successfully`);
+			startGame();
+		}
+	});
 });
 
 // Click event for virus
 virusEl.addEventListener('click', () => {});
 
 /*//////
-//  Socket events
+//  Socket on events - Listening to server
 /////*/
+
+socket.on('player:connected', updatePlayers);
+
+socket.on('game:start', startGame);
