@@ -43,14 +43,15 @@ handleConnect = function (username) {
 		score: 0,
 		reactionTime: null,
 	};
+	debug("This i a player object of connected player outside of the queue" + this.playerData.id);
 
 	// find another player
+
 	if (playQueue.length) {
 		joinRoom(this, playQueue.pop());
 		return;
 	}
-
-	playQueue.push(this); //this = spelaren
+		playQueue.push(this); //this = spelaren
 
 	this.emit('player:waiting'); //
 };
@@ -142,3 +143,4 @@ module.exports = function (socket, _io) {
 
 	socket.on('virus:clicked', handleClick);
 };
+ 
