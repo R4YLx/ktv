@@ -37,15 +37,11 @@ let virusTimeout;
 //  Functions 
 /////*/
 
-
-
-
 /*//////
 //  Events
 /////*/
 
 //* display virus
-
 
 //*
 // Register new player
@@ -63,12 +59,8 @@ const displayWaitingForPlayer = () => {
 	startEl.classList.add('hide');
 };
 
-
 // Starting game
 const startGame = ({ id, opponent }) => {
-	console.log('show id:', id);
-	console.log('show opponent', opponent);
-
 	playerId = id;
 
 	// place players names
@@ -82,7 +74,6 @@ const startGame = ({ id, opponent }) => {
 	// visa spelet
 	gameWrapperEl.classList.remove('hide');
 };
-
 
 const timer = element => {
 	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
@@ -98,10 +89,9 @@ let startTimer = () => {
 };
 
 // Opponents reaction time
-const opponentTimer = (time) => {
+const opponentTimer = time => {
 	timer('#playerTwoTime', time);
 };
-
 
 const displayVirus = ({ col, row, delay }) => {
 	virusTimeout = setTimeout(() => {
@@ -116,12 +106,11 @@ const displayVirus = ({ col, row, delay }) => {
 };
 
 // update score
-const score = ({winner, score}) => {
+const score = ({ winner, score }) => {
 	if (winner === playerId) {
-		setInnerText(playerOneTimeEl, score )
-
-	}	else {
-		setInnerText(playerTwoNameEl, score)
+		setInnerText(playerOneTimeEl, score);
+	} else {
+		setInnerText(playerTwoNameEl, score);
 	}
 };
 
@@ -130,7 +119,11 @@ const score = ({winner, score}) => {
 /////*/
 
 // Click event for virus
-virusEl.addEventListener('click', () => {});
+virusEl.addEventListener('click', () => {
+	virusEl.classList.add('hide');
+	clearInterval(timerInterval);
+	socket.emit('virus:clicked', reactionTime);
+});
 
 /*//////
 //  Socket on events - Listening to server
@@ -141,3 +134,5 @@ socket.on('player:waiting', displayWaitingForPlayer); // visa spinnner
 socket.on('game:start', startGame);
 
 socket.on('virus:show', displayVirus);
+
+socket.on('playerTwo:timer', playerTwoTimer);

@@ -11,11 +11,23 @@ let io = null;
 
 const activeGames = {};
 const playQueue = [];
-const maxGameRounds = 10;
 
 /*//////
 //  Functions 
 /////*/
+
+const getRoomId = (playerId, activeGames) => {
+	const roomIds = Object.keys(activeGames);
+	return roomIds.find(roomId => roomId.includes(playerId));
+};
+
+const getPlayerTwo = (id, roomId, activeGames) => {
+	return activeGames[roomId].players.find(player => player.id !== id);
+};
+
+const getPlayerOne = (id, roomId, activeGames) => {
+	return activeGames[roomId].players.find(player => player.id === id);
+};
 
 /*//////
 //  Handling events
@@ -34,38 +46,31 @@ handleConnect = function (username) {
 	debug("This i a player object of connected player outside of the queue" + this.playerData.id);
 
 	// find another player
-	if (playQueue.length) { //om det finns en array med 1 st spealre i som väntar:
-	debug("this is play Queue" + playQueue.length) //visar 1.= hur många som är i playQueue
-		const playerOne = this; //hämtar ut this player objectet på den enda som är i kön
-		const playerTwo = playQueue.pop(); //sätter player 2 till att vara id på spelare 1
-		debug('playerOne', playerOne.id);
-		debug('playerTwo', playerTwo.id);
 
-		const roomId = `${playerOne.id}`;
-
-		debug('playerOne', playerOne.id);
-		debug('playerTwo', playerTwo.id);
-
-		// players är i samma rum
-		playerOne.join(roomId);
-		playerTwo.join(roomId);
-
-		debug('playerOne', playerOne.id);
-		debug('playerTwo', playerTwo.id);
-
-		activeGames[roomId] = {
-			players: [{ ...playerOne.playerData }, { ...playerTwo.playerData }],
-			gameRound: 1,
-		};
-
-
-		// start new game -skickar detta till funktionen startGame i game.js och tar in id och erstter id och oponnent med player1 och player2.
-		startGame(playerOne, playerTwo, roomId);
+	if (playQueue.length) {
+		joinRoom(this, playQueue.pop());
 		return;
 	}
 		playQueue.push(this); //this = spelaren
 
 	this.emit('player:waiting'); //
+};
+
+const joinRoom = (playerOne, playerTwo) => {
+	const roomId = `${playerOne.id}#${playerTwo.id}`;
+
+	// join both players
+	playerOne.join(roomId);
+	playerTwo.join(roomId);
+
+	// save to active games
+	activeGames[roomId] = {
+		players: [{ ...playerOne.playerData }, { ...playerTwo.playerData }],
+		gameRound: 1,
+	};
+
+	// start new game
+	startGame(playerOne, playerTwo, roomId);
 };
 
 const startGame = (playerOne, playerTwo, roomId) => {
@@ -95,6 +100,37 @@ const getVirusData = () => {
 	});
 };
 
+handleClick = function (reactionTime) {
+	const roomId = getRoomId(this.id, activeGames);
+
+	// save players reaction time
+	const player = getPlayerOne(this.id, roomId, activeGames);
+	player.reactionTime = reactionTime;
+
+	// emit reaction time to opponent
+	this.to(roomId).emit('playerTwo:timer', reactionTime);
+
+	// get opponents reaction time, return if null
+	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
+	if (!playerTwo.reactionTime) return;
+
+	// emit updated score to players
+	// io.in(roomId).emit('update-scoreboard', getUpdatedScore(player, playerTwo));
+
+	// // check if game is over and emit the winner
+	// if (activeGames[roomId].gameRound === maxGameRounds) {
+	// 	io.in(roomId).emit('game-over', getWinner(player, playerTwo));
+
+	// 	// delete the game from list of active games
+	// 	delete activeGames[roomId];
+
+	// 	return;
+	// }
+
+	// // start new game round
+	// startNewGameRound(roomId);
+};
+
 module.exports = function (socket, _io) {
 	io = _io;
 	debug('On start of app: a new client has connected', socket.id);
@@ -104,5 +140,7 @@ module.exports = function (socket, _io) {
 	 */
 
 	socket.on('player:connected', handleConnect);
+
+	socket.on('virus:clicked', handleClick);
 };
  
