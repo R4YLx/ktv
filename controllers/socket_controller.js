@@ -9,17 +9,15 @@
 const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
-let players = {};
-
-let gamesArray = [];
-
-let rooms = 1;
+const activeGames = {};
+const playQueue = [];
+const maxGameRounds = 10;
 
 /*//////
 //  Functions 
 /////*/
 
-const virusData = () => {
+const getVirusData = () => {
 	let col = Math.floor(Math.random() * 21);
 	let row = Math.floor(Math.random() * 21);
 	let delay = Math.floor(Math.random() * 5000);
@@ -31,51 +29,60 @@ const virusData = () => {
 	});
 };
 
+const findAnotherPlayer = player => {
+	if (playQueue.length) {
+		joinGame(player, playQueue.pop());
+		return;
+	}
+
+	playQueue.push(player);
+
+	player.emit('player:waiting');
+};
+
+const joinGame = (player1, player2) => {
+	const gameId = `${player1.id}#${player2.id}`;
+
+	player1.join(gameId);
+	player2.join(gameId);
+
+	activeGames[gameId] = {
+		players: [{ ...player1.playerData }, { ...player2.playerData }],
+		gameRound: 1,
+	};
+
+	// start new game
+	startGame(player1, player2, gameId);
+};
+
+const startGame = (player1, player2, gameId) => {
+	player1.emit('game:start', {
+		id: player1.id,
+		opponent: player2.playerData.username,
+	});
+
+	player2.emit('game:start', {
+		id: player2.id,
+		opponent: player1.playerData.username,
+	});
+
+	// emit delay and random virus
+	io.in(gameId).emit('virus:show', getVirusData());
+};
+
 /*//////
 //  Handling events
 /////*/
 
-const handleJoin = function (username, callback) {
-	players[this.id] = username;
+handleConnect = function (username) {
+	this.playerData = {
+		id: this.id,
+		player: username,
+		score: 0,
+		reactionTime: null,
+	};
 
-	this.join(rooms);
-
-	if (Object.keys(players).length === 2) {
-		callback({
-			success: true,
-		});
-
-		const room = rooms;
-
-		// add the room players are in and which 2 players that are in the room, to the games array
-		let thisGame = {
-			room,
-			players,
-		};
-
-		gamesArray.push(thisGame);
-
-		io.in(room).emit('player:connected', players);
-
-		io.in(room).emit('game:start', virusData());
-
-		// players = {};
-
-		rooms++;
-	}
-};
-
-const handleClick = function () {
-	// show reaction time for player
-	// let player = {
-	// 	name: users[playerData.id],
-	// 	id: playerData.id,
-	// 	reactionTime: playerData.reactionTime,
-	// 	clicked: playerData.clicked,
-	// 	rounds: playerData.rounds,
-	// };
-
-	io.emit('virus:reset', virusData());
+	findAnotherPlayer(this);
 };
 
 module.exports = function (socket, _io) {
@@ -86,7 +93,5 @@ module.exports = function (socket, _io) {
 	 * Socket on events - Listening to client
 	 */
 
-	socket.on('player:join', handleJoin);
-
-	socket.on('virus:clicked', handleClick);
+	socket.on('player:connected', handleConnect);
 };
