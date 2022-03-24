@@ -144,7 +144,6 @@ const handleClick = function (elapsedTime) {
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 	// GAME OVER - check game rounds and send
-
 	if (activeGames[roomId].gameRound === 4) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
@@ -155,18 +154,19 @@ const handleClick = function (elapsedTime) {
 	startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 };
 
-//* Sara
+
 const startNewRound = roomId => {
 	// reset reaction time
 
 	getVirusData();
 
+	// för varje spelare i rummet...reaktionstiden = null
 	activeGames[roomId].players.forEach(player => (player.elapsedTime = null));
 
 	//update rounds
 	activeGames[roomId].gameRound++;
 
-	// emit virus, rounds & (delay)
+	// emit virus &  rounds
 	io.in(roomId).emit(
 		'virus:show',
 		getVirusData(),
@@ -174,7 +174,6 @@ const startNewRound = roomId => {
 	);
 };
 
-//* winner
 
 function handleDisconnect() {
 	debug(`Client ${this.id} disconnected.`);
