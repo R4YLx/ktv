@@ -41,9 +41,12 @@ handleConnect = function (username) {
 		id: this.id, // = klientId
 		player: username,
 		score: 0,
-		reactionTime: null,
+		elapsedTime: null,
 	};
-	debug("This i a player object of connected player outside of the queue" + this.playerData.id);
+	debug(
+		'This i a player object of connected player outside of the queue' +
+			this.playerData.id
+	);
 
 	// find another player
 
@@ -51,7 +54,7 @@ handleConnect = function (username) {
 		joinRoom(this, playQueue.pop());
 		return;
 	}
-		playQueue.push(this); //this = spelaren
+	playQueue.push(this); //this = spelaren
 
 	this.emit('player:waiting'); //
 };
@@ -100,19 +103,19 @@ const getVirusData = () => {
 	});
 };
 
-handleClick = function (reactionTime) {
+handleClick = function (elapsedTime) {
 	const roomId = getRoomId(this.id, activeGames);
 
 	// save players reaction time
 	const playerOne = getPlayerOne(this.id, roomId, activeGames);
-	playerOne.reactionTime = reactionTime;
+	playerOne.elapsedTime = elapsedTime;
 
 	// emit reaction time to opponent
-	this.to(roomId).emit('playerTwo:timer', reactionTime);
+	this.to(roomId).emit('playerTwo:timer', elapsedTime);
 
 	// get opponents reaction time, return if null
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
-	if (!playerTwo.reactionTime) return;
+	if (!playerTwo.elapsedTime) return;
 
 	// emit updated score to players
 	// io.in(roomId).emit('update-scoreboard', getUpdatedScore(playerOne, playerTwo));
@@ -143,4 +146,3 @@ module.exports = function (socket, _io) {
 
 	socket.on('virus:clicked', handleClick);
 };
- 
