@@ -10,7 +10,12 @@ let gamesArray = []; //sätter en tom array för att sedan fylla med spel, där 
 
 let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum ligger i samma players-objekt
 
+//let players = {}; //players är ett tomt objekt. vi lägger spelare här i, de som är i samma rum
+
 let score = 0; //måste ha nollställd poäng från start
+
+
+
 /**
  *
  * Functions
@@ -30,19 +35,27 @@ const virusData = () => {
 
 
 
+
 // Handle connecting players
 const handlePlayerJoined = function (username, callback) {
 	players[this.id] = username; //sets the players id to be equal to their username instead. Utan denna rad så connectar de bara till ett rum och if-satsen på rad 74 körs ej
-
+	
 	this.join(rooms);
+
+	debug(`User ${username} with socket id ${this.id} has connected to the first room: room ${rooms}`);
 
 	if (Object.keys(players).length === 2) {
 		callback({
 			success: true,
 			//usersThatareOnline: Object.values(players), //hämtar ut innehållet i objektet players från usersthatareonline. men det behöver vi inte veta här
 		});
+		debug("joined room");
 
+	
 		const room = rooms;
+	
+		debug(`User ${username} with socket id ${this.id} has connected 2 PEOPLE HAVE CONNECTED to room ${rooms}`);
+		debug("The room u joined is room " + room);
 
 		// add the room players are in and which 2 players that are in the room, to the games array
 		//i detta spel-objektet finns det info om room, players, score
@@ -52,17 +65,34 @@ const handlePlayerJoined = function (username, callback) {
 			score
 		};
 
-		debug(thisGame.players, room);
+	
+		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
+		debug(gamesArray);
 
-		const player1 = players[this.id];
+		debug("THIS NOW IS THIS PLAYER " + players[this.id]); //prints last person to join
+		debug(`THIS NOW IS THIS PLAYER  ${username} and they have socket id ${this.id}`); //prints last person to join
+
+		/*debug(getRoomByUserId);
+		const THISroom = getRoomByUserId(this.id);
+		debug("-this is the room the user is in " + THISroom);*/
+		
+
+		let player1 = players[this.id];
 		debug("Player 1 is " +player1); //visar användarnas namn
 		delete players[this.id];
-		const player2 = Object.values(players);
+		let player2 = Object.values(players);
 		debug("Player 2 is " +player2); //visar användarnas namn
-		//player1ID = players[this.id];
 
-		gamesArray.push(thisGame); //pushes thisGame into the from start empty Games-array
+		/*
+		debug(gamesArray[1].id);
+		if (gamesArray[room].id = players[this.id]) {
+			debug(gamesArray[room].id);
+		};
+	*/
+		//debug("THIIIIIISSSSSS", thisGame.players[this.id]);
 
+
+		
 		//io.emit('start game');
 		io.in(room).emit('game:start', player1, player2, virusData());
 
@@ -77,6 +107,8 @@ const handlePlayerJoined = function (username, callback) {
 		//kalla på rad 144 if sucess true function i game
 	}
 };
+
+
 
 // Start game handler (denna ska ändras helt klart och utvecklas men ligger som en liten boilerplate här så länge)
  const handleStartGame = (player1, player2) => {
@@ -114,7 +146,21 @@ const handleDisconnect = function () {
 
 // Handle when virus is clicked
 const handleVirusClick = function () {
-	debug('Someone clicked on the virus');
+		debug(`Player with socket id ${this.id} have clicked the virus!!`); //prints last person to click virus
+	debug("This is the new array" + gamesArray);
+	let socket_id = socket.id
+
+
+	// get room id
+	let roomId = (gamesArray.thisGame.room);
+	let player1 = players[this.id];
+	debug("Player 1 is " +player1 `with socket id ${this.id} is inroom ${rooms}`); //visar rum
+	let player2 = Object.values(players);
+	debug("Player 2 is " +player2); //visar användarnas namn
+
+
+
+
 
 	// Gets random virus position and delay on each click
 	// this.emit('virus:position', getVirus);
@@ -122,6 +168,7 @@ const handleVirusClick = function () {
 	// setTimeout(() => {
 	// 	this.emit('virus:position', getRandomPosition(), getRandomPosition());
 	// }, getRandomDelay());
+	
 };
 
 // Compare reaction time and update score //! inte klar
