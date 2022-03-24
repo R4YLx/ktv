@@ -29,6 +29,26 @@ const getPlayerOne = (id, roomId, activeGames) => {
 	return activeGames[roomId].players.find(player => player.id === id);
 };
 
+const getUpdatedScore = (playerOne, playerTwo) => {
+	if (playerOne.elapsedTime < playerTwo.elapsedTime) {
+		playerOne.score++;
+		return { winnerId: playerOne.id, score: playerOne.score };
+	} else {
+		playerTwo.score++;
+		return { winnerId: playerTwo.id, score: playerTwo.score };
+	}
+};
+
+const getWinner = (playerOne, playerTwo) => {
+	if (playerOne.score < playerTwo.score) {
+		return playerTwo;
+	} else if (playerTwo.score < playerOne.score) {
+		return playerOne;
+	}
+
+	return null;
+};
+
 /*//////
 //  Handling events
 /////*/
@@ -117,21 +137,21 @@ handleClick = function (elapsedTime) {
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
 	if (!playerTwo.elapsedTime) return;
 
-	// emit updated score to players
-	// io.in(roomId).emit('update-scoreboard', getUpdatedScore(playerOne, playerTwo));
+	// send updated score
+	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
-	// // check if game is over and emit the winner
-	// if (activeGames[roomId].gameRound === maxGameRounds) {
-	// 	io.in(roomId).emit('game-over', getWinner(playerOne, playerTwo));
+	// check game rounds and send
+	if (activeGames[roomId].gameRound === 10) {
+		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
-	// 	// delete the game from list of active games
-	// 	delete activeGames[roomId];
+		// delete the game from list of active games
+		delete activeGames[roomId];
 
-	// 	return;
-	// }
+		return;
+	}
 
-	// // start new game round
-	// startNewGameRound(roomId);
+	// start new game round
+	startNewGameRound(roomId);
 };
 
 module.exports = function (socket, _io) {
