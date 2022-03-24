@@ -175,6 +175,13 @@ virusEl.addEventListener('click', () => {
 	socket.emit('virus:clicked', elapsedTime);
 });
 
+playAgainButtonEl.addEventListener('click', () => {
+
+    gameWrapperEl.classList.add('hide');
+    startEl.classList.remove('hide');
+    noticeEl.classList.add('hide');
+});
+
 /*//////
 //  Socket on events - Listening to server
 /////*/
