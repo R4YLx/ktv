@@ -2,8 +2,6 @@
  * Socket Controller
  */
 
-
-
 /*//////
 //  Variables
 /////*/
@@ -12,7 +10,7 @@ const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
 const activeGames = {};
-const playQueue = [];
+const waitingRoom = [];
 
 /*//////
 //  Functions 
@@ -66,19 +64,19 @@ handleConnect = function (username) {
 		elapsedTime: null,
 	};
 	debug(
-		'This i a player object of connected player outside of the queue' +
+		'This is a player object of connected player outside of the queue' +
 			this.playerData.id
 	);
 
 	// find another player
 
-	if (playQueue.length) {
-		joinRoom(this, playQueue.pop());
+	if (waitingRoom.length) {
+		joinRoom(this, waitingRoom.pop());
 		return;
 	}
-	playQueue.push(this); //this = spelaren
+	waitingRoom.push(this); //this = spelaren
 
-	this.emit('player:waiting'); //
+	this.emit('player:waiting'); 
 };
 
 const joinRoom = (playerOne, playerTwo) => {
@@ -125,7 +123,7 @@ const getVirusData = () => {
 	});
 };
 
-handleClick = function (elapsedTime) {
+const handleClick = function (elapsedTime) {
 	const roomId = getRoomId(this.id, activeGames);
 
 	// Get player one time
@@ -137,27 +135,45 @@ handleClick = function (elapsedTime) {
 
 	// Get reaction time
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
-	if (!playerTwo.elapsedTime) return;
+	if (!playerTwo.elapsedTime){
+		return
+	};
 
 	// send updated score
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 
-
-	//Game-Over
+	// GAME OVER - check game rounds and send
+	
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
-	
-		delete activeGames[roomId]; //deletes the game/room from active games when finished after 10 rounds
-
+		
+		// delete this games id
+		delete activeGames[roomId];
 		return;
-	}
 
-	else {
+	}	else {
 		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
-	}
-	
+	};
 };
+
+//* Sara
+const startNewRound = (roomId) => {
+	// reset reaction time
+
+	getVirusData()
+
+	activeGames[roomId].players.forEach(player => player.elapsedTime = null);
+
+	//update rounds
+	activeGames[roomId].gameround++;
+
+	// emit virus, rounds & (delay)
+	io.in(roomId).emit ('get:virus', getVirusData(), activeGames[roomId].gameRound);
+};
+
+
+//* winner
 
 
 module.exports = function (socket, _io) {

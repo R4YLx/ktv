@@ -110,7 +110,8 @@ const playerTwoTimer = time => {
 	timer('#playerTwoTime', time);
 };
 
-const displayVirus = ({ col, row, delay }) => {
+const displayVirus = ({ col, row, delay }, gameRound = 1) => {
+	currentRoundEl.innerText = gameRound; // visar vilken round vi är på
 	virusTimeout = setTimeout(() => {
 		// update virus position
 		virusEl.style.gridColumn = `${col} / span 1`;
