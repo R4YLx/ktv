@@ -28,9 +28,9 @@ const socket = io();
 let username = null;
 let playerId = null;
 
-let reactionTime;
+let elapsedTime;
 let startTime;
-let timerInterval;
+let interval;
 let virusTimeout;
 
 /*//////
@@ -120,8 +120,8 @@ const score = ({winner, score}) => {
 // Click event for virus
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
-	clearInterval(timerInterval);
-	socket.emit('virus:clicked', reactionTime);
+	clearInterval(interval);
+	socket.emit('virus:clicked', elapsedTime);
 });
 
 /*//////
