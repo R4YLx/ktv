@@ -31,29 +31,39 @@ handleConnect = function (username) {
 		score: 0,
 		reactionTime: null,
 	};
+	debug("This i a player object of connected player outside of the queue" + this.playerData.id);
 
 	// find another player
-	if (playQueue.length) {
-		const playerOne = this;
-		const playerTwo = playQueue.pop();
+	if (playQueue.length) { //om det finns en array med 1 st spealre i som väntar:
+	debug("this is play Queue" + playQueue.length) //visar 1.= hur många som är i playQueue
+		const playerOne = this; //hämtar ut this player objectet på den enda som är i kön
+		const playerTwo = playQueue.pop(); //sätter player 2 till att vara id på spelare 1
+		debug('playerOne', playerOne.id);
+		debug('playerTwo', playerTwo.id);
 
 		const roomId = `${playerOne.id}`;
+
+		debug('playerOne', playerOne.id);
+		debug('playerTwo', playerTwo.id);
 
 		// players är i samma rum
 		playerOne.join(roomId);
 		playerTwo.join(roomId);
+
+		debug('playerOne', playerOne.id);
+		debug('playerTwo', playerTwo.id);
 
 		activeGames[roomId] = {
 			players: [{ ...playerOne.playerData }, { ...playerTwo.playerData }],
 			gameRound: 1,
 		};
 
-		// start new game
+
+		// start new game -skickar detta till funktionen startGame i game.js och tar in id och erstter id och oponnent med player1 och player2.
 		startGame(playerOne, playerTwo, roomId);
 		return;
 	}
-
-	playQueue.push(this); //this = spelaren
+		playQueue.push(this); //this = spelaren
 
 	this.emit('player:waiting'); //
 };
@@ -95,3 +105,4 @@ module.exports = function (socket, _io) {
 
 	socket.on('player:connected', handleConnect);
 };
+ 
