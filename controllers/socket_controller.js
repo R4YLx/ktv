@@ -141,7 +141,7 @@ handleClick = function (elapsedTime) {
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 	// check game rounds and send
-	if (activeGames[roomId].gameRound === 10) {
+	/*if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
 		// delete the game from list of active games
@@ -152,6 +152,8 @@ handleClick = function (elapsedTime) {
 
 	// start new game round
 	startNewGameRound(roomId);
+
+	*/
 };
 
 module.exports = function (socket, _io) {
