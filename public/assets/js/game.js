@@ -121,6 +121,9 @@ const score = ({winner, score}) => {
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
 	clearInterval(interval);
+	timer(playerOneTimeEl, elapsedTime)
+	timer(playerTwoNameEl, elapsedTime)
+
 	socket.emit('virus:clicked', elapsedTime);
 });
 
@@ -135,3 +138,5 @@ socket.on('game:start', startGame);
 socket.on('virus:show', displayVirus);
 
 socket.on('playerTwo:timer', playerTwoTimer);
+
+socket.on('new:score', score)
