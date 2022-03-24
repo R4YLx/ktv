@@ -2,8 +2,6 @@
  * Socket Controller
  */
 
-
-
 /*//////
 //  Variables
 /////*/
@@ -12,7 +10,7 @@ const debug = require('debug')('ktv:socket_controller');
 let io = null;
 
 const activeGames = {};
-const playQueue = [];
+const waitingRoom = [];
 
 /*//////
 //  Functions 
@@ -72,11 +70,11 @@ handleConnect = function (username) {
 
 	// find another player
 
-	if (playQueue.length) {
-		joinRoom(this, playQueue.pop());
+	if (waitingRoom.length) {
+		joinRoom(this, waitingRoom.pop());
 		return;
 	}
-	playQueue.push(this); //this = spelaren
+	waitingRoom.push(this); //this = spelaren
 
 	this.emit('player:waiting'); //
 };
@@ -145,27 +143,36 @@ handleClick = function (elapsedTime) {
 
 
 	// GAME OVER - check game rounds and send
-	/*
+	
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
-		showLightbox();
-		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
-		setInnerText(playAgainButtonEl, 'Play Again');
-		setInnerText(exitGameButtonEl, 'Exit');
-		// delete the game from list of active games
+		
 		delete activeGames[roomId];
 
 		return;
-
-		
 	}
 
 	else {
 		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 	}
-	*/
-
+	
 };
+
+//* Sara
+const startNewRound = (roomId) => {
+	// reset reaction time
+
+	activeGames[roomId].players.forEach(player => player.elapsedTime = null);
+
+	//update rounds
+	activeGames[roomId].gameround++;
+
+	// emit virus, rounds & (delay)
+	io.in(roomId).emit ('get:virus', getVirusData(), activeGames[roomId].gameRound());
+};
+
+
+//* winner
 
 
 module.exports = function (socket, _io) {
