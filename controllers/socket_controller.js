@@ -17,45 +17,49 @@ const maxGameRounds = 10;
 //  Functions 
 /////*/
 
-const getVirusData = () => {
-	let col = Math.floor(Math.random() * 21);
-	let row = Math.floor(Math.random() * 21);
-	let delay = Math.floor(Math.random() * 5000);
+/*//////
+//  Handling events
+/////*/
 
-	return (getVirusData = {
-		col,
-		row,
-		delay,
-	});
-};
+// Här ihop med register new flayer från game.js
+handleConnect = function (username) {
+	// username är parameter som vi skickar från game.js
+	this.playerData = {
+		// this = klienten
+		id: this.id, // = klientId
+		player: username,
+		score: 0,
+		reactionTime: null,
+	};
 
-const findAnotherPlayer = player => {
+	// find another player
 	if (playQueue.length) {
-		joinGame(player, playQueue.pop());
+		joinGame(this, playQueue.pop()); // player 1 & player 2
 		return;
 	}
 
-	playQueue.push(player);
+	playQueue.push(this); //this = spelaren
 
-	player.emit('player:waiting');
+	this.emit('player:waiting'); //
 };
 
 const joinGame = (player1, player2) => {
-	const gameId = `${player1.id}#${player2.id}`;
+	const roomId = `${player1.id}#${player2.id}`;
 
-	player1.join(gameId);
-	player2.join(gameId);
+	// players är i samma rum
+	player1.join(roomId);
+	player2.join(roomId);
 
-	activeGames[gameId] = {
+	activeGames[roomId] = {
 		players: [{ ...player1.playerData }, { ...player2.playerData }],
 		gameRound: 1,
 	};
 
 	// start new game
-	startGame(player1, player2, gameId);
+	startGame(player1, player2, roomId);
 };
 
-const startGame = (player1, player2, gameId) => {
+const startGame = (player1, player2, roomId) => {
 	player1.emit('game:start', {
 		id: player1.id,
 		opponent: player2.playerData.username,
@@ -67,22 +71,7 @@ const startGame = (player1, player2, gameId) => {
 	});
 
 	// emit delay and random virus
-	io.in(gameId).emit('virus:show', getVirusData());
-};
-
-/*//////
-//  Handling events
-/////*/
-
-handleConnect = function (username) {
-	this.playerData = {
-		id: this.id,
-		player: username,
-		score: 0,
-		reactionTime: null,
-	};
-
-	findAnotherPlayer(this);
+	//io.in(roomId).emit('virus:show', getVirusData());
 };
 
 module.exports = function (socket, _io) {
