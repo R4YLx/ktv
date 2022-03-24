@@ -34,8 +34,25 @@ handleConnect = function (username) {
 
 	// find another player
 	if (playQueue.length) {
-		joinGame(this, playQueue.pop()); // player 1 & player 2
+		const playerOne = this;
+		const playerTwo = playQueue.pop();
 
+		const roomId = `${playerOne.id}#${playerTwo.id}`;
+
+		debug('playerOne', playerOne.id);
+		debug('playerTwo', playerTwo.id);
+
+		// players är i samma rum
+		playerOne.join(roomId);
+		playerTwo.join(roomId);
+
+		activeGames[roomId] = {
+			players: [{ ...playerOne.playerData }, { ...playerTwo.playerData }],
+			gameRound: 1,
+		};
+
+		// start new game
+		startGame(playerOne, playerTwo, roomId);
 		return;
 	}
 
@@ -44,34 +61,15 @@ handleConnect = function (username) {
 	this.emit('player:waiting'); //
 };
 
-const joinGame = (player1, player2) => {
-	const roomId = `${player1.id}#${player2.id}`;
-
-	debug('player1', player1.id);
-	debug('player2', player2.id);
-
-	// players är i samma rum
-	player1.join(roomId);
-	player2.join(roomId);
-
-	activeGames[roomId] = {
-		players: [{ ...player1.playerData }, { ...player2.playerData }],
-		gameRound: 1,
-	};
-
-	// start new game
-	startGame(player1, player2, roomId);
-};
-
-const startGame = (player1, player2, roomId) => {
-	player1.emit('game:start', {
-		id: player1.id,
-		opponent: player2.playerData.player,
+const startGame = (playerOne, playerTwo, roomId) => {
+	playerOne.emit('game:start', {
+		id: playerOne.id,
+		opponent: playerTwo.playerData.player,
 	});
 
-	player2.emit('game:start', {
-		id: player2.id,
-		opponent: player1.playerData.player,
+	playerTwo.emit('game:start', {
+		id: playerTwo.id,
+		opponent: playerOne.playerData.player,
 	});
 
 	// emit delay and random virus
