@@ -31,26 +31,6 @@ let virusTimeout;
 //  Functions 
 /////*/
 
-// Display element
-const displayElement = element => {
-	element.classList.remove('hide');
-};
-
-// Hide element
-const hideElement = element => {
-	element.classList.add('hide');
-};
-
-// Set innerText value
-const setInnerText = (element, value) => {
-	element.innerText = value;
-};
-
-// Set innerHTML value
-const setInnerHTML = (element, value) => {
-	element.innerHTML = value;
-};
-
 /*//////
 //  Events
 /////*/
