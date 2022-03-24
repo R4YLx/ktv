@@ -44,6 +44,7 @@ let virusTimeout;
 /*//////
 //  Functions 
 /////*/
+/*
 const showLightbox = () => {
 	if (noticeEl.style.display === 'grid') {
 		noticeEl.style.display = 'none';
@@ -52,6 +53,7 @@ const showLightbox = () => {
 		noticeEl.style.display = 'grid';
 		displayElement(noticeEl);
 	}
+*/
 
 /*//////
 //  Events
@@ -146,8 +148,8 @@ const gameOver = ({ winner, score }) => {
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
 	clearInterval(interval);
-	//timer(playerOneTimeEl, elapsedTime);
-	//timer(playerTwoTimeEl, elapsedTime);
+	timer(playerOneTimeEl, elapsedTime);
+	timer(playerTwoTimeEl, elapsedTime);
 	//sets game to equal 10 rounds
 
 	socket.emit('virus:clicked', elapsedTime);

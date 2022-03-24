@@ -145,6 +145,7 @@ handleClick = function (elapsedTime) {
 
 
 	// GAME OVER - check game rounds and send
+	/*
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 		showLightbox();
@@ -158,12 +159,14 @@ handleClick = function (elapsedTime) {
 
 		
 	}
-/*
+
 	else {
 		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 	}
-*/
+	*/
+
 };
+
 
 module.exports = function (socket, _io) {
 	io = _io;
