@@ -2,3 +2,5 @@
 /**/node_modules/
 *-nogit
 /**/*.env
+.DS_Store
+.gitignore
