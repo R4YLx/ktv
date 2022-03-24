@@ -103,8 +103,8 @@ handleClick = function (reactionTime) {
 	const roomId = getRoomId(this.id, activeGames);
 
 	// save players reaction time
-	const player = getPlayerOne(this.id, roomId, activeGames);
-	player.reactionTime = reactionTime;
+	const playerOne = getPlayerOne(this.id, roomId, activeGames);
+	playerOne.reactionTime = reactionTime;
 
 	// emit reaction time to opponent
 	this.to(roomId).emit('playerTwo:timer', reactionTime);
@@ -114,11 +114,11 @@ handleClick = function (reactionTime) {
 	if (!playerTwo.reactionTime) return;
 
 	// emit updated score to players
-	// io.in(roomId).emit('update-scoreboard', getUpdatedScore(player, playerTwo));
+	// io.in(roomId).emit('update-scoreboard', getUpdatedScore(playerOne, playerTwo));
 
 	// // check if game is over and emit the winner
 	// if (activeGames[roomId].gameRound === maxGameRounds) {
-	// 	io.in(roomId).emit('game-over', getWinner(player, playerTwo));
+	// 	io.in(roomId).emit('game-over', getWinner(playerOne, playerTwo));
 
 	// 	// delete the game from list of active games
 	// 	delete activeGames[roomId];

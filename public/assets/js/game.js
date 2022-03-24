@@ -89,7 +89,7 @@ let startTimer = () => {
 };
 
 // Opponents reaction time
-const opponentTimer = time => {
+const playerTwoTimer = time => {
 	timer('#playerTwoTime', time);
 };
 
