@@ -53,7 +53,7 @@ const getWinner = (playerOne, playerTwo) => {
 //  Handling events
 /////*/
 
-// Här ihop med register new flayer från game.js
+// Hör ihop med register new player från game.js
 handleConnect = function (username) {
 	// username är parameter som vi skickar från game.js
 	this.playerData = {
@@ -66,10 +66,9 @@ handleConnect = function (username) {
 	debug(
 		'This is a player object of connected player outside of the queue' +
 			this.playerData.id
-	);
+);
 
 	// find another player
-
 	if (waitingRoom.length) {
 		joinRoom(this, waitingRoom.pop());
 		return;
@@ -140,11 +139,11 @@ const handleClick = function (elapsedTime) {
 		return;
 	}
 
-	// send updated score
+	// send updated score to updateScore() in game.js
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 	// GAME OVER - check game rounds and send
-	if (activeGames[roomId].gameRound === 4) {
+	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
 		// delete this games id
@@ -153,7 +152,6 @@ const handleClick = function (elapsedTime) {
 	}
 	startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 };
-
 
 const startNewRound = roomId => {
 	// reset reaction time

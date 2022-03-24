@@ -145,7 +145,6 @@ const gameOver = winner => {
 			'CONGRATULATIONS YOU LOST! IT CAN ONLY GO UP FROM HERE <3';
 	}
 	playAgainButtonEl.innerText = 'Play Again';
-	exitGameButtonEl.innerText = 'Exit';
 };
 
 const playerDisconnect = data => {
@@ -168,15 +167,12 @@ const playerDisconnect = data => {
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
 	clearInterval(interval);
-	//timer(playerOneTimeEl, elapsedTime);
-	//timer(playerTwoTimeEl, elapsedTime);
-	//sets game to equal 10 rounds
 
+	//sets game to equal 10 rounds
 	socket.emit('virus:clicked', elapsedTime);
 });
 
 playAgainButtonEl.addEventListener('click', () => {
-
     gameWrapperEl.classList.add('hide');
     startEl.classList.remove('hide');
     noticeEl.classList.add('hide');
@@ -186,7 +182,7 @@ playAgainButtonEl.addEventListener('click', () => {
 //  Socket on events - Listening to server
 /////*/
 
-socket.on('player:waiting', displayWaitingForPlayer); // visa spinnner
+socket.on('player:waiting', displayWaitingForPlayer); // visa spinner
 
 socket.on('game:start', startGame);
 
