@@ -1,5 +1,9 @@
 # ktv
 
+KILL THE VIRUS GAME
+
+This was a group assignment with [Johanna Bäckström](https://github.com/jo-oo) and [Sara Almqvist](https://github.com/50773sa).
+
 Try out our game [Kill The Virus](https://kill-the-virus-jrs.herokuapp.com/)
 
 ### Languages used:
@@ -14,7 +18,20 @@ Try out our game [Kill The Virus](https://kill-the-virus-jrs.herokuapp.com/)
 
 ## Assignment
 
-Create game
+Create an online player versus player game with Socket.io, Express and Node.js.
+
+#### Requirement
+
+- Player should be able to submit nickname when entering game.
+
+- Wait for another player joins to start a game.
+
+- All points, object location and delay must be sent from the server side.
+
+- Compare reaction time on server side and then show on browser.
+
+- Several players should be able to pair and play the game without waiting when matched.
+-
 
 #### Time limit
 

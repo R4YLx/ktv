@@ -142,9 +142,12 @@ const handleClick = function (elapsedTime) {
 	// send updated score
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
+	debug(`Player ${playerOne.player} has ${playerOne.score} points`);
+	debug(`Player ${playerTwo.player} has ${playerTwo.score} points`);
+
 	// GAME OVER - check game rounds and send
 
-	if (activeGames[roomId].gameRound === 10) {
+	if (activeGames[roomId].gameRound === 2) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
 		// delete this games id

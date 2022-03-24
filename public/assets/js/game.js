@@ -123,8 +123,8 @@ const displayVirus = ({ col, row, delay }, gameRound = 1) => {
 };
 
 // update score
-const updateScore = ({ winner, score }) => {
-	if (winner === playerId) {
+const updateScore = ({ winnerId, score }) => {
+	if (winnerId == playerId) {
 		playerOneScoreEl.innerText = score;
 	} else {
 		playerTwoScoreEl.innerText = score;
@@ -172,6 +172,19 @@ virusEl.addEventListener('click', () => {
 	//sets game to equal 10 rounds
 
 	socket.emit('virus:clicked', elapsedTime);
+});
+
+playAgainButtonEl.addEventListener('click', () => {
+	gameWrapperEl.classList.add('hide');
+	startEl.classList.remove('hide');
+	noticeEl.classList.add('hide');
+	clearTimeout(virusTimeout);
+	clearInterval(interval);
+	currentRoundEl.innerText = 1;
+	playerOneScoreEl.innerText = 0;
+	playerTwoScoreEl.innerText = 0;
+	playerOneTimeEl.innerHTML = '&mdash;';
+	playerTwoTimeEl.innerHTML = '&mdash;';
 });
 
 /*//////
