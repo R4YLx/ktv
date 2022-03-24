@@ -78,6 +78,7 @@ const displayWaitingForPlayer = () => {
 // Starting game
 const startGame = ({ id, opponent }) => {
 	playerId = id;
+	console.log("PLAYER ID " + playerId);
 
 	// place players names
 	playerOneNameEl.innerText = username;
@@ -123,8 +124,8 @@ const displayVirus = ({ col, row, delay }, gameRound = 1) => {
 };
 
 // update score
-const updateScore = ({ winner, score }) => {
-	if (winner === playerId) {
+const updateScore = ({ winnerId, score }) => {
+	if (winnerId == playerId) {
 		playerOneScoreEl.innerText = score;
 	} else {
 		playerTwoScoreEl.innerText = score;
@@ -191,3 +192,4 @@ socket.on('game:updateScore', updateScore); //lyssna på update score
 socket.on('game:over', gameOver); //lyssna på game over
 
 socket.on('player:disconnect', playerDisconnect);
+
