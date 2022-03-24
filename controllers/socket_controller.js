@@ -17,28 +17,36 @@ const maxGameRounds = 10;
 //  Functions 
 /////*/
 
-const getVirusData = () => {
-	let col = Math.floor(Math.random() * 21);
-	let row = Math.floor(Math.random() * 21);
-	let delay = Math.floor(Math.random() * 5000);
 
-	return (getVirusData = {
-		col,
-		row,
-		delay,
-	});
-};
 
-const findAnotherPlayer = player => {
+
+
+/*//////
+//  Handling events
+/////*/
+
+// Här ihop med register new flayer från game.js
+handleConnect = function (username) { // username är parameter som vi skickar från game.js
+	this.playerData = { // this = klienten
+		id: this.id, // = klientId
+		player: username,
+		score: 0,
+		reactionTime: null,
+	};
+
+	// find another player
 	if (playQueue.length) {
 		joinGame(player, playQueue.pop());
 		return;
 	}
+	
+	playQueue.push(this); //this = spelaren
 
-	playQueue.push(player);
+	this.emit('player:waiting');
 
-	player.emit('player:waiting');
 };
+
+
 
 const joinGame = (player1, player2) => {
 	const gameId = `${player1.id}#${player2.id}`;
@@ -70,20 +78,6 @@ const startGame = (player1, player2, gameId) => {
 	io.in(gameId).emit('virus:show', getVirusData());
 };
 
-/*//////
-//  Handling events
-/////*/
-
-handleConnect = function (username) {
-	this.playerData = {
-		id: this.id,
-		player: username,
-		score: 0,
-		reactionTime: null,
-	};
-
-	findAnotherPlayer(this);
-};
 
 module.exports = function (socket, _io) {
 	io = _io;
