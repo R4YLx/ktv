@@ -10,6 +10,9 @@ const playerTwoNameEl = document.querySelector('#playerTwoName');
 const playerOneTimeEl = document.querySelector('#playerOneTime');
 const playerTwoTimeEl = document.querySelector('#playerTwoTime');
 
+const playerOneScoreEl = document.querySelector('#playerOneScore');
+const playerTwoScoreEl = document.querySelector('#playerTwoScore');
+
 const currentRoundEl = document.querySelector('#currentRound');
 
 const startEl = document.querySelector('#start');
@@ -106,11 +109,11 @@ const displayVirus = ({ col, row, delay }) => {
 };
 
 // update score
-const score = ({ winner, score }) => {
+const updateScore = ({ winner, score }) => {
 	if (winner === playerId) {
-		setInnerText(playerOneTimeEl, score);
+		playerOneScoreEl.innerText = score;
 	} else {
-		setInnerText(playerTwoNameEl, score);
+		playerTwoScoreEl.innerText = score;
 	}
 };
 
@@ -136,3 +139,5 @@ socket.on('game:start', startGame);
 socket.on('virus:show', displayVirus);
 
 socket.on('playerTwo:timer', playerTwoTimer);
+
+socket.on('game:updateScore', updateScore);//lyssna på update score
