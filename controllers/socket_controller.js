@@ -132,6 +132,7 @@ const handleClick = function (elapsedTime) {
 
 	// send other player reaction time
 	this.to(roomId).emit('playerTwo:timer', elapsedTime);
+	
 
 	// Get reaction time
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
@@ -144,7 +145,7 @@ const handleClick = function (elapsedTime) {
 
 	// GAME OVER - check game rounds and send
 
-	if (activeGames[roomId].gameRound === 10) {
+	if (activeGames[roomId].gameRound === 4) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
 		// delete this games id
