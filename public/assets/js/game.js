@@ -37,23 +37,7 @@ let virusTimeout;
 //  Functions 
 /////*/
 
-const timer = element => {
-	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
-};
 
-// start timer when virus is on display
-let startTimer = () => {
-	let startTime = Date.now();
-	interval = setInterval(function () {
-		elapsedTime = Date.now() - startTime;
-		timer('#playerOneTime', elapsedTime);
-	}, 100);
-};
-
-// Opponents reaction time
-const opponentTimer = () => {
-	timer('#playerTwoTime', time);
-};
 
 
 /*//////
@@ -79,6 +63,7 @@ const displayWaitingForPlayer = () => {
 	startEl.classList.add('hide');
 };
 
+
 // Starting game
 const startGame = ({ id, opponent }) => {
 	console.log('show id:', id);
@@ -98,6 +83,26 @@ const startGame = ({ id, opponent }) => {
 	gameWrapperEl.classList.remove('hide');
 };
 
+
+const timer = element => {
+	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+};
+
+// start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function () {
+		elapsedTime = Date.now() - startTime;
+		timer('#playerOneTime', elapsedTime);
+	}, 100);
+};
+
+// Opponents reaction time
+const opponentTimer = (time) => {
+	timer('#playerTwoTime', time);
+};
+
+
 const displayVirus = ({ col, row, delay }) => {
 	virusTimeout = setTimeout(() => {
 		// update virus position
@@ -106,8 +111,18 @@ const displayVirus = ({ col, row, delay }) => {
 		virusEl.classList.remove('hide');
 
 		// start timer
-		// startTimer();
+		startTimer();
 	}, delay);
+};
+
+// update score
+const score = ({winner, score}) => {
+	if (winner === playerId) {
+		setInnerText(playerOneTimeEl, score )
+
+	}	else {
+		setInnerText(playerTwoNameEl, score)
+	}
 };
 
 /*//////
