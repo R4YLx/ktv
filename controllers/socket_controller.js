@@ -143,7 +143,6 @@ const handleClick = function (elapsedTime) {
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 
-
 	// GAME OVER - check game rounds and send
 	
 	if (activeGames[roomId].gameRound === 10) {
