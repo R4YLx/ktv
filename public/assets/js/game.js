@@ -122,6 +122,24 @@ const newRound = (player1, player2, virusData) => {
 	// }
 };
 
+
+
+//RAYMONDS
+// Update scoreboard. Get score from server
+const updateScoreBoard = players => {
+	// showRoundsEl.innerText = `${players[0].rounds}/10`;
+	// players.forEach(player => {
+	// 	playersTimer.innerHTML += `<p>${player.reactionTime}</p>`;
+	// });
+
+	document.querySelector('#players').innerHTML = Object.values(players)
+		.map(
+			player =>
+				`<h3 class="playerScore">${player.name}<span>:</span><span class="score">${player.score}</span><span>:</span><span class="time">${player.time}</span></h3>`
+		)
+		.join(' vs ');
+};
+
 /*//////
 //  Events
 /////*/
@@ -141,6 +159,7 @@ usernameFormEl.addEventListener('submit', e => {
 });
 
 // Click event for virus
+// How to make sure something only happens if both users pressed the virus?
 virusEl.addEventListener('click', () => {
 	//prevents default page reload
 	//e.preventDefault();
@@ -151,9 +170,18 @@ virusEl.addEventListener('click', () => {
 		//virusEl.src = '';
 		hideElement(virusEl);
 
+		playerData = {
+			time: reactionTime,
+			id: socket.id,
+		};
+
+		console.log(playerData);
+
+		socket.emit('virus:clicked', playerData);
 
 
-	//score++;
+/*
+			//score++;
 	//setInnerText(currentRoundEl, score);
 	hideElement(virusEl);
 
@@ -168,10 +196,14 @@ virusEl.addEventListener('click', () => {
 		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
 		setInnerText(playAgainButtonEl, 'Play Again');
 		setInnerText(exitGameButtonEl, 'Exit');
-	}
-});
+		
+	}*/
 
-	// socket.emit('virus:clicked'), playerData;
+	});
+
+
+
+	
 
 
 
@@ -183,9 +215,6 @@ playAgainButtonEl.addEventListener('click', e => {
 		setInnerText(playerScoreEl, score);
 		setInnerText(currentRoundEl, score);
 		currentRoundEl.innerHTML = 0;
-		//currentRoundEl.innerHTML = ""; //nollställer Scoreboard
-		//playerScoreEl.innerHTML= ""; //nolställer Spelare 1:s poäng
-		//opponentScoreEl.innerHTML=""; //nolställer Spelare 2:s poäng
 		messageEl.innerHTML = ''; //nollställer "Grattis-meddelandet"
 	}
 	//Exit game-event
@@ -200,13 +229,6 @@ playAgainButtonEl.addEventListener('click', e => {
 // Restart game on disconnect
 
 
-
-
-
-
-	
-
-
 /*//////
 //  Socket events
 /////*/
@@ -217,7 +239,8 @@ socket.on('game:start', startGame);
 
 socket.on('waitingForPlayer', displayWaitingForPlayers);
 
-socket.on('newRound', newRound);
+socket.on('game:newRound', newRound);
+socket.on('player:updateScore', updateScoreBoard);
 
 
 
