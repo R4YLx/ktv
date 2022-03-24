@@ -13,6 +13,8 @@ const usernameFormEl = document.querySelector('#usernameForm');
 const virusEl = document.querySelector('#virus');
 
 const waitingEl = document.querySelector('#waiting');
+const playerOnetimeEl = document.querySelector('#playerOnetime');
+const playerTwotimeEl = document.querySelector('#playerTwotime');
 
 /*//////
 //  Variables
