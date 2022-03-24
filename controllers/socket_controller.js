@@ -53,7 +53,7 @@ const getWinner = (playerOne, playerTwo) => {
 //  Handling events
 /////*/
 
-// Här ihop med register new flayer från game.js
+// Hör ihop med register new player från game.js
 handleConnect = function (username) {
 	// username är parameter som vi skickar från game.js
 	this.playerData = {
@@ -69,7 +69,6 @@ handleConnect = function (username) {
 	);
 
 	// find another player
-
 	if (waitingRoom.length) {
 		joinRoom(this, waitingRoom.pop());
 		return;
@@ -139,15 +138,14 @@ const handleClick = function (elapsedTime) {
 		return;
 	}
 
-	// send updated score
+	// send updated score to updateScore() in game.js
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
 	debug(`Player ${playerOne.player} has ${playerOne.score} points`);
 	debug(`Player ${playerTwo.player} has ${playerTwo.score} points`);
 
 	// GAME OVER - check game rounds and send
-
-	if (activeGames[roomId].gameRound === 2) {
+	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
 		// delete this games id
@@ -157,26 +155,24 @@ const handleClick = function (elapsedTime) {
 	startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 };
 
-//* Sara
 const startNewRound = roomId => {
 	// reset reaction time
 
 	getVirusData();
 
+	// för varje spelare i rummet...reaktionstiden = null
 	activeGames[roomId].players.forEach(player => (player.elapsedTime = null));
 
 	//update rounds
 	activeGames[roomId].gameRound++;
 
-	// emit virus, rounds & (delay)
+	// emit virus &  rounds
 	io.in(roomId).emit(
 		'virus:show',
 		getVirusData(),
 		activeGames[roomId].gameRound
 	);
 };
-
-//* winner
 
 function handleDisconnect() {
 	debug(`Client ${this.id} disconnected.`);
