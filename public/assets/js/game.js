@@ -1,8 +1,8 @@
 /*//////
 //  DOM Elements
 /////*/
-const playerOneNameEl = document.querySelector('#playerOneName')
-const playerTwoNameEl = document.querySelector('#playerTwoName')
+const playerOneNameEl = document.querySelector('#playerOneName');
+const playerTwoNameEl = document.querySelector('#playerTwoName');
 
 const gameWrapperEl = document.querySelector('#gameWrapper');
 
@@ -63,36 +63,33 @@ usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameFormEl.username.value;
-	
 
 	socket.emit('player:connected', username);
-
 });
 
 //Display "waiting for other players"
-const displayWaitingForPlayer = ()=> {
+const displayWaitingForPlayer = () => {
 	waitingEl.classList.remove('hide');
-	startEl.classList.add('hide')
-}
-
-
-
+	startEl.classList.add('hide');
+};
 
 // Starting game
-const startGame = ({id, oppenent}) => {
+const startGame = ({ id, opponent }) => {
+	console.log('show id:', id);
+	console.log('show opponent', opponent);
 
 	playerId = id;
 
 	// place players names
 	playerOneNameEl.innerText = username;
-	playerTwoNameEl.innerText = oppenent;
+	playerTwoNameEl.innerText = opponent;
 
 	// dölj spinner
 	waitingEl.classList.add('hide');
+	startEl.classList.add('hide');
 
 	// visa spelet
 	gameWrapperEl.classList.remove('hide');
-
 };
 
 // Render players on scoreboard
@@ -115,7 +112,6 @@ virusEl.addEventListener('click', () => {});
 /*//////
 //  Socket on events - Listening to server
 /////*/
-
 
 socket.on('player:waiting', displayWaitingForPlayer); // visa spinnner
 

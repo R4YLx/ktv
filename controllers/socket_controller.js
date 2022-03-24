@@ -35,6 +35,7 @@ handleConnect = function (username) {
 	// find another player
 	if (playQueue.length) {
 		joinGame(this, playQueue.pop()); // player 1 & player 2
+
 		return;
 	}
 
@@ -45,6 +46,9 @@ handleConnect = function (username) {
 
 const joinGame = (player1, player2) => {
 	const roomId = `${player1.id}#${player2.id}`;
+
+	debug('player1', player1.id);
+	debug('player2', player2.id);
 
 	// players är i samma rum
 	player1.join(roomId);
@@ -62,12 +66,12 @@ const joinGame = (player1, player2) => {
 const startGame = (player1, player2, roomId) => {
 	player1.emit('game:start', {
 		id: player1.id,
-		opponent: player2.playerData.username,
+		opponent: player2.playerData.player,
 	});
 
 	player2.emit('game:start', {
 		id: player2.id,
-		opponent: player1.playerData.username,
+		opponent: player1.playerData.player,
 	});
 
 	// emit delay and random virus
