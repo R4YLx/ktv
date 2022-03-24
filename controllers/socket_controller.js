@@ -144,27 +144,19 @@ handleClick = function (elapsedTime) {
 
 
 
-	// GAME OVER - check game rounds and send
-	/*
+	//Game-Over
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
-		showLightbox();
-		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
-		setInnerText(playAgainButtonEl, 'Play Again');
-		setInnerText(exitGameButtonEl, 'Exit');
-		// delete the game from list of active games
-		delete activeGames[roomId];
+	
+		delete activeGames[roomId]; //deletes the game/room from active games when finished after 10 rounds
 
 		return;
-
-		
 	}
 
 	else {
 		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 	}
-	*/
-
+	
 };
 
 
