@@ -49,16 +49,11 @@ const setInnerHTML = (element, value) => {
 	element.innerHTML = value;
 };
 
-
-
 /*//////
 //  Events
 /////*/
 
 //* display virus
-
-
-
 
 //*
 // Register new player
@@ -74,16 +69,6 @@ usernameFormEl.addEventListener('submit', e => {
 const displayWaitingForPlayer = () => {
 	waitingEl.classList.remove('hide');
 };
-
-
-
-
-
-
-
-
-
-
 
 // Starting game
 const startGame = () => {};
@@ -101,7 +86,6 @@ const getRandomVirus = () => {};
 /*//////
 //  Submit and click events
 /////*/
-
 
 // Click event for virus
 virusEl.addEventListener('click', () => {});

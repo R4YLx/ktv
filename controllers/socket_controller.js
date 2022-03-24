@@ -17,17 +17,15 @@ const maxGameRounds = 10;
 //  Functions 
 /////*/
 
-
-
-
-
 /*//////
 //  Handling events
 /////*/
 
 // Här ihop med register new flayer från game.js
-handleConnect = function (username) { // username är parameter som vi skickar från game.js
-	this.playerData = { // this = klienten
+handleConnect = function (username) {
+	// username är parameter som vi skickar från game.js
+	this.playerData = {
+		// this = klienten
 		id: this.id, // = klientId
 		player: username,
 		score: 0,
@@ -39,14 +37,11 @@ handleConnect = function (username) { // username är parameter som vi skickar f
 		joinGame(player, playQueue.pop());
 		return;
 	}
-	
+
 	playQueue.push(this); //this = spelaren
 
 	this.emit('player:waiting');
-
 };
-
-
 
 const joinGame = (player1, player2) => {
 	const gameId = `${player1.id}#${player2.id}`;
@@ -77,7 +72,6 @@ const startGame = (player1, player2, gameId) => {
 	// emit delay and random virus
 	io.in(gameId).emit('virus:show', getVirusData());
 };
-
 
 module.exports = function (socket, _io) {
 	io = _io;
