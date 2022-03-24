@@ -37,10 +37,7 @@ handleConnect = function (username) {
 		const playerOne = this;
 		const playerTwo = playQueue.pop();
 
-		const roomId = `${playerOne.id}#${playerTwo.id}`;
-
-		debug('playerOne', playerOne.id);
-		debug('playerTwo', playerTwo.id);
+		const roomId = `${playerOne.id}`;
 
 		// players är i samma rum
 		playerOne.join(roomId);
@@ -73,7 +70,19 @@ const startGame = (playerOne, playerTwo, roomId) => {
 	});
 
 	// emit delay and random virus
-	//io.in(roomId).emit('virus:show', getVirusData());
+	io.in(roomId).emit('virus:show', getVirusData());
+};
+
+const getVirusData = () => {
+	let col = Math.floor(Math.random() * 21);
+	let row = Math.floor(Math.random() * 21);
+	let delay = Math.floor(Math.random() * 5000);
+
+	return (virusData = {
+		col,
+		row,
+		delay,
+	});
 };
 
 module.exports = function (socket, _io) {
