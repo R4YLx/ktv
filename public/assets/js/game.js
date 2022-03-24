@@ -1,10 +1,16 @@
 /*//////
 //  DOM Elements
 /////*/
+
+const gameWrapperEl = document.querySelector('#gameWrapper');
+
 const playerOneNameEl = document.querySelector('#playerOneName');
 const playerTwoNameEl = document.querySelector('#playerTwoName');
 
-const gameWrapperEl = document.querySelector('#gameWrapper');
+const playerOneTimeEl = document.querySelector('#playerOneTime');
+const playerTwoTimeEl = document.querySelector('#playerTwoTime');
+
+const currentRoundEl = document.querySelector('#currentRound');
 
 const startEl = document.querySelector('#start');
 
@@ -13,8 +19,6 @@ const usernameFormEl = document.querySelector('#usernameForm');
 const virusEl = document.querySelector('#virus');
 
 const waitingEl = document.querySelector('#waiting');
-const playerOnetimeEl = document.querySelector('#playerOnetime');
-const playerTwotimeEl = document.querySelector('#playerTwotime');
 
 /*//////
 //  Variables
@@ -33,11 +37,31 @@ let virusTimeout;
 //  Functions 
 /////*/
 
+const timer = element => {
+	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+};
+
+// start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function () {
+		elapsedTime = Date.now() - startTime;
+		timer('#playerOneTime', elapsedTime);
+	}, 100);
+};
+
+// Opponents reaction time
+const opponentTimer = () => {
+	timer('#playerTwoTime', time);
+};
+
+
 /*//////
 //  Events
 /////*/
 
 //* display virus
+
 
 //*
 // Register new player
@@ -74,16 +98,18 @@ const startGame = ({ id, opponent }) => {
 	gameWrapperEl.classList.remove('hide');
 };
 
-// Render players on scoreboard
-const updatePlayers = () => {};
+const displayVirus = ({ col, row, delay }) => {
+	virusTimeout = setTimeout(() => {
+		// update virus position
+		virusEl.style.gridColumn = `${col} / span 1`;
+		virusEl.style.gridRow = `${row} / span 1`;
+		virusEl.classList.remove('hide');
 
-// Setting new location and delay after click
-const updateVirus = getVirusData => {};
+		// start timer
+		// startTimer();
+	}, delay);
+};
 
-const updateScore = id => {};
-
-// Get random values for virus
-const getRandomVirus = () => {};
 /*//////
 //  Submit and click events
 /////*/
@@ -98,3 +124,5 @@ virusEl.addEventListener('click', () => {});
 socket.on('player:waiting', displayWaitingForPlayer); // visa spinnner
 
 socket.on('game:start', startGame);
+
+socket.on('virus:show', displayVirus);
