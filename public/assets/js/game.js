@@ -51,7 +51,7 @@ let startTimer = () => {
 };
 
 // Opponents reaction time
-const opponentTimer = () => {
+const opponentTimer = (time) => {
 	timer('#playerTwoTime', time);
 };
 
@@ -60,10 +60,7 @@ const opponentTimer = () => {
 //  Events
 /////*/
 
-//* display virus
 
-
-//*
 // Register new player
 usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
@@ -105,9 +102,19 @@ const displayVirus = ({ col, row, delay }) => {
 		virusEl.style.gridRow = `${row} / span 1`;
 		virusEl.classList.remove('hide');
 
-		// start timer
-		// startTimer();
+		// start timer for both players
+		startTimer();
 	}, delay);
+};
+
+// update score
+const score = ({winner, score}) => {
+	if (winner === playerId) {
+		setInnerText(playerOneTimeEl, score )
+
+	}	else {
+		setInnerText(playerTwoNameEl, score)
+	}
 };
 
 /*//////
