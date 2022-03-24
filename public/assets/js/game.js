@@ -45,16 +45,25 @@ let virusTimeout;
 /*//////
 //  Functions 
 /////*/
-/*
+
+//lightbox that shows content for clients when called upon
 const showLightbox = () => {
-	if (noticeEl.style.display === 'grid') {
-		noticeEl.style.display = 'none';
-		hideElement(noticeEl);
-	} else {
-		noticeEl.style.display = 'grid';
-		displayElement(noticeEl);
-	}
-*/
+
+    if (noticeEl.style.display === 'grid') {
+
+        noticeEl.style.display = 'none';
+
+        noticeEl.classList.add('hide');
+
+    } else {
+
+        noticeEl.style.display = 'grid';
+
+        noticeEl.classList.remove('hide');
+
+    }
+
+};
 
 /*//////
 //  Events
