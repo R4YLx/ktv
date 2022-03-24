@@ -37,25 +37,6 @@ let virusTimeout;
 //  Functions 
 /////*/
 
-const timer = element => {
-	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
-};
-
-// start timer when virus is on display
-let startTimer = () => {
-	let startTime = Date.now();
-	interval = setInterval(function () {
-		elapsedTime = Date.now() - startTime;
-		timer('#playerOneTime', elapsedTime);
-	}, 100);
-};
-
-// Opponents reaction time
-const opponentTimer = (time) => {
-	timer('#playerTwoTime', time);
-};
-
-
 /*//////
 //  Events
 /////*/
@@ -78,9 +59,6 @@ const displayWaitingForPlayer = () => {
 
 // Starting game
 const startGame = ({ id, opponent }) => {
-	console.log('show id:', id);
-	console.log('show opponent', opponent);
-
 	playerId = id;
 
 	// place players names
@@ -93,6 +71,24 @@ const startGame = ({ id, opponent }) => {
 
 	// visa spelet
 	gameWrapperEl.classList.remove('hide');
+};
+
+const timer = element => {
+	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+};
+
+// start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function () {
+		elapsedTime = Date.now() - startTime;
+		timer('#playerOneTime', elapsedTime);
+	}, 100);
+};
+
+// Opponents reaction time
+const playerTwoTimer = time => {
+	timer('#playerTwoTime', time);
 };
 
 const displayVirus = ({ col, row, delay }) => {
@@ -122,7 +118,11 @@ const score = ({winner, score}) => {
 /////*/
 
 // Click event for virus
-virusEl.addEventListener('click', () => {});
+virusEl.addEventListener('click', () => {
+	virusEl.classList.add('hide');
+	clearInterval(timerInterval);
+	socket.emit('virus:clicked', reactionTime);
+});
 
 /*//////
 //  Socket on events - Listening to server
@@ -133,3 +133,5 @@ socket.on('player:waiting', displayWaitingForPlayer); // visa spinnner
 socket.on('game:start', startGame);
 
 socket.on('virus:show', displayVirus);
+
+socket.on('playerTwo:timer', playerTwoTimer);
