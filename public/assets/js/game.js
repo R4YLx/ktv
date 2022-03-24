@@ -33,11 +33,31 @@ let virusTimeout;
 //  Functions 
 /////*/
 
+const timer = element => {
+	document.querySelector(element).innerHTML = (elapsedTime / 1000).toFixed(3); //(3)- is nr of decimals
+};
+
+// start timer when virus is on display
+let startTimer = () => {
+	let startTime = Date.now();
+	interval = setInterval(function () {
+		elapsedTime = Date.now() - startTime;
+		timer('#playerOneTime', elapsedTime);
+	}, 100);
+};
+
+// Opponents reaction time
+const opponentTimer = () => {
+	timer('#playerTwoTime', time);
+};
+
+
 /*//////
 //  Events
 /////*/
 
 //* display virus
+
 
 //*
 // Register new player
