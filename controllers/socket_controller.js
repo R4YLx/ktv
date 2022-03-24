@@ -106,14 +106,14 @@ const getVirusData = () => {
 handleClick = function (elapsedTime) {
 	const roomId = getRoomId(this.id, activeGames);
 
-	// save players reaction time
+	// Get player one time
 	const playerOne = getPlayerOne(this.id, roomId, activeGames);
 	playerOne.elapsedTime = elapsedTime;
 
-	// emit reaction time to opponent
+	// send other player reaction time
 	this.to(roomId).emit('playerTwo:timer', elapsedTime);
 
-	// get opponents reaction time, return if null
+	// Get reaction time
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
 	if (!playerTwo.elapsedTime) return;
 
