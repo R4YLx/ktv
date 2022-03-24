@@ -44,9 +44,7 @@ let virusTimeout;
 //  Events
 /////*/
 
-//* display virus
 
-//*
 // Register new player
 usernameFormEl.addEventListener('submit', e => {
 	e.preventDefault();
@@ -103,7 +101,7 @@ const displayVirus = ({ col, row, delay }) => {
 		virusEl.style.gridRow = `${row} / span 1`;
 		virusEl.classList.remove('hide');
 
-		// start timer
+		// start timer for both players
 		startTimer();
 	}, delay);
 };
@@ -125,6 +123,9 @@ const updateScore = ({ winner, score }) => {
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
 	clearInterval(interval);
+	timer(playerOneTimeEl, elapsedTime)
+	timer(playerTwoNameEl, elapsedTime)
+
 	socket.emit('virus:clicked', elapsedTime);
 });
 
