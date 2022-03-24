@@ -28,6 +28,15 @@
 		<div id="app">
 			<!-- Start -->
 			<div id="start">
+				<h1 class="m-4">KILL THE VIRUS</h1>
+				<div class="imgContainer">
+					<img
+						src="./assets/icons/virus.png"
+						alt="virus"
+						class="startVirusImg"
+					/>
+				</div>
+
 				<form id="usernameForm">
 					<input
 						type="text"
@@ -51,35 +60,33 @@
 			</div>
 
 			<!-- Game -->
-			<div id="gameWrapper" class="hide d-flex flex-column-reverse">
+			<div id="gameWrapper" class="hide">
 				<div
-					id="scoreColumn"
-					class="justify-content-center align-items-center d-flex justify-content-around p-2 order-md-1"
+					id="scoreboardWrapper"
+					class="container-fluid text-center d-flex align-items-center row row-cols-3 mt-4"
 				>
-					<div class="playerNameContainer text-center">
-						<h3 id="playerUsername" class="names">Player 1</h3>
-						<p id="playerOneTime" >&mdash;</p>
+					<div id="playersWrapper">
+						<h3>Players</h3>
+						<ul id="playersNameList">
+							<li id="playerOneName">Player 1</li>
+							<li id="playerTwoName">Player 2</li>
+						</ul>
 					</div>
 
-					<div class="scoreWrapper">
-						<div id="scoreboard" class="text-center mb-4">
-							<h3>Scoreboard</h3>
-							<p>
-								<span id="playerScore">0</span>-<span id="opponentScore"
-									>0</span
-								>
-							</p>
-						</div>
-
-						<div id="gameRounds" class="text-center mt-4">
-							<h3>Game Round</h3>
-							<p id="showRounds"><span id="currentRound">0</span> / 10</p>
-						</div>
+					<div id="scoreWrapper">
+						<h3>Score</h3>
+						<ul id="playersScoreList">
+							<li id="playerOneScore">0</li>
+							<li id="playerTwoScore">0</li>
+						</ul>
 					</div>
 
-					<div class="playerNameContainer text-center">
-						<h3 id="opponentUsername" class="names">Player 2</h3>
-						<p id="playerTwoTime">&mdash;</p>
+					<div id="timeWrapper">
+						<h3>Time</h3>
+						<ul id="playersTimeList">
+							<li id="playerOneTime">&mdash;</li>
+							<li id="playerTwoTime">&mdash;</li>
+						</ul>
 					</div>
 				</div>
 
@@ -100,10 +107,12 @@
 				<h3 id="message" class="text-center justify-content-center col-12"></h3>
 				<div class="container">
 					<!--innehåller YOU WON!-meddelande-->
-					<div
+					<button
 						id="playAgainButton"
 						class="text-center justify-content-center btn-lg btn-danger col-12 p-2"
-					></div>
+					>
+						Play Again
+					</button>
 					<!--innehåller PLAY AGAIN-KNAPP-->
 					<div
 						id="exitGameButton"
