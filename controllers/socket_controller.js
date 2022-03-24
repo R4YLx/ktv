@@ -2,6 +2,8 @@
  * Socket Controller
  */
 
+
+
 /*//////
 //  Variables
 /////*/
@@ -140,20 +142,27 @@ handleClick = function (elapsedTime) {
 	// send updated score
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
-	// check game rounds and send
-	/*if (activeGames[roomId].gameRound === 10) {
-		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 
+
+	// GAME OVER - check game rounds and send
+	if (activeGames[roomId].gameRound === 10) {
+		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
+		showLightbox();
+		setInnerText(messageEl, 'CONGRATULATIONS YOU WON!');
+		setInnerText(playAgainButtonEl, 'Play Again');
+		setInnerText(exitGameButtonEl, 'Exit');
 		// delete the game from list of active games
 		delete activeGames[roomId];
 
 		return;
+
+		
 	}
-
-	// start new game round
-	startNewGameRound(roomId);
-
-	*/
+/*
+	else {
+		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
+	}
+*/
 };
 
 module.exports = function (socket, _io) {

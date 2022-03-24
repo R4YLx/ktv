@@ -23,6 +23,10 @@ const virusEl = document.querySelector('#virus');
 
 const waitingEl = document.querySelector('#waiting');
 
+const playAgainButtonEl = document.querySelector('#playAgainButton');
+const exitGameButtonEl = document.querySelector('#exitGameButton');
+
+
 /*//////
 //  Variables
 /////*/
@@ -30,6 +34,7 @@ const waitingEl = document.querySelector('#waiting');
 const socket = io();
 let username = null;
 let playerId = null;
+
 
 let elapsedTime;
 let startTime;
@@ -39,6 +44,14 @@ let virusTimeout;
 /*//////
 //  Functions 
 /////*/
+const showLightbox = () => {
+	if (noticeEl.style.display === 'grid') {
+		noticeEl.style.display = 'none';
+		hideElement(noticeEl);
+	} else {
+		noticeEl.style.display = 'grid';
+		displayElement(noticeEl);
+	}
 
 /*//////
 //  Events
@@ -114,6 +127,16 @@ const updateScore = ({ winner, score }) => {
 		playerTwoScoreEl.innerText = score;
 	}
 };
+/*
+const gameOver = ({ winner, score }) => {
+	if (winner === playerId) {
+		playerOneScoreEl.innerText = score;
+	} else {
+		playerTwoScoreEl.innerText = score;
+	}
+
+};
+};*/
 
 /*//////
 //  Submit and click events
@@ -123,8 +146,9 @@ const updateScore = ({ winner, score }) => {
 virusEl.addEventListener('click', () => {
 	virusEl.classList.add('hide');
 	clearInterval(interval);
-	timer(playerOneTimeEl, elapsedTime)
-	timer(playerTwoNameEl, elapsedTime)
+	//timer(playerOneTimeEl, elapsedTime);
+	//timer(playerTwoTimeEl, elapsedTime);
+	//sets game to equal 10 rounds
 
 	socket.emit('virus:clicked', elapsedTime);
 });
@@ -142,3 +166,5 @@ socket.on('virus:show', displayVirus);
 socket.on('playerTwo:timer', playerTwoTimer);
 
 socket.on('game:updateScore', updateScore);//lyssna på update score
+
+//socket.on('game:over', gameOver);//lyssna på ugame over
