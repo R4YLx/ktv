@@ -76,7 +76,7 @@ handleConnect = function (username) {
 	}
 	waitingRoom.push(this); //this = spelaren
 
-	this.emit('player:waiting'); 
+	this.emit('player:waiting');
 };
 
 const joinRoom = (playerOne, playerTwo) => {
@@ -135,46 +135,61 @@ const handleClick = function (elapsedTime) {
 
 	// Get reaction time
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
-	if (!playerTwo.elapsedTime){
-		return
-	};
+	if (!playerTwo.elapsedTime) {
+		return;
+	}
 
 	// send updated score
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
 
-
 	// GAME OVER - check game rounds and send
-	
+
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
-		
+
 		// delete this games id
 		delete activeGames[roomId];
 		return;
-
-	}	else {
-		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
-	};
+	}
+	startNewRound(roomId); ///tar emot ett rum ID för att spela igen
 };
 
 //* Sara
-const startNewRound = (roomId) => {
+const startNewRound = roomId => {
 	// reset reaction time
 
-	getVirusData()
+	getVirusData();
 
-	activeGames[roomId].players.forEach(player => player.elapsedTime = null);
+	activeGames[roomId].players.forEach(player => (player.elapsedTime = null));
 
 	//update rounds
-	activeGames[roomId].gameround++;
+	activeGames[roomId].gameRound++;
 
 	// emit virus, rounds & (delay)
-	io.in(roomId).emit ('get:virus', getVirusData(), activeGames[roomId].gameRound);
+	io.in(roomId).emit(
+		'virus:show',
+		getVirusData(),
+		activeGames[roomId].gameRound
+	);
 };
-
 
 //* winner
 
+function handleDisconnect() {
+	debug(`Client ${this.id} disconnected.`);
+
+	// check if player has an active game, return if null
+	const roomId = getRoomId(this.id, activeGames);
+	if (!roomId) return;
+
+	// send disconnection message
+	this.to(roomId).emit('player:disconnect', {
+		message: 'The other player be gone!',
+	});
+
+	// delete the game
+	delete activeGames[roomId];
+}
 
 module.exports = function (socket, _io) {
 	io = _io;
@@ -187,4 +202,6 @@ module.exports = function (socket, _io) {
 	socket.on('player:connected', handleConnect);
 
 	socket.on('virus:clicked', handleClick);
+
+	socket.on('disconnect', handleDisconnect);
 };

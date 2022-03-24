@@ -2,7 +2,13 @@
 //  DOM Elements
 /////*/
 
+const currentRoundEl = document.querySelector('#currentRound');
+const exitGameButtonEl = document.querySelector('#exitGameButton');
 const gameWrapperEl = document.querySelector('#gameWrapper');
+const messageEl = document.querySelector('#message');
+const noticeEl = document.querySelector('#notice');
+
+const playAgainButtonEl = document.querySelector('#playAgainButton');
 
 const playerOneNameEl = document.querySelector('#playerOneName');
 const playerTwoNameEl = document.querySelector('#playerTwoName');
@@ -13,20 +19,12 @@ const playerTwoTimeEl = document.querySelector('#playerTwoTime');
 const playerOneScoreEl = document.querySelector('#playerOneScore');
 const playerTwoScoreEl = document.querySelector('#playerTwoScore');
 
-const currentRoundEl = document.querySelector('#currentRound');
-
 const startEl = document.querySelector('#start');
 
 const usernameFormEl = document.querySelector('#usernameForm');
 
 const virusEl = document.querySelector('#virus');
-
 const waitingEl = document.querySelector('#waiting');
-const messageEl = document.querySelector('#message');
-
-const playAgainButtonEl = document.querySelector('#playAgainButton');
-const exitGameButtonEl = document.querySelector('#exitGameButton');
-
 
 /*//////
 //  Variables
@@ -35,7 +33,6 @@ const exitGameButtonEl = document.querySelector('#exitGameButton');
 const socket = io();
 let username = null;
 let playerId = null;
-
 
 let elapsedTime;
 let startTime;
@@ -48,27 +45,20 @@ let virusTimeout;
 
 //lightbox that shows content for clients when called upon
 const showLightbox = () => {
+	if (noticeEl.style.display === 'grid') {
+		noticeEl.style.display = 'none';
 
-    if (noticeEl.style.display === 'grid') {
+		noticeEl.classList.add('hide');
+	} else {
+		noticeEl.style.display = 'grid';
 
-        noticeEl.style.display = 'none';
-
-        noticeEl.classList.add('hide');
-
-    } else {
-
-        noticeEl.style.display = 'grid';
-
-        noticeEl.classList.remove('hide');
-
-    }
-
+		noticeEl.classList.remove('hide');
+	}
 };
 
 /*//////
 //  Events
 /////*/
-
 
 // Register new player
 usernameFormEl.addEventListener('submit', e => {
@@ -141,25 +131,33 @@ const updateScore = ({ winner, score }) => {
 	}
 };
 
-
 //Game-Over-event - display messages to clients
-const gameOver = (winner) => {
-
+const gameOver = winner => {
 	showLightbox();
 
 	if (winner.id === playerId) {
 		messageEl.innerText = 'CONGRATULATIONS YOU WON!';
 	} else if (!winner) {
 		messageEl.innerText = 'NO NOONE WON THIS. :-( FIGHT!';
+	} else {
+		messageEl.innerText =
+			'CONGRATULATIONS YOU LOST! IT CAN ONLY GO UP FROM HERE <3';
 	}
-	 else {
-		messageEl.innerText = 'CONGRATULATIONS YOU LOST! IT CAN ONLY GO UP FROM HERE <3';
-	}
-		playAgainButtonEl.innerText = 'Play Again'
-		exitGameButtonEl.innerText = 'Exit'
+	playAgainButtonEl.innerText = 'Play Again';
+	exitGameButtonEl.innerText = 'Exit';
 };
 
+const playerDisconnect = data => {
+	// clear and stop timer
+	clearTimeout(virusTimeout);
+	clearInterval(interval);
 
+	// show lightbox
+	showLightbox();
+
+	// display message sent from server
+	messageEl.innerText = data.message;
+};
 
 /*//////
 //  Submit and click events
@@ -188,6 +186,8 @@ socket.on('virus:show', displayVirus);
 
 socket.on('playerTwo:timer', playerTwoTimer);
 
-socket.on('game:updateScore', updateScore);//lyssna på update score
+socket.on('game:updateScore', updateScore); //lyssna på update score
 
-socket.on('game:over', gameOver);//lyssna på game over
+socket.on('game:over', gameOver); //lyssna på game over
+
+socket.on('player:disconnect', playerDisconnect);
