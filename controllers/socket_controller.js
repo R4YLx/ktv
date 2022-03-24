@@ -64,7 +64,7 @@ handleConnect = function (username) {
 		elapsedTime: null,
 	};
 	debug(
-		'This i a player object of connected player outside of the queue' +
+		'This is a player object of connected player outside of the queue' +
 			this.playerData.id
 	);
 
@@ -76,7 +76,7 @@ handleConnect = function (username) {
 	}
 	waitingRoom.push(this); //this = spelaren
 
-	this.emit('player:waiting'); //
+	this.emit('player:waiting'); 
 };
 
 const joinRoom = (playerOne, playerTwo) => {
@@ -123,7 +123,7 @@ const getVirusData = () => {
 	});
 };
 
-handleClick = function (elapsedTime) {
+const handleClick = function (elapsedTime) {
 	const roomId = getRoomId(this.id, activeGames);
 
 	// Get player one time
@@ -135,7 +135,9 @@ handleClick = function (elapsedTime) {
 
 	// Get reaction time
 	const playerTwo = getPlayerTwo(this.id, roomId, activeGames);
-	if (!playerTwo.elapsedTime) return;
+	if (!playerTwo.elapsedTime){
+		return
+	};
 
 	// send updated score
 	io.in(roomId).emit('game:updateScore', getUpdatedScore(playerOne, playerTwo));
@@ -147,20 +149,20 @@ handleClick = function (elapsedTime) {
 	if (activeGames[roomId].gameRound === 10) {
 		io.in(roomId).emit('game:over', getWinner(playerOne, playerTwo));
 		
+		// delete this games id
 		delete activeGames[roomId];
-
 		return;
-	}
 
-	else {
+	}	else {
 		startNewRound(roomId); ///tar emot ett rum ID för att spela igen
-	}
-	
+	};
 };
 
 //* Sara
 const startNewRound = (roomId) => {
 	// reset reaction time
+
+	getVirusData()
 
 	activeGames[roomId].players.forEach(player => player.elapsedTime = null);
 
@@ -168,7 +170,7 @@ const startNewRound = (roomId) => {
 	activeGames[roomId].gameround++;
 
 	// emit virus, rounds & (delay)
-	io.in(roomId).emit ('get:virus', getVirusData(), activeGames[roomId].gameRound());
+	io.in(roomId).emit ('get:virus', getVirusData(), activeGames[roomId].gameRound);
 };
 
 
