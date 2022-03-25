@@ -45,4 +45,4 @@ Create an online player versus player game with Socket.io, Express and Node.js.
 
 ## Printscreen
 
-<img src="" width=100%>
+<img src="https://github.com/R4YLx/ktv/blob/main/public/assets/icons/scrn.png" width=100%>
