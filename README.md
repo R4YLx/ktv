@@ -4,7 +4,7 @@ KILL THE VIRUS GAME
 
 This was a group assignment with [Johanna Bäckström](https://github.com/jo-oo) and [Sara Almqvist](https://github.com/50773sa).
 
-Try out our game [Kill The Virus](https://kill-the-virus-jrs.herokuapp.com/)
+Try out our game [Kill The Virus](https://ktv-production.up.railway.app/)
 
 ### Languages used:
 
